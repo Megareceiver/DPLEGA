@@ -690,6 +690,7 @@ footer.parent .author-box img { height: 30px; float: right }
 .cards.fluid { padding: 0; margin-bottom: 10px }
 .cards.fluid.plus { margin-bottom: 20px }
 .cards.clear { padding: 0; border-bottom: 1px solid rgba(0,0,0,0.12); }
+.cards.clear.min { padding: 0 12px; }
 .cards.mop { margin-top: 20px }
 .cards.title { /*height: 70px*/ }
 .cards.click:hover { cursor: pointer; }
@@ -1268,7 +1269,7 @@ footer.parent .author-box img { height: 30px; float: right }
 /*#kelembagaan*/ .description-box p { margin-bottom: 3px }
 /*#kelembagaan*/ .description-box p.title-set { font-weight: bold; font-size: 14px; }
 /*#kelembagaan*/ .description-box div.text-set { color: rgba(0,0,0,0.5); }
-/*#kelembagaan*/ .description-box div.text-set span { display:inline-block; }
+/*#kelembagaan*/ .description-box div.text-set span { display:inline-block; padding-right: 25px; }
 /*#kelembagaan*/ .description-box div.text-set span.id-set { width: 40%; }
 /*#kelembagaan*/ .description-box button.btn-set { 
 	position: absolute;
@@ -1629,6 +1630,7 @@ footer.parent .author-box img { height: 30px; float: right }
 	.cards .desc-frame .desc-box .labels, 
 	.cards .desc-frame .desc-box .divider { display: block; width: 100%; padding-left: 0 }
 	.cards .desc-frame .desc-box .divider { margin-bottom: 15px }
+	.cards.clear.min { padding: 0; }
 	
 	/**/
 	.picture-box { height: 320px }
@@ -1637,7 +1639,7 @@ footer.parent .author-box img { height: 30px; float: right }
 	#kelembagaan .filter-box .head { background-position-x: 0 }
 	
 	/**/
-	.option-pop, .option-layer { height: 100vh; }
+	.option-pop, .option-layer, .preview-pop { height: 100vh; }
 
 	/**/
 	.jumbotron-content h1 { font-size: 20px }

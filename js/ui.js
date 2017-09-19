@@ -339,3 +339,32 @@ function hideOptionList(){
 	$(".option-pop").remove();
 	$("html, body").css("overflow","initial");
 }
+
+/* preview-box */
+function showPreviewBox(urlFile, type = ""){
+	if(urlFile != '' && urlFile != null){
+		var optionHtml  = '';
+		var confirmText = '';
+		
+		optionHtml = '<div class="option-pop">';
+		
+		optionHtml = optionHtml +
+		'<div id="option-confirm" class="option-list">' +
+			'<div class="option-frame col-md-8 col-sm-8">' +
+				'<img src= "' + urlFile + '" />' +
+			'</div>' +
+		'</div>' +
+		'<div class="option-layer"></div>';
+		
+		optionHtml = optionHtml + '</div>';
+
+		$("body").append(optionHtml);
+		$(".option-layer, .option-cancel, .option-frame").unbind().on("click", function(){ hidePreviewBox() });
+		$("html, body").css("overflow","hidden");
+	}
+}
+
+function hidePreviewBox(){
+	$(".option-pop").remove();
+	$("html, body").css("overflow","initial");
+}

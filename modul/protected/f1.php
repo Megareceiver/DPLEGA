@@ -25,6 +25,7 @@
 			case "f117"  : $resultList = getKoleksiSection($data); break;
 			case "f119"  : $resultList = getPrestasiSection($data); break;
 			case "f141"  : $resultList = getKoleksi($data); break;
+			case "f151"  : $resultList = getVerifikasi($data); break;
 			
 			default	   : $resultList = array( "feedStatus" => "failed", "feedType" => "danger", "feedMessage" => "Terjadi kesalahan fatal, proses dibatalkan!", "feedData" => array()); break;
 		}
@@ -1834,6 +1835,278 @@
 				"hirarki"		=> $hirarki,
 				"koleksi"		=> $koleksi,
 				"prestasi"		=> $prestasi
+			);
+
+			$resultList = array( "feedStatus" => "success", "feedMessage" => "Data ditemukan!", "feedData" => $record);
+		}
+
+		if($error == 1){
+			//error state
+			$resultList = array( "feedStatus" => "failed", "feedType" => $errorType, "feedMessage" => $errorMsg, "feedData" => array());
+		}
+		
+		/* result fetch */
+		$json = $resultList;
+		
+		return $json;
+	}
+
+	function getVerifikasi($data){
+		/* initial condition */
+		$resultList = array();
+		$table 		= "";
+		$field 		= array();
+		$rows		= 0;
+		$condition 	= "";
+		$orderBy	= "";
+		$error		= 0;
+		$errorType  = "";
+		$errorMsg	= "";
+		$dumbTable  = "";
+		$noreg 		= $data['refferences'];
+
+		/* open connection */ 
+		$gate = openGate();
+		if($gate){		
+			// connection = true
+			//checking section
+			$sql 	= " SELECT noRegistrasi FROM dplega_000_lembaga WHERE noRegistrasi = '".$noreg."'";
+			$result = mysqli_query($gate, $sql);
+			if(mysqli_num_rows($result) > 0) {
+				$dumbTable = "";
+			}else{
+				$sql 	= " SELECT noRegistrasi FROM dplega_000_lembaga_temp WHERE noRegistrasi = '".$noreg."'";
+				$result = mysqli_query($gate, $sql);
+				if(mysqli_num_rows($result) > 0) {
+					$dumbTable = "_temp";
+				}else{
+					//error state
+					$error		= 1;
+					$errorType  = "danger";
+					$errorMsg	= "Terjadi kesalahan, data tidak dikenal!";
+				}
+			}
+
+
+			$record    	= array(); 
+			$fetch 	   	= array();  
+			$lembaga  	= array();  
+			$legalitas	= array();  
+			$verifikasi	= array();  
+			$statusValid= (($dumbTable == "") ? 'valid' : 'ajuan'); 
+
+			if($error != 1){
+				//kelembagaan
+				$sql = 	"
+					SELECT 
+						l.`noRegistrasi`, 
+						l.`nama`, 
+						b.`namaBentukLembaga`, 
+						l.`urlGambarLogo`,
+						CONCAT_WS(' ', `alamat`, 'RT.',`noRt`, '/', 'RW.', `noRw`, `namaKelurahan`, `namaKecamatan`, `namaWilayah`, `namaProvinsi`) as alamat
+					FROM
+						dplega_000_lembaga".$dumbTable." l
+					JOIN
+						dplega_200_bentuklembaga b ON l.kodeBentukLembaga = b.kodeBentukLembaga
+					LEFT JOIN
+						dplega_100_provinsi p ON l.kodeProvinsi = p.idData
+					LEFT JOIN
+						dplega_101_wilayah w ON l.kodeWilayah = w.idData
+					LEFT JOIN
+						dplega_102_kecamatan kc ON l.kodeKecamatan = kc.idData
+					LEFT JOIN
+						dplega_103_kelurahan kl ON l.kodeKelurahan = kl.idData
+					WHERE
+						l.noRegistrasi = '".$noreg."'
+				";
+				$result = mysqli_query($gate, $sql);
+				if($result){
+					if(mysqli_num_rows($result) > 0) {
+						// output data of each row 
+						while($row = mysqli_fetch_assoc($result)) {
+							$lembaga = array(
+									"noreg"   		=> $row['noRegistrasi'],
+									"nama" 			=> $row['nama'],
+									"bentukLembaga"	=> $row['namaBentukLembaga'],
+									"alamat"		=> $row['alamat'],
+									"picture"		=> $row['urlGambarLogo'],
+									"statusValid"	=> $statusValid
+							);
+						}
+					}
+				}else{
+					//error state
+					$error		= 1;
+					$errorType  = "danger";
+					$errorMsg	= "Terjadi kesalahan, tidak dapat terhubung ke server!";
+				}	
+
+				//legalitas
+				$kodeBentukLembaga = mysqli_fetch_assoc(mysqli_query($gate, "SELECT kodeBentukLembaga FROM dplega_000_lembaga".$dumbTable." WHERE noRegistrasi = '".$noreg."'"));
+				$kodeBentukLembaga = $kodeBentukLembaga['kodeBentukLembaga'];
+
+				$sql = 	"
+					SELECT 
+						`kodePersyaratan`, 
+						`namaPersyaratan`
+					FROM
+						dplega_201_persyaratan
+					WHERE
+						kodeBentukLembaga = '".$kodeBentukLembaga."'
+				";
+
+				$result = mysqli_query($gate, $sql);
+				if($result){
+					if(mysqli_num_rows($result) > 0) {
+						// output data of each row 
+						while($row = mysqli_fetch_assoc($result)) {
+							$sql = 	"
+								SELECT 
+									noLegalitas,
+									tanggalLegalitas,
+									urlFile
+								FROM
+									dplega_009_legalitas".$dumbTable."
+								WHERE
+									kodePersyaratan = '".$row['kodePersyaratan']."'
+								AND noRegistrasi = '".$noreg."'
+							";
+
+							$res = mysqli_query($gate, $sql);
+							if($res){
+								if(mysqli_num_rows($res) > 0) {
+									// output data of each row 
+									while($rowf = mysqli_fetch_assoc($res)) {
+										$fetch = array (
+											"noRegistrasi" 		=> $noreg,
+											"kodePersyaratan" 	=> $row['kodePersyaratan'],
+											"namaLegalitas" 	=> $row['namaPersyaratan'],
+											"noLegalitas" 		=> $rowf['noLegalitas'],
+											"tanggalLegalitas" 	=> $rowf['tanggalLegalitas'],
+											"urlFile" 			=> $rowf['urlFile']
+										);
+									}
+								}else{
+									$fetch = array (
+										"noRegistrasi" 		=> $noreg,
+										"kodePersyaratan" 	=> $row['kodePersyaratan'],
+										"namaLegalitas" 	=> $row['namaPersyaratan'],
+										"noLegalitas" 		=> '',
+										"tanggalLegalitas" 	=> '',
+										"urlFile" 			=> ''
+									);
+								}
+							}
+
+							array_push($record, $fetch);
+							unset($fetch);
+							$fetch = array();
+						}
+
+						$legalitas = array(
+									"noRegistrasi"   	=> $noreg,
+									"items" 			=> $record
+						);
+
+						unset($record);
+						$record = array();
+					}
+				}else{
+					//error state
+					$error		= 1;
+					$errorType  = "danger";
+					$errorMsg	= "Terjadi kesalahan, tidak dapat terhubung ke serverSS!";
+				}
+
+
+				//verifikasi
+				$sql = 	"
+					SELECT 
+						v.`kodeVerifikasi`, 
+						v.`namaVerifikasi`,
+						v.`kodeGrupVerifikasi`,
+						g.`namaGrupVerifikasi`
+					FROM
+						 dplega_221_verifikasi v
+					JOIN dplega_220_grupverifikasi g ON v.kodeGrupVerifikasi = g.kodeGrupVerifikasi
+					ORDER BY v.kodeGrupVerifikasi
+				";
+
+				$result = mysqli_query($gate, $sql);
+				if($result){
+					if(mysqli_num_rows($result) > 0) {
+						// output data of each row 
+						while($row = mysqli_fetch_assoc($result)) {
+							$sql = 	"
+								SELECT 
+									idData,
+									noRegistrasi,
+									kodeVerifikasi,
+									urlFile,
+									status
+								FROM
+									dplega_012_verifikasi".$dumbTable."
+								WHERE
+									kodeVerifikasi = '".$row['kodeVerifikasi']."'
+								AND noRegistrasi = '".$noreg."'
+							";
+
+							$res = mysqli_query($gate, $sql);
+							if($res){
+								if(mysqli_num_rows($res) > 0) {
+									// output data of each row 
+									while($rowf = mysqli_fetch_assoc($res)) {
+										$fetch = array (
+											"idData" 			=> $rowf['idData'],
+											"noRegistrasi" 		=> $noreg,
+											"kodeVerifikasi" 	=> $row['kodeVerifikasi'],
+											"namaVerifikasi" 	=> $row['namaVerifikasi'],
+											"status" 			=> $rowf['status'],
+											"urlFile" 			=> $rowf['urlFile']
+										);
+									}
+								}else{
+									$fetch = array (
+										"idData" 			=> '',
+										"noRegistrasi" 		=> $noreg,
+										"kodeVerifikasi" 	=> $row['kodeVerifikasi'],
+										"namaVerifikasi" 	=> $row['namaVerifikasi'],
+										"status" 			=> '0',
+										"urlFile" 			=> ''
+									);
+								}
+							}
+
+							array_push($record, $fetch);
+							unset($fetch);
+							$fetch = array();
+						}
+
+						$verifikasi = array(
+									"noRegistrasi"   	=> $noreg,
+									"items" 			=> $record
+						);
+
+						unset($record);
+						$record = array();
+					}
+				}else{
+					//error state
+					$error		= 1;
+					$errorType  = "danger";
+					$errorMsg	= "Terjadi kesalahan, tidak dapat terhubung ke serverSS!";
+				}
+
+				
+			//end		
+			}
+
+			closeGate($gate);
+
+			$record = array(
+				"kelembagaan" 	=> $lembaga,
+				"legalitas" 	=> $legalitas,
+				"verifikasi" 	=> $verifikasi,
 			);
 
 			$resultList = array( "feedStatus" => "success", "feedMessage" => "Data ditemukan!", "feedData" => $record);

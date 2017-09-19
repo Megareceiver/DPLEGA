@@ -418,7 +418,7 @@ function r_f1DetailLembaga(packet) {
 		profile_look_set(packet);
 		
 		//data = p_getData('f1', 'f1111', '', '12121300001');
-		data = p_getData('f1', 'f1111', '', packet); console.log(packet);
+		data = p_getData('f1', 'f1111', '', packet);
 		data = data.feedData;
 		
 		//-- set option list on a session
@@ -2090,6 +2090,12 @@ function r_f1SejarahBantuanDataGenerator(data){
 //F1 VERIFIKASI LEMBAGA
 //=====================================
 function r_f1VerifikasiLembaga(packet) {
+	if(packet == undefined || packet == "" || packet == null || packet == "start"){
+		packet = profile_look_reader();
+	}
+
+	profile_look_set(packet);
+
 	$("body").prepend(preload);
 	$('main.parent').animate({'opacity': '0.6'},'fast','linear', function(){
 		mainPage.html('');
@@ -2097,97 +2103,154 @@ function r_f1VerifikasiLembaga(packet) {
 		body  	= '';
 		part	= ['',''];
 		content = '';
-		data 	= [{
-			'lembaga': [{ 'nama': 'TEST SESSION', 'picture': 'avatar-2.jpg', 'noreg': '001', 'bentukLembaga': '-'}],
-			'list': [
-				{ 
-					'group': 'Dokumen legalitas', 
-					'items': [
-						{'id': '2', 'label': 'Akta notaris', 'attachment': 'Y', 'picture': ''},
-						{'id': '3', 'label': 'SK Kemenhukam', 'attachment': 'Y', 'picture': ''},
-					]
-				},
-				{ 
-					'group': 'Survei lapangan', 
-					'items': [
-						{'id': '4', 'label': 'Keberadaan lembaga', 'attachment': 'N', 'picture': ''},
-					]
-				},
-			]
-		}];
+		data 	= p_getData('f1','f151', '', packet);
+		data 	= data.feedData;
 		
+		placeImg = data.kelembagaan.noreg;
+		placeImg = placeImg.substr((placeImg.length-1), 1);
+		temPic   = (data.kelembagaan.picture != "") ? 'img/logo/' + data.kelembagaan.picture : 'img/logo/avatar-' + placeImg + '.jpg';
+
 		//--open
 		head	= '';
 		
 		body	= '<div class="row no-head"><div class="container">';
 		body	= body + '<div class="col-md-10 col-md-offset-1">';
 		body	= body + 
-		'<div class="cards fluid">' +
-			'<div class="description-box click-frame group-click" p-id="' + data[0].lembaga[0].noreg + '">' +
-				'<img class="icon-set" src="img/avatar/' + data[0].lembaga[0].picture + '"/>' +
-				'<p class="title-set">' + data[0].lembaga[0].nama + '</p>' +
-				'<div class="text-set">' +
-					'<span class="id-set">' + data[0].lembaga[0].noreg + '</span>' +
+		'<div class="cards clear min" id="' + data.kelembagaan.noreg + '-group">' +
+			'<div class="description-box">' +
+				'<div class="">' +
+					'<img class="icon-set" src="' + temPic + '"/>' +
+					'<p class="title-set">' + data.kelembagaan.bentukLembaga + ' ' + data.kelembagaan.nama + '</p>' +
+					'<div class="text-set">' +
+						'<span class="id-set">' + data.kelembagaan.noreg + '</span>' +
+						'<span class="desc-text">' + data.kelembagaan.alamat + '</span>' +
+					'</div>' +
+				'</div>' +
+				// '<button class="click-option btn-set toggle-click clear" toggle-target="' + data.kelembagaan.noreg + '-group" type="button"><span class="fa fa-chevron-down"></span></button>' +
+			'</div>' +
+		'</div>';
+
+		var tempR = ((data.kelembagaan.statusValid == "valid") ? 'checked' : '');
+		body = body +
+		'<div class="cards ' + data.kelembagaan.noreg + '-group flush">' +
+			'<div class="list-box clear">' +
+				'<p class="list-text text-green">KONFIRMASI KEABSAHAN DATA</p>' +
+				'<div class="switch-box clear fixed-position right">' +
+					'<input id="k-' + data.kelembagaan.noreg + '" pId="' + data.kelembagaan.noreg + '" class="userActivator" type="checkbox" ' + tempR + ' />' +
+					'<label for="k-' + data.kelembagaan.noreg + '"></label>' +
 				'</div>' +
 			'</div>' +
 		'</div>';
 
+		body = body +
+		'<div class="cards title">' +
+			'<div class="cards-header">' +
+				'<h6 class="text-purple"><b>Kelengkapan Legalitas</b></h6>' +
+				// '<div class="btn-collapse right">' +
+				// 	'<button class="clear" type="submit"><span class="fa fa-check-circle-o"></span></button>' +
+				// '</div>' +
+			'</div>' +
+		'</div>' +
+		'<div class="row default">' +
+			'<div class="col-xs-12">';
+
 		//--render data
 		var stat = 0;
 		var divider = "";
-		for(var loop = 0; loop < data[0].list.length; loop++){	
-			
+
+		/*legalitas*/
+		var legalitas = (data != null && data.legalitas.items != null) ? data.legalitas.items : [];
+		for(var loop = 0; loop < legalitas.length; loop++){	
+			divider = "";
+			if(loop == (legalitas.length - 1)){ divider = 'flush'; }
+
 			body = body +
-			'<div class="cards">' +
-				'<div class="cards-header">' +
-					'<p class="fixed text-purple text-bold">' + data[0].list[loop].group + '</p>' +
-				'</div>' +
-			'</div>';
-			
-			for(var loopY = 0; loopY < data[0].list[loop].items.length; loopY++){	
-				if(loopY == (data[0].list[loop].items.length - 1)){ divider = "flush"; } else { divider = ""; }
-				stat = 0;
-				body = body +
+			'<div class="cards ' + divider + '">' +
 				'<div class="row default">' +
-					'<div class="col-xs-12">' +
-						'<div class="cards ' + divider + '">' +
-							'<div class="row default">' +
-								'<div class="col-md-7">' +
-									'<div class="list-box clear">' +
-										'<p class="list-text parent">' + data[0].list[loop].items[loopY].label + '</p>';
-				
-				if(data[0].list[loop].items[loopY].attachment == "Y") { 
-					if(data[0].list[loop].items[loopY].picture != ""){ stat = 1; }
-					body = body +
-					'<button type="button" class="btn-link clear">Pratinjau (' + stat + ')</button>';
-				}
-				
-				body = body +	
-										'<div class="check-box fixed-position right">' +
-										  '<input id="' + data[0].list[loop].items[loopY].id + '" type="checkbox">' +
-										  '<label for="' + data[0].list[loop].items[loopY].id + '"><span class="inner"></span><span class="icon"></span></label>' +
-										'</div>' +
-									'</div>' +
-									'<div class="space-box hidden-md hidden-lg visible-sm-block visible-xs-block"></div>' +
-								'</div>' +
-								'<div class="col-md-5">' +
-									'<div class="list-box input-clear">' +
-										'<div class="input-box pop-right">' +
-											'<input placeholder="Catatan revisi" tabindex="1" type="text" value="" />' +
-										'</div>' +
-										'<div class="list-remove right" p-id=""><span class="fa fa-thumb-tack"></span></div>' +
-									'</div>' +
-									'<div class="space-box hidden-md hidden-lg visible-sm-block visible-xs-block"></div>' +
-								'</div>' +
-								'<div class="clearfix"></div>' +
+					'<div class="col-md-7">' +
+						'<div class="list-box clear">' +
+							'<p class="list-text parent">' + legalitas[loop].namaLegalitas + '</p>';
+
+			tempc = "";
+			if(legalitas[loop].urlFile != ""){ stat = 1; tempc = 'img/legalitas/' + legalitas[loop].urlFile; }
+			body = body + '<button type="button" class="btn-link clear" preview-target="' + tempc + '">Pratinjau (' + stat + ')</button>';
+			stat = 0;
+			
+			body = body +	
+							'<div class="check-box fixed-position right">' +
+							  '<input id="' + legalitas[loop].kodePersyaratan + '" type="checkbox">' +
+							  '<label for="' + legalitas[loop].kodePersyaratan + '"><span class="inner"></span><span class="icon"></span></label>' +
 							'</div>' +
 						'</div>' +
+						'<div class="space-box hidden-md hidden-lg visible-sm-block visible-xs-block"></div>' +
+					'</div>' +
+					'<div class="col-md-5">' +
+						'<div class="list-box input-clear">' +
+							'<div class="input-box pop-right">' +
+								'<input placeholder="Catatan revisi" tabindex="1" type="text" value="" />' +
+							'</div>' +
+							'<div class="list-remove right" p-id=""><span class="fa fa-thumb-tack"></span></div>' +
+						'</div>' +
+						'<div class="space-box hidden-md hidden-lg visible-sm-block visible-xs-block"></div>' +
 					'</div>' +
 					'<div class="clearfix"></div>' +
-				'</div>';
-			}
+				'</div>' +
+			'</div>';
+				
+		}
+
+		/*poin verifikasi*/
+		body = body +
+		'<div class="cards title">' +
+			'<div class="cards-header">' +
+				'<h6 class="text-purple"><b>Kelengkapan lainnya</b></h6>' +
+				// '<div class="btn-collapse right">' +
+				// 	'<button class="clear" type="submit"><span class="fa fa-check-circle-o"></span></button>' +
+				// '</div>' +
+			'</div>' +
+		'</div>';
+
+		var verifikasi = (data != null && data.verifikasi.items != null) ? data.verifikasi.items : [];
+		for(var loop = 0; loop < verifikasi.length; loop++){	
+			body = body +
+			'<div class="cards">' +
+				'<div class="row default">' +
+					'<div class="col-md-7">' +
+						'<div class="list-box clear">' +
+							'<p class="list-text parent">' + verifikasi[loop].namaVerifikasi + '</p>';
+			
+			// if(verifikasi[loop].urlFile != ""){ stat = 1; }
+			// body = body + '<button type="button" class="btn-link clear">Pratinjau (' + stat + ')</button>';
+			// stat = 0;
+			
+			body = body +	
+							'<div class="check-box fixed-position right">' +
+							  '<input id="v-' + verifikasi[loop].kodeVerifikasi + '" type="checkbox">' +
+							  '<label for="v-' + verifikasi[loop].kodeVerifikasi + '"><span class="inner"></span><span class="icon"></span></label>' +
+							'</div>' +
+						'</div>' +
+						'<div class="space-box hidden-md hidden-lg visible-sm-block visible-xs-block"></div>' +
+					'</div>' +
+					'<div class="col-md-5">' +
+						'<div class="list-box input-clear">' +
+							'<div class="input-box pop-right">' +
+								'<input placeholder="Catatan revisi" tabindex="1" type="text" value="" />' +
+							'</div>' +
+							'<div class="list-remove right" p-id=""><span class="fa fa-thumb-tack"></span></div>' +
+						'</div>' +
+						'<div class="space-box hidden-md hidden-lg visible-sm-block visible-xs-block"></div>' +
+					'</div>' +
+					'<div class="clearfix"></div>' +
+				'</div>' +
+			'</div>';
+				
 		}
 		
+		body = body + 
+				'</div>' +
+			'<div class="clearfix"></div>' +
+		'</div>';
+
 		body	= body + '</div></div></div>';
 		content = '<section id="">' + head + body + '</section>';
 		//--close
@@ -2198,8 +2261,11 @@ function r_f1VerifikasiLembaga(packet) {
 		$("#preload").remove();
 		
 		//--command reactor
-		$(".back-button").unbind().on('click', function(){ r_navigateTo(11); });
+		$(".back-button").unbind().on('click', function(){ r_navigateTo(r_pagePreviousReader()); });
+		$("[preview-target]").unbind().on('click', function(){ showPreviewBox($(this).attr('preview-target')); });
+
 		r_navbarReactor();
+		// toggleBoxActivator();
 	});
 }
 
