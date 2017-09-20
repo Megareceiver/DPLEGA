@@ -319,6 +319,15 @@ function r_f3FormUser(packet) {
 					{"id": "konfigurasi-ubah", "state": ""},
 					{"id": "konfigurasi-hapus", "state": ""},
 				]
+			},
+			{
+				'module': 'verifikasi', 'group': "Verifikasi lembaga", "list": 
+				[
+					{"id": "verifikasi-lihat", "state": ""},
+					{"id": "verifikasi-tambah", "state": ""},
+					{"id": "verifikasi-ubah", "state": ""},
+					{"id": "verifikasi-hapus", "state": ""},
+				]
 			}
 
 		];

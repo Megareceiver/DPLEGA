@@ -1052,7 +1052,7 @@ function r_fNotification() {
 		
 		//--open
 		head = '';
-		body = '<div class="row no-head"><div class="container"><div class="col-md-8 col-md-offset-2">';
+		body = '<div class="row no-head"><div class="container"><div class="col-md-10 col-md-offset-1">';
 		
 		if(data.feedData != null){
 			for(var loop = 0; loop < data.feedData.length; loop++){
@@ -1062,7 +1062,7 @@ function r_fNotification() {
 					counta = data.feedData[loop].list.length;
 
 					body = body + 
-					'<div class="cards-label plus">' +
+					'<div class="cards-label ' + ((loop > 0) ? "plus" : '') + '">' +
 						'<p>' +
 							'<strong>' + data.feedData[loop].group + ' (' + counta + ')</strong>' +
 						'</p>' +

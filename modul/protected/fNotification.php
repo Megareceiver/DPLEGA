@@ -1,4 +1,5 @@
 <?php
+	if (session_status() == PHP_SESSION_NONE) {session_start();} // session start
 	require_once('protected/config.php');
 	function getData($data, $target){
 		/* initial condition */
@@ -13,10 +14,6 @@
 		$errorMsg	= "";
 	
 		/* refferences */
-		// f411 : provinsi
-		// f412 : wilayah
-		// f413 : kecamatan
-		// f414 : kelurahan
 		
 		switch($target){
 			case "f110": $resultList = getNotification($data); break;
@@ -52,10 +49,14 @@
 		if($gate){		
 			// connection = true
 			$sql = 	
-			"SELECT idData, deskripsi, waktu, targetUser, readStatus
+			"
+			SELECT idData, deskripsi, waktu, targetUser, statusBaca
 			FROM dplega_901_notifications
-			ORDER BY idData DESC
-			";
+			WHERE 
+				targetUser = '".$_SESSION['username']."'
+			OR
+				targetUser = 'public'
+			ORDER BY idData DESC";
 					
 			$result = mysqli_query($gate, $sql);
 			if($result){
@@ -64,13 +65,13 @@
 				$group;
 				if(mysqli_num_rows($result) > 0) {
 					while($row = mysqli_fetch_assoc($result)) {
-						if($row["readStatus"] == 0){
+						if($row["statusBaca"] == 0){
 							$unReadData = array(
 								"idData"   			=> $row['idData'],
 								"deskripsi" 		=> $row['deskripsi'],
 								"waktu" 			=> $row['waktu'],
 								"targetUser" 		=> $row['targetUser'],
-								"readStatus" 		=> $row['readStatus']
+								"readStatus" 		=> $row['statusBaca']
 							);
 							array_push($unReadData2, $unReadData);
 							unset($unReadData);
@@ -81,7 +82,7 @@
 								"deskripsi" 		=> $row['deskripsi'],
 								"waktu" 			=> $row['waktu'],
 								"targetUser" 		=> $row['targetUser'],
-								"readStatus" 		=> $row['readStatus']
+								"readStatus" 		=> $row['statusBaca']
 							);
 							array_push($readData2, $readData);
 							unset($readData);

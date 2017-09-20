@@ -1028,19 +1028,49 @@
 										$hapus = "1";
 									}
 
-									$sql = 
-									"	UPDATE dplega_911_useraccess
-										SET
-											lihat = '".$lihat."',
-											tambah = '".$tambah."',
-											ubah = '".$ubah."',
-											hapus = '".$hapus."',
-											changedBy = '".$_SESSION['username']."',
-											changedDate = NOW()
-										WHERE
-											username = '".$username."'
-										AND module = '".$value."'
-									";
+
+									$sql 	= "SELECT module FROM dplega_911_useraccess WHERE module = '".$value."' AND username = '".$username."'";
+									$result	= mysqli_query($gate, $sql);
+									if(mysqli_num_rows($result) > 0) {
+										$sql = 
+										"	UPDATE dplega_911_useraccess
+											SET
+												lihat = '".$lihat."',
+												tambah = '".$tambah."',
+												ubah = '".$ubah."',
+												hapus = '".$hapus."',
+												changedBy = '".$_SESSION['username']."',
+												changedDate = NOW()
+											WHERE
+												username = '".$username."'
+											AND module = '".$value."'
+										";
+									}else{
+										$sql = 
+										"	INSERT INTO dplega_911_useraccess
+											(
+												username,
+												idApps,
+												module,
+												lihat,
+												tambah,
+												ubah,
+												hapus,
+												createdBy,createdDate
+											)
+											VALUES
+											(
+												'".$data['username']."',
+												'1',
+												'".$value."',
+												'".$lihat."',
+												'".$tambah."',
+												'".$ubah."',
+												'".$hapus."',
+												'".$_SESSION['username']."',NOW()
+											);
+										";
+									}
 
 									$result	  = mysqli_query($gate, $sql);
 								}

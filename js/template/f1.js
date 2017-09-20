@@ -115,7 +115,7 @@ function r_f1DaftarLembaga(packet) {
 		part	= ['',''];
 		content = '';
 		data = p_getData('f1', 'f1110', "", 'single,'+ kodeBentukLembagaState);
-		data = data.feedData;
+		data = data.feedData; 
 		
 		//-- set option list on a session
 		optionBatch = (data != null) ? data.option : [];
@@ -279,14 +279,21 @@ function r_f1LembagaGenerator(data){
 			if(loop > 0){ tempP = "plus"; }
 			if(data.lembaga[loop].collapse == 'y') { tempB = '<span class="btn-collapse">Lihat semua</span>'; } else { tempB = ""; }
 
-			//--right
-			genHtml = genHtml +
-			'<div class="cards-label ' + tempP + '">' +
-				'<p>' +
-					'<strong>' + data.lembaga[loop].group + ' (' +  data.lembaga[loop].list.length + ')</strong>' +
-					tempB +
-				'</p>' +
-			'</div>';
+			//--group
+			if(data.lembaga[loop].list.length > 0){
+				var group = data.lembaga[loop].group;
+				if(group == "Ajuan")	 group = "Data lembaga ajuan";
+				if(group == "Perubahan") group = "Data lembaga perubahan";
+				if(group == "Valid") 	 group = "Data lembaga sudah verifikasi";
+				genHtml = genHtml +
+				'<div class="cards-label ' + tempP + '">' +
+					'<p>' +
+						'<strong> ' + group + ' (' +  data.lembaga[loop].list.length + ')</strong>' +
+						tempB +
+					'</p>' +
+				'</div>';
+			}
+
 			var temPic = "";
 			for(var loopY = 0; loopY < data.lembaga[loop].list.length; loopY++){
 				var placeImg = data.lembaga[loop].list[loopY].noreg;

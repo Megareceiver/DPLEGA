@@ -350,59 +350,52 @@
 				if($result){
 					$package    = array();  
 					$packageDumb= array();  
-					$record		= array();  
-					$fetch 	   = array(); 
-					$statLoop  = 0;
-					$counter   = mysqli_num_rows($result);
-					$fetch 	   = array();
+					$fetch 	    = array(); 
+					$dataDumb['Ajuan']		= array(); 
+					$dataDumb['Perubahan']	= array(); 
+					$dataDumb['Valid']		= array(); 
+				
 					if(mysqli_num_rows($result) > 0) {
 						// output data of each row 
 						while($row = mysqli_fetch_assoc($result)) {
-							unset($fetch); $fetch = array();
-							
-							if($statLoop == 0) { $next  = $row['group']; }
-							
-							if($next != $row['group']){
-								$packageDumb = array("group" => $row['group'], "collapse" => "n", "list" => $record);
-								unset($record); 
-								$record = array();
-								$next   = $row['group'];
-							}
-							
+
 							$fetch = array(
-										"id"   		=> $row['id'],
-										"username" 	=> $row['username'],
-										"noreg" 	=> $row['noreg'],
-										"nama" 		=> $row['nama'],
-										"telp" 		=> $row['telp'],
-										"email"		=> $row['email'],
-										"alamat"	=> $row['alamat'],
-										"np"		=> $row['np'],
-										"nw"		=> $row['nw'],
-										"nc"		=> $row['nc'],
-										"nk"		=> $row['nk'],
-										"nb"		=> $row['nb'],
-										"picture"	=> $row['picture']
-									);
+								"id"   		=> $row['id'],
+								"username" 	=> $row['username'],
+								"noreg" 	=> $row['noreg'],
+								"nama" 		=> $row['nama'],
+								"telp" 		=> $row['telp'],
+								"email"		=> $row['email'],
+								"alamat"	=> $row['alamat'],
+								"np"		=> $row['np'],
+								"nw"		=> $row['nw'],
+								"nc"		=> $row['nc'],
+								"nk"		=> $row['nk'],
+								"nb"		=> $row['nb'],
+								"picture"	=> $row['picture']
+							);
 							
-							array_push($record, $fetch); 
-							$statLoop++;
-							if($statLoop == $counter){
-								$packageDumb = array("group" => $row['group'], "collapse" => "n", "list" => $record);
-								unset($record); 
-								$record = array();
-							}
+							array_push($dataDumb[$row['group']], $fetch); 
+							unset($fetch); $fetch = array();
 						}
+
+						array_push($packageDumb, array("group" => "Ajuan", "collapse" => "n", "list" => $dataDumb['Ajuan']));
+						array_push($packageDumb, array("group" => "Perubahan", "collapse" => "n", "list" => $dataDumb['Perubahan']));
+						array_push($packageDumb, array("group" => "Valid", "collapse" => "n", "list" => $dataDumb['Valid']));
+						
+						/*session fetch*/
+						$access1  = sessionFecth('kelembagaan');
+						$access2  = sessionFecth('verifikasi');
+						$options = array();
+						if($access1['lihat']  == '1') array_push($options, array("selector" => "view-card", "icon" => "search", "label" => "Lihat selengkapnya"));
+						if($access1['lihat']  == '1') array_push($options, array("selector" => "download-card", "icon" => "download", "label" => "Unduh (.pdf)"));
+						if($access2['tambah'] == '1' || $access2['ubah']   == '1') array_push($options, array("selector" => "verification-card", "icon" => "check", "label" => "Verifikasi"));
+						if($access1['ubah']   == '1') array_push($options, array("selector" => "edit-card", "icon" => "pencil", "label" => "Ubah profil"));
+						if($access1['hapus']  == '1') array_push($options, array("selector" => "delete-card", "icon" => "trash", "label" => "Hapus lembaga"));
 						
 						$package = array(
-							"lembaga" => array($packageDumb),
-							"option" => array(
-								array("selector" => "download-card", "icon" => "download", "label" => "Unduh (.pdf)"),
-								array("selector" => "view-card", "icon" => "search", "label" => "Lihat selengkapnya"),
-								array("selector" => "verification-card", "icon" => "check", "label" => "Verifikasi"),
-								array("selector" => "edit-card", "icon" => "pencil", "label" => "Ubah profil"),
-								array("selector" => "delete-card", "icon" => "trash", "label" => "Hapus lembaga")
-							)
+							"lembaga" => $packageDumb,
+							"option" => $options
 						);
 						
 						$resultList = array( "feedStatus" => "success", "feedMessage" => "Data ditemukan!", "feedData" => $package);
@@ -434,6 +427,26 @@
 		$json = $resultList;
 		
 		return $json;
+	}
+
+	function sessionFecth($module){
+		$res = array();
+		$res = $_SESSION['accessList'];
+
+		switch ($module) {
+			case 'kelembagaan':
+				$res = $res[0];
+				break;
+			case 'verifikasi':
+				$res = ((isset($res[6])) ? $res[6] : array("lihat" => "0", "tambah" => "0", "ubah"=> "0", "hapus"=> "0"));
+				break;
+			
+			default:
+				# code...
+				break;
+		}
+
+		return $res;
 	}
 
 	function getListAllLembagaan($data){
