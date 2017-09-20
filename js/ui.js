@@ -26,6 +26,16 @@ function init(){
 	window.location.hash="?";
 	window.location.hash="#";//again because google chrome don't insert first hash into history
 	window.onhashchange=function(){window.location.hash="?";}
+	window.ondragstart = function() { return false; } 
+
+	document.addEventListener('copy', function (e){
+	    e.preventDefault();
+	    e.clipboardData.setData("text/plain", "Tidak diperkenankan menyalin konten!");
+	});
+
+    // Stop the context menu
+	// $(document).on({ "contextmenu": function(e) {e.preventDefault();}});
+
 }
 
 /* time converter */
@@ -350,7 +360,7 @@ function showPreviewBox(urlFile, type = ""){
 		
 		optionHtml = optionHtml +
 		'<div id="option-confirm" class="option-list">' +
-			'<div class="option-frame col-md-8 col-sm-8">' +
+			'<div class="option-frame col-md-12">' +
 				'<img src= "' + urlFile + '" />' +
 			'</div>' +
 		'</div>' +

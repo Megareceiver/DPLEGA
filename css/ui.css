@@ -1121,6 +1121,13 @@ footer.parent .author-box img { height: 30px; float: right }
 .option-list .option-frame {
 	margin:auto; 
 	float: none;
+	max-height: 100%;
+    max-width: 100%;
+    overflow-y: auto;
+}
+
+.option-list .option-frame img {
+    max-width: 100%;
 }
 
 .option-list ul,

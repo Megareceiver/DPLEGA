@@ -277,6 +277,22 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 					$('#counter-select').html(0);
 					clearTargetForm(formId);
 				break;
+				case 'f151' :
+				case 'f152' :
+					$("#" + formId + ' [type=submit] span').removeClass('fa-active-success').addClass('fa-active-success');
+					$("#" + formId + ' [type=submit]').attr('type', 'reset');
+					$("#" + formId + ' [type=reset]').unbind().on('click', function(){
+						$("#" + formId + ' [type=reset]').children('span').removeClass('fa-active-success'); 
+						$("#" + formId + ' [type=reset]').attr('type', 'submit').unbind(); 
+						$("#" + formId + " .catatan").val('');
+						$("#" + formId + " input").unbind();
+						$("#" + formId + " input").on("keypress", function(event) { return event.keyCode; });
+						p_formHandler(formId,'addData');
+						return false;
+					});
+
+					$("#" + formId + " input").on("keypress", function(event) { return event.keyCode != 13; });
+				break;
 			}
 		break;
 		case 'f3': //megan

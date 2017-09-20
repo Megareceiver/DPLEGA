@@ -2110,6 +2110,9 @@ function r_f1VerifikasiLembaga(packet) {
 		placeImg = placeImg.substr((placeImg.length-1), 1);
 		temPic   = (data.kelembagaan.picture != "") ? 'img/logo/' + data.kelembagaan.picture : 'img/logo/avatar-' + placeImg + '.jpg';
 
+		checkedTotal = 0;
+		checkedCounter = 0;
+
 		//--open
 		head	= '';
 		
@@ -2136,8 +2139,8 @@ function r_f1VerifikasiLembaga(packet) {
 			'<div class="list-box clear">' +
 				'<p class="list-text text-green">KONFIRMASI KEABSAHAN DATA</p>' +
 				'<div class="switch-box clear fixed-position right">' +
-					'<input id="k-' + data.kelembagaan.noreg + '" pId="' + data.kelembagaan.noreg + '" class="userActivator" type="checkbox" ' + tempR + ' />' +
-					'<label for="k-' + data.kelembagaan.noreg + '"></label>' +
+					'<input id="valid-button" p-referencesKey="' + data.kelembagaan.noreg + '" class="userActivator" type="checkbox" ' + tempR + ' />' +
+					'<label for="valid-button"></label>' +
 				'</div>' +
 			'</div>' +
 		'</div>';
@@ -2161,6 +2164,7 @@ function r_f1VerifikasiLembaga(packet) {
 		/*legalitas*/
 		var legalitas = (data != null && data.legalitas.items != null) ? data.legalitas.items : [];
 		for(var loop = 0; loop < legalitas.length; loop++){	
+			checkedTotal = checkedTotal + 1;
 			divider = "";
 			if(loop == (legalitas.length - 1)){ divider = 'flush'; }
 
@@ -2176,22 +2180,30 @@ function r_f1VerifikasiLembaga(packet) {
 			body = body + '<button type="button" class="btn-link clear" preview-target="' + tempc + '">Pratinjau (' + stat + ')</button>';
 			stat = 0;
 			
+			tempS = ((legalitas[loop].catatan != "" && legalitas[loop].catatan != null) ? "fa-active-success" : "");
+			tempB = ((legalitas[loop].catatan != "" && legalitas[loop].catatan != null) ? "reset" : "submit");
+			tempC = ((legalitas[loop].statusVerifikasi == "1") ? "checked" : "");
+			if(legalitas[loop].statusVerifikasi == "1") checkedCounter = checkedCounter + 1;
 			body = body +	
 							'<div class="check-box fixed-position right">' +
-							  '<input id="' + legalitas[loop].kodePersyaratan + '" type="checkbox">' +
-							  '<label for="' + legalitas[loop].kodePersyaratan + '"><span class="inner"></span><span class="icon"></span></label>' +
+							  '<input id="lv-' + legalitas[loop].kodePersyaratan + '" p-id="' + legalitas[loop].kodePersyaratan + '" p-referencesKey="' + data.legalitas.noRegistrasi + '" type="checkbox" ' + tempC + '>' +
+							  '<label for="lv-' + legalitas[loop].kodePersyaratan + '"><span class="inner"></span><span class="icon"></span></label>' +
 							'</div>' +
 						'</div>' +
 						'<div class="space-box hidden-md hidden-lg visible-sm-block visible-xs-block"></div>' +
 					'</div>' +
 					'<div class="col-md-5">' +
-						'<div class="list-box input-clear">' +
-							'<div class="input-box pop-right">' +
-								'<input placeholder="Catatan revisi" tabindex="1" type="text" value="" />' +
+						'<form id="f-cl-create-' + legalitas[loop].kodePersyaratan + '" f-group="f1" f-target="f151">' +
+							'<div class="list-box input-clear">' +
+								'<div class="input-box pop-right">' +
+									'<input placeholder="" name="kode" tabindex="1" type="hidden" value="' + legalitas[loop].kodePersyaratan + '" />' +
+									'<input placeholder="" name="noreg" tabindex="1" type="hidden" value="' + data.legalitas.noRegistrasi + '" />' +
+									'<input placeholder="Catatan revisi (*)" name="catatan" class="catatan" tabindex="1" type="text" value="' + legalitas[loop].catatan + '" />' +
+								'</div>' +
+								'<div class="list-remove right" p-id=""><button class="clear" type="' + tempB + '" p-id="f-cl-create-' + legalitas[loop].kodePersyaratan + '"><span class="fa fa-thumb-tack ' + tempS + '"></span></button></div>' +
 							'</div>' +
-							'<div class="list-remove right" p-id=""><span class="fa fa-thumb-tack"></span></div>' +
-						'</div>' +
-						'<div class="space-box hidden-md hidden-lg visible-sm-block visible-xs-block"></div>' +
+							'<div class="space-box hidden-md hidden-lg visible-sm-block visible-xs-block"></div>' +
+						'</form>' +
 					'</div>' +
 					'<div class="clearfix"></div>' +
 				'</div>' +
@@ -2212,6 +2224,7 @@ function r_f1VerifikasiLembaga(packet) {
 
 		var verifikasi = (data != null && data.verifikasi.items != null) ? data.verifikasi.items : [];
 		for(var loop = 0; loop < verifikasi.length; loop++){	
+			checkedTotal = checkedTotal + 1;
 			body = body +
 			'<div class="cards">' +
 				'<div class="row default">' +
@@ -2222,22 +2235,30 @@ function r_f1VerifikasiLembaga(packet) {
 			// if(verifikasi[loop].urlFile != ""){ stat = 1; }
 			// body = body + '<button type="button" class="btn-link clear">Pratinjau (' + stat + ')</button>';
 			// stat = 0;
-			
+			if(verifikasi[loop].statusVerifikasi == "1") checkedCounter = checkedCounter + 1;
+			tempC = ((verifikasi[loop].statusVerifikasi == "1") ? "checked" : "");
+			tempS = ((verifikasi[loop].catatan != "" && verifikasi[loop].catatan != null) ? "fa-active-success" : "");
+			tempB = ((verifikasi[loop].catatan != "" && verifikasi[loop].catatan != null) ? "reset" : "submit");
 			body = body +	
 							'<div class="check-box fixed-position right">' +
-							  '<input id="v-' + verifikasi[loop].kodeVerifikasi + '" type="checkbox">' +
-							  '<label for="v-' + verifikasi[loop].kodeVerifikasi + '"><span class="inner"></span><span class="icon"></span></label>' +
+							  '<input id="vr-' + verifikasi[loop].kodeVerifikasi + '" p-id="' + verifikasi[loop].kodeVerifikasi + '" p-referencesKey="' + data.verifikasi.noRegistrasi + '" type="checkbox" ' + tempC + '>' +
+							  '<label for="vr-' + verifikasi[loop].kodeVerifikasi + '"><span class="inner"></span><span class="icon"></span></label>' +
 							'</div>' +
 						'</div>' +
 						'<div class="space-box hidden-md hidden-lg visible-sm-block visible-xs-block"></div>' +
 					'</div>' +
 					'<div class="col-md-5">' +
-						'<div class="list-box input-clear">' +
-							'<div class="input-box pop-right">' +
-								'<input placeholder="Catatan revisi" tabindex="1" type="text" value="" />' +
+						'<form id="f-cv-create-' + verifikasi[loop].kodeVerifikasi + '" f-group="f1" f-target="f152">' +
+							'<div class="list-box input-clear">' +
+								'<div class="input-box pop-right">' +
+									'<input placeholder="" name="kode" tabindex="1" type="hidden" value="' + verifikasi[loop].kodeVerifikasi + '" />' +
+									'<input placeholder="" name="noreg" tabindex="1" type="hidden" value="' + data.verifikasi.noRegistrasi + '" />' +
+									'<input placeholder="Catatan revisi (*)" name="catatan" class="catatan" tabindex="1" type="text" value="' + verifikasi[loop].catatan + '" />' +
+								'</div>' +
+								'<div class="list-remove right"><button class="clear" type="' + tempB + '" p-id="f-cv-create-' + verifikasi[loop].kodeVerifikasi + '"><span class="fa fa-thumb-tack ' + tempS + '"></span></button></div>' +
 							'</div>' +
-							'<div class="list-remove right" p-id=""><span class="fa fa-thumb-tack"></span></div>' +
-						'</div>' +
+							'<div class="space-box hidden-md hidden-lg visible-sm-block visible-xs-block"></div>' +
+						'</form>' +
 						'<div class="space-box hidden-md hidden-lg visible-sm-block visible-xs-block"></div>' +
 					'</div>' +
 					'<div class="clearfix"></div>' +
@@ -2266,6 +2287,114 @@ function r_f1VerifikasiLembaga(packet) {
 
 		r_navbarReactor();
 		// toggleBoxActivator();
+		
+		/* legalitas*/
+		for(var loop = 0; loop < legalitas.length; loop++){	
+			tempS = ((legalitas[loop].catatan != "" && legalitas[loop].catatan != null) ? "fa-active-success" : "");
+			if(tempS == "") { p_formHandler('f-cl-create-' + legalitas[loop].kodePersyaratan,'addData'); }
+			else { 
+				$("#f-cl-create-" + legalitas[loop].kodePersyaratan + " button").unbind().on('click', function(){ 
+					$(this).children('span').removeClass('fa-active-success'); 
+					$(this).attr('type', 'submit').unbind(); 
+					$("#" + $(this).attr('p-id') + " .catatan").attr('value', '');
+					$("#" + $(this).attr('p-id') + " input").unbind();
+					p_formHandler($(this).attr('p-id'),'addData');
+					return false;
+				}); 
+
+				$("#f-cl-create-" + legalitas[loop].kodePersyaratan + " input").on("keypress", function(event) { return event.keyCode != 13; });
+			}
+
+
+			$('#lv-' + legalitas[loop].kodePersyaratan).on('click', function(){
+				hideOptionList(); 
+				showOptionConfirm('status');
+				clearPacket();
+				pTarget			= $(this);
+				pId 			= $(this).attr('p-Id');
+				pReferencesKey 	= $(this).attr('p-referencesKey');
+				checkedStatus  	= ($(this).prop('checked') == true ? '1' : '0');
+				$(".option-yes").unbind().on("click", function(){ 
+					hideOptionList(); 
+					if(p_changeData('f1', 'f117', pId, pReferencesKey, checkedStatus) == 'success'){ 
+						state = (pTarget.prop('checked') == true ? false : true);
+						pTarget.prop('checked', state);
+
+						if(pTarget.prop('checked') == true) checkedCounter = checkedCounter + 1; else checkedCounter = checkedCounter - 1;
+						clearPacket();
+					}; 
+					
+				});
+				 return false;
+			});
+		}
+
+		/* verifikasi */
+		for(var loop = 0; loop < verifikasi.length; loop++){	
+			tempS = ((verifikasi[loop].catatan != "" && verifikasi[loop].catatan != null) ? "fa-active-success" : "");
+			if(tempS == "") { p_formHandler('f-cv-create-' + verifikasi[loop].kodeVerifikasi,'addData'); }
+			else { 
+				$("#f-cv-create-" + verifikasi[loop].kodeVerifikasi + " button").unbind().on('click', function(){ 
+					$(this).children('span').removeClass('fa-active-success'); 
+					$(this).attr('type', 'submit').unbind(); 
+					$("#" + $(this).attr('p-id') + " .catatan").attr('value', '');
+					$("#" + $(this).attr('p-id') + " input").unbind();
+					p_formHandler($(this).attr('p-id'),'addData');
+					return false;
+				}); 
+
+				$("#f-cv-create-" + verifikasi[loop].kodeVerifikasi + " input").on("keypress", function(event) { return event.keyCode != 13; });
+			}
+
+
+			$('#vr-' + verifikasi[loop].kodeVerifikasi).on('click', function(){
+				hideOptionList(); 
+				showOptionConfirm('status');
+				clearPacket();
+				pTarget			= $(this);
+				pId 			= $(this).attr('p-Id');
+				pReferencesKey 	= $(this).attr('p-referencesKey');
+				checkedStatus  	= ($(this).prop('checked') == true ? '1' : '0');
+				$(".option-yes").unbind().on("click", function(){ 
+					hideOptionList(); 
+					if(p_changeData('f1', 'f118', pId, pReferencesKey, checkedStatus) == 'success'){ 
+						state = (pTarget.prop('checked') == true ? false : true);
+						pTarget.prop('checked', state);
+
+						if(pTarget.prop('checked') == true) checkedCounter = checkedCounter + 1; else checkedCounter = checkedCounter - 1;
+						clearPacket();
+					}; 
+					
+				});
+				 return false;
+			});
+		}
+
+
+		$('#valid-button').unbind().on('click', function(){
+			if(checkedCounter == checkedTotal){
+				hideOptionList(); 
+				showOptionConfirm('status');
+				clearPacket();
+				pTarget			= $(this);
+				pReferencesKey 	= $(this).attr('p-referencesKey');
+				checkedStatus  	= ($(this).prop('checked') == true ? '1' : '0');
+				$(".option-yes").unbind().on("click", function(){ 
+					hideOptionList(); 
+					if(p_changeData('f1', 'f199', '', pReferencesKey, checkedStatus) == 'success'){ 
+						state = (pTarget.prop('checked') == true ? false : true);
+						pTarget.prop('checked', state);
+						clearPacket();
+					}; 
+				});
+				
+				return false;
+			}else{
+				showNotification('danger', 'failure', 'Perlu melengkapi semua verifikasi!');
+				return false;
+			}
+		});
+
 	});
 }
 

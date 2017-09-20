@@ -85,7 +85,7 @@ function p_changeData(group, target, pId, refferenceId, dataFetch){
 			showNotification(data.feedType, 'changed', data.feedMessage);
 		},
 		complete: function(xhr,status) { hideNotification('waiting'); },
-		error: function(xhr,status,error) { showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); }
+		error: function(xhr,status,error) { showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); console.log(xhr); }
 	});
 	
 	return reStatus;

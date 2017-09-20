@@ -32,6 +32,21 @@ input.form-control:focus, textarea.form-control:focus {
 .modal-backdrop { background-color: #C2185B }
 .modal-backdrop.in { opacity: 1 }
 
+/*font awesome*/
+.fa-active-success {
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+	color: #00A859;
+}
+
+.fa {
+	-webkit-transition: 0.5s all;
+	-moz-transition: 0.5s all;
+	-ms-transition: 0.5s all;
+	transition: 0.5s all;
+}
 
 /* RESPONSIVE */
 /* extra small */
