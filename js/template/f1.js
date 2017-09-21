@@ -8,7 +8,7 @@ function r_f1Kelembagaan() {
 		body  	= '';
 		part	= ['',''];
 		content = '';
-		data 	= p_getData('f4', 'f431'); 
+		data 	= p_getData('f4', 'f431');
 		data 	= data.feedData; 
 		
 		//--open
@@ -43,7 +43,7 @@ function r_f1Kelembagaan() {
 				'<div class="cards-header">' +
 					'<p class="fixed offset text-black">' + data[loop].caption + '</p>' +
 					'<div class="btn-collapse right">' +
-						'<span id="counter-select">' + data[loop].counter + '</span>' +
+						'<span id="counter-select">' + (parseInt(data[loop].ajuan) + parseInt(data[loop].valid)) + '</span>' +
 					'</div>' +
 				'</div>' +
 			'</div>';
@@ -626,6 +626,7 @@ function r_f1DetailLembaga(packet) {
 
 			//-- popup
 			$("#verification-card").unbind().on("click", function(){ hideOptionList(); r_navigateTo(13, $(this).attr('p-id')); });
+			$("#user-card").unbind().on("click", function(){ hideOptionList(); r_navigateTo(46); });
 			$("#edit-card").unbind().on("click", function(){ hideOptionList(); r_pageSet(1); r_navigateTo(15, $(this).attr('p-id')); });
 			$("#delete-card").unbind().on("click", function(){ 
 				hideOptionList(); 
@@ -1644,7 +1645,8 @@ function r_f1FormKelembagaan(packet){
 		$("#preload").remove();
 		
 		//--command reactor
-		$(".back-button").unbind().on('click', function(){ r_navigateTo(r_pagePreviousReader()); });
+		navito = ((String(r_getCookie('userLevel')) == '1') ? 12 : 1);
+		$(".back-button").unbind().on('click', function(){ r_navigateTo(navito); });
 		
 		// $(".reset").unbind().on('click', function(){ clearTargetForm('f-kelembagaan-create'); });
 		/*tab reader*/
@@ -1750,7 +1752,7 @@ function r_f1FormKelembagaanDataGenerator(packet){
 	//kelembagaan
 	var bentukLembaga = r_bentukLembagaReader();
 	var tex = '<option value="' + data.kelembagaan.kodeBentukLembaga + '" selected>' + data.kelembagaan.namaBentukLembaga + '</option>';
-	$("#f-kelembagaan-create [name=bentukLembaga]").append(tex);
+	$("#f-kelembagaan-create [name=bentukLembaga]").html('').append(tex);
 
 	$("#f-kelembagaan-create [name=noreg]").val(data.kelembagaan.noRegistrasi);
 	$("#f-kelembagaan-create [name=nama]").val(data.kelembagaan.nama);

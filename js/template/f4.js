@@ -14,105 +14,132 @@ function r_f4Pengaturan() {
 		body	= '<div class="row no-head"><div class="container">';
 		part[0] = '';
 			
+		if(r_getCookie('lingkupAreaLihat') == '1') { 
+			part[0] = part[0] + 
+			'<div class="col-md-4 col-sm-6">' +
+				'<div class="cards">' +
+					'<div class="group-box body">' +
+						'<div class="icon-set bg-green"><span class="fa fa-map-marker fa-2x"></span></div>' +
+						'<p class="title-set">Linkup area</p>' +
+						'<p class="text-set">Lengkapi data pendukung lembaga yang berkaitan dengan Provinsi, wilayah, kecamatan, dan kelurahan.</p>' +
+					'</div>' +
+				'</div>' + 
+				'<div class="cards flush">' +
+					'<div class="group-box foot fixed">' +
+						'<div class="button-set">' +
+							'<div class="button-frame"><button type="button" class="btn-link" id="pLingkupArea">Atur konten</button></div>' +
+							'<div class="button-frame"><button type="button" class="btn-link" id="pTransferLembaga">Transfer lembaga</button></div>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+			'</div>';
+		}
+
+		if(r_getCookie('pengaturanKelembagaanLihat') == '1') { 
+			part[0] = part[0] + 
+			'<div class="col-md-4 col-sm-6">' +
+				'<div class="cards">' +
+					'<div class="group-box body">' +
+						'<div class="icon-set bg-red"><span class="fa fa-sitemap fa-2x"></span></div>' +
+						'<p class="title-set">Kelembagaan</p>' +
+						'<p class="text-set">Grup pendukung kelengkapan data lembaga yang memungkinkan diatur secara dinamis.</p>' +
+					'</div>' +
+				'</div>' +
+				'<div class="cards flush">' +
+					'<div class="group-box foot fixed">' +
+						'<div class="button-set">' +
+							'<div class="button-frame"><button type="button" class="btn-link" id="pBentukLembaga">Bentuk lembaga</button></div>' +
+							'<div class="button-frame"><button type="button" class="btn-link" id="pLegalitasLembaga">Legalitas lembaga</button></div>' +
+							'<div class="button-frame"><button type="button" class="btn-link" id="pBidangGerakLembaga">Bidang gerak lembaga</button></div>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+			'</div>';
+		}
+
+		if(r_getCookie('pengaturanVerifikasiLihat') == '1') { 
+			part[0] = part[0] + 
+			'<div class="col-md-4 col-sm-6">' +
+				'<div class="cards">' +
+					'<div class="group-box body">' +
+						'<div class="icon-set bg-purple"><span class="fa fa-list-ol fa-2x"></span></div>' +
+						'<p class="title-set">Verifikasi</p>' +
+						'<p class="text-set">Verifikasi adalah layanan untuk memilah data lembaga sesuai kriteria.</p>' +
+					'</div>' +
+				'</div>' +
+				'<div class="cards flush">' +
+					'<div class="group-box foot fixed">' +
+						'<div class="button-set">' +
+							'<div class="button-frame"><button type="button" class="btn-link" id="pDaftarVerifikasi">Atur konten</button></div>' +
+							'<div class="button-frame"><button type="button" class="btn-link" id="pGrupVerifikasi">Grup verifikasi</button></div>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+			'</div>';
+		}
+
+		if(r_getCookie('beritaLihat') == '1') { 
+			part[0] = part[0] + 
+			'<div class="col-md-4 col-sm-6">' +
+				'<div class="cards">' +
+					'<div class="group-box body">' +
+						'<div class="icon-set bg-yellow"><span class="fa fa-newspaper-o fa-2x"></span></div>' +
+						'<p class="title-set">Berita</p>' +
+						'<p class="text-set">Kelola berita terkini untuk dibagikan dan tampilkan dihalaman utama.</p>' +
+					'</div>' +
+				'</div>' +
+				'<div class="cards flush">' +
+					'<div class="group-box foot fixed">' +
+						'<div class="button-set">' +
+							'<div class="button-frame"><button type="button" class="btn-link" id="pDaftarBerita">Daftar berita</button></div>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+			'</div>';
+		}
+
+		if(r_getCookie('konfigurasiLihat') == '1') { 
+			part[0] = part[0] + 
+				'<div class="col-md-4 col-sm-6">' +
+				'<div class="cards">' +
+					'<div class="group-box body">' +
+						'<div class="icon-set bg-theme"><span class="fa fa-gears fa-2x"></span></div>' +
+						'<p class="title-set">Konfigurasi</p>' +
+						'<p class="text-set">Kemudahaan untuk mengontrol aplikasi.</p>' +
+					'</div>' +
+				'</div>' +
+				'<div class="cards flush">' +
+					'<div class="group-box foot fixed">' +
+						'<div class="button-set">' +
+							//'<div class="button-frame"><button type="button" class="btn-link" id="pImportData">Import data</button></div>' +
+							'<div class="button-frame"><button type="button" class="btn-link" id="pBackupRestore">Backup & restore</button></div>' +
+							// '<div class="button-frame"><button type="button" class="btn-link" id="pSetelan">Setelan</button></div>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+			'</div>';
+		}
+
 		part[0] = part[0] + 
-		'<div class="col-md-4 col-sm-12">' +
+		'<div class="col-md-4 col-sm-6">' +
 			'<div class="cards">' +
-				'<div class="group-box">' +
-					'<div class="icon-set bg-green"><span class="fa fa-map-marker fa-2x"></span></div>' +
-					'<p class="title-set">Linkup area</p>' +
-					'<p class="text-set">Lengkapi data pendukung lembaga yang berkaitan dengan Provinsi, wilayah, kecamatan, dan kelurahan.</p>' +
-				'</div>' +
-			'</div>' +
-			'<div class="cards flush">' +
-				'<div class="group-box fixed">' +
-					'<div class="button-set">' +
-						'<div class="button-frame"><button type="button" class="btn-link" id="pLingkupArea">Atur konten</button></div>' +
-						'<div class="button-frame"><button type="button" class="btn-link" id="pTransferLembaga">Transfer lembaga</button></div>' +
-					'</div>' +
-				'</div>' +
-			'</div>' +
-			'<div class="cards">' +
-				'<div class="group-box">' +
-					'<div class="icon-set bg-purple"><span class="fa fa-list-ol fa-2x"></span></div>' +
-					'<p class="title-set">Verifikasi</p>' +
-					'<p class="text-set">Verifikasi adalah layanan untuk memilah data lembaga sesuai kriteria.</p>' +
-				'</div>' +
-			'</div>' +
-			'<div class="cards flush">' +
-				'<div class="group-box fixed">' +
-					'<div class="button-set">' +
-						'<div class="button-frame"><button type="button" class="btn-link" id="pDaftarVerifikasi">Atur konten</button></div>' +
-						'<div class="button-frame"><button type="button" class="btn-link" id="pGrupVerifikasi">Grup verifikasi</button></div>' +
-					'</div>' +
-				'</div>' +
-			'</div>' +
-		'</div>' +
-		
-		'<div class="col-md-4 col-sm-12">' +
-			'<div class="cards">' +
-				'<div class="group-box">' +
-					'<div class="icon-set bg-red"><span class="fa fa-sitemap fa-2x"></span></div>' +
-					'<p class="title-set">Kelembagaan</p>' +
-					'<p class="text-set">Grup pendukung kelengkapan data lembaga yang memungkinkan diatur secara dinamis.</p>' +
-				'</div>' +
-			'</div>' +
-			'<div class="cards flush">' +
-				'<div class="group-box fixed">' +
-					'<div class="button-set">' +
-						'<div class="button-frame"><button type="button" class="btn-link" id="pBentukLembaga">Bentuk lembaga</button></div>' +
-						'<div class="button-frame"><button type="button" class="btn-link" id="pLegalitasLembaga">Legalitas lembaga</button></div>' +
-						'<div class="button-frame"><button type="button" class="btn-link" id="pBidangGerakLembaga">Bidang gerak lembaga</button></div>' +
-					'</div>' +
-				'</div>' +
-			'</div>' +
-			'<div class="cards">' +
-				'<div class="group-box">' +
-					'<div class="icon-set bg-yellow"><span class="fa fa-newspaper-o fa-2x"></span></div>' +
-					'<p class="title-set">Berita</p>' +
-					'<p class="text-set">Kelola berita terkini untuk dibagikan dan tampilkan dihalaman utama.</p>' +
-				'</div>' +
-			'</div>' +
-			'<div class="cards flush">' +
-				'<div class="group-box fixed">' +
-					'<div class="button-set">' +
-						'<div class="button-frame"><button type="button" class="btn-link" id="pDaftarBerita">Daftar berita</button></div>' +
-					'</div>' +
-				'</div>' +
-			'</div>' +
-		'</div>' +
-		
-		'<div class="col-md-4 col-sm-12">' +
-			'<div class="cards">' +
-				'<div class="group-box">' +
-					'<div class="icon-set bg-theme"><span class="fa fa-gears fa-2x"></span></div>' +
-					'<p class="title-set">Konfigurasi</p>' +
-					'<p class="text-set">Kemudahaan untuk mengontrol aplikasi.</p>' +
-				'</div>' +
-			'</div>' +
-			'<div class="cards flush">' +
-				'<div class="group-box fixed">' +
-					'<div class="button-set">' +
-						//'<div class="button-frame"><button type="button" class="btn-link" id="pImportData">Import data</button></div>' +
-						'<div class="button-frame"><button type="button" class="btn-link" id="pBackupRestore">Backup & restore</button></div>' +
-						'<div class="button-frame"><button type="button" class="btn-link" id="pSetelan">Setelan</button></div>' +
-					'</div>' +
-				'</div>' +
-			'</div>' +
-			'<div class="cards">' +
-				'<div class="group-box">' +
+				'<div class="group-box body">' +
 					'<div class="icon-set bg-sky"><span class="fa fa-shield fa-2x"></span></div>' +
 					'<p class="title-set">Preferensi akun</p>' +
 					'<p class="text-set">Proteksi demi kenyamanan penggunaan anda.</p>' +
 				'</div>' +
 			'</div>' +
 			'<div class="cards flush">' +
-				'<div class="group-box fixed">' +
+				'<div class="group-box foot fixed">' +
 					'<div class="button-set">' +
 						'<div class="button-frame"><button type="button" class="btn-link" id="pInformasiPersonal">Informasi personal</button></div>' +
 						'<div class="button-frame"><button type="button" class="btn-link" id="pGantiPassword">Ganti password</button></div>' +
 					'</div>' +
 				'</div>' +
 			'</div>' +
+		'</div>';
+
+		part[0] = part[0] + 
 		'</div>';
 		
 		part[0] = part[0] + '</div>';
@@ -237,7 +264,7 @@ function r_f4LingkupArea() {
 			'</div-->';
 		}
 		
-		if(data != null && data[0].provinsi != undefined){
+		if(data[0].provinsi.length > 0){
 			counter = data[0].provinsi.length;
 			if(counter > 0){
 				for(var loop = 0; loop < counter; loop++){
@@ -336,7 +363,7 @@ function r_f4LingkupArea() {
 			'</div-->';
 		}
 		
-		if(data != null && data[0].wilayah != undefined){
+		if(data[0].wilayah.length > 0){
 			counter = data[0].wilayah.length;
 			if(counter > 0){
 				for(var loop   = 0; loop < data[0].wilayah.length; loop++){
@@ -441,7 +468,7 @@ function r_f4LingkupArea() {
 			'</div-->';
 		}
 		
-		if(data != null && data[0].kecamatan != undefined){
+		if(data[0].kecamatan.length > 0){
 			counter = data[0].kecamatan.length;
 			if(counter > 0){
 				for(var loop = 0; loop < data[0].kecamatan.length; loop++){
@@ -547,7 +574,7 @@ function r_f4LingkupArea() {
 			'</div-->';
 		}
 		
-		if(data != null && data[0].kelurahan != undefined){
+		if(data[0].kelurahan.length > 0){
 			counter = data[0].kelurahan.length;
 			if(counter > 0){
 				for(var loop = 0; loop < data[0].kelurahan.length; loop++){
@@ -864,7 +891,7 @@ function r_f4LingkupAreaDataGenerator(formType, type, data, sectionId){
 
 function r_f4BeritaGenerator(data){
 	var genHtml = "";
-	if(data != null){
+	if(data.length > 0){
 		// genHtml = genHtml +
 		// '<div class="cards-label plus emptyList">' +
 		// 	'<p>' +
@@ -1200,11 +1227,11 @@ function r_f4DaftarVerifikasi() {
 					'</div>' +
 				'</div>' +
 			'</form>' +
-			'<div class="cards-label plus">' +
+			'<!--div class="cards-label plus">' +
 				'<p>' +
 					'<strong>Daftar verifikasi (' + counter + ')</strong>' +
 				'</p>' +
-			'</div>';
+			'</div-->';
 		}
 			
 		if(counter > 0){
@@ -1347,11 +1374,11 @@ function r_f4GrupVerifikasi() {
 					'</div>' +
 				'</div>' +
 			'</form>' +
-			'<div class="cards-label plus">' +
+			'<!--div class="cards-label plus">' +
 				'<p>' +
 					'<strong>Daftar grup (' + counter + ')</strong>' +
 				'</p>' +
-			'</div>';
+			'</div-->';
 		}
 		
 		if(counter > 0){
@@ -1615,11 +1642,11 @@ function r_f4BentukLembaga() {
 					'</div>' +
 				'</div>' +
 			'</form>' +
-			'<div class="cards-label plus">' +
+			'<!--div class="cards-label plus">' +
 				'<p>' +
 					'<strong>Daftar grup (' + counter + ')</strong>' +
 				'</p>' +
-			'</div>';
+			'</div-->';
 		}
 		
 		if(counter > 0){
@@ -1774,11 +1801,11 @@ function r_f4LegalitasLembaga() {
 					'</div>' +
 				'</div>' +
 			'</form>' +
-			'<div class="cards-label plus">' +
+			'<!--div class="cards-label plus">' +
 				'<p>' +
 					'<strong>Daftar legalitas (' + counter + ')</strong>' +
 				'</p>' +
-			'</div>';
+			'</div-->';
 		}
 		
 		if(counter > 0){
@@ -1916,11 +1943,11 @@ function r_f4BidangGerakLembaga() {
 					'</div>' +
 				'</div>' +
 			'</form>' +
-			'<div class="cards-label plus">' +
+			'<!--div class="cards-label plus">' +
 				'<p>' +
 					'<strong>Daftar bidang (' + counter + ')</strong>' +
 				'</p>' +
-			'</div>';
+			'</div-->';
 		}
 		
 		if(counter > 0){
@@ -2736,7 +2763,7 @@ function r_f4InfoPersonal() {
 		body = body + 
 		'<div class="cards fluid">' +
 			'<div class="col-md-4 text-center">' +
-				'<img src="' + imgDir + ((dataProfile.urlGambar != "") ? dataProfile.urlGambar : 'avatar-default-x3.jpg') + '" class="big-pic" />' +
+				'<img src="' + imgDir + ((dataProfile.urlGambar != "" && dataProfile.urlGambar != null) ? dataProfile.urlGambar : 'avatar-default-x3.jpg') + '" class="big-pic" />' +
 			'</div>' +
 			'<div class="col-md-8">' +
 				'<div class="desc-frame">' +
@@ -2839,13 +2866,15 @@ function r_f4InfoPersonal() {
 		//--close
 		
 		//--gen
-		headPage.html(r_headPageHtml(3, 'Informasi personal'));
+		res = (r_getCookie('userLevel') == '1') ? 2 : 3;
+		headPage.html(r_headPageHtml(res, 'Informasi personal'));
 		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
 		$("#preload").remove();
 		
 		//--command reactor
+		res = (r_getCookie('userLevel') == '1') ? 12 : 4;
 		$("#pEditInformasiPersonal").unbind().on('click', function(){ r_navigateTo(462); });
-		$(".back-button").unbind().on('click', function(){ r_navigateTo(4); });
+		$(".back-button").unbind().on('click', function(){ r_navigateTo(res); });
 		toggleBoxActivator();
 		r_navbarReactor();
 	});
@@ -2864,7 +2893,7 @@ function r_f4FormInfoPersonal() {
 		data 	= data.feedData;
 		
 		//-- get data lingkup area
-		dataTemp 		  	= p_getData('f4', 'f401', '');
+		dataTemp 		  	= p_getData('f4', 'f401', ''); 
 		sourcesData 	  	= (dataTemp.feedData != null) ? dataTemp.feedData[0] : ""; 
 		sourcesDetailData 	= (dataTemp.feedData != null) ? dataTemp.feedDataDetail : "";
 		
@@ -2872,6 +2901,8 @@ function r_f4FormInfoPersonal() {
 		head = '';
 		
 		body = '<div class="row no-head"><div class="container"><div class="col-md-8 col-md-offset-2">';
+
+		var imgDir = ((data.noRegistrasi != "") ? 'img/logo/' : 'img/avatar/');
 		body = body + 
 		'<form id="f-user-update" f-group="f3" f-target="f314">' +
 			'<div class="cards">' +
@@ -2885,7 +2916,7 @@ function r_f4FormInfoPersonal() {
 			'<div class="cards">' +
 				'<div class="col-sm-5">' +
 					'<div class="picture-box relative">' +
-						'<img viewer-id="v-user" class="pic-default pic-relative ' + ((data.urlGambar != null) ? 'changed' : '') + '" src="img/avatar/' + ((data.urlGambar != null) ? data.urlGambar : "img/sources/picture.png") + '" />' +
+						'<img viewer-id="v-user" class="pic-default pic-relative changed" src="' + imgDir + ((data.urlGambar != "" && data.urlGambar != null) ? data.urlGambar : 'avatar-default-x3.jpg')  + '" />' +
 					'</div>' +
 					'<div class="input-box">' +
 						'<div class="icon-box both">' +
@@ -2958,7 +2989,8 @@ function r_f4FormInfoPersonal() {
 		//--close
 		
 		//--gen
-		headPage.html(r_headPageHtml(3, 'Form info personal'));
+		res = (r_getCookie('userLevel') == '1') ? 2 : 3;
+		headPage.html(r_headPageHtml(res, 'Form info personal'));
 		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
 		$("#preload").remove();
 		

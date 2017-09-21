@@ -21,6 +21,10 @@ var lembagaCounter		= 0;
 var moduleCounter		= 0;
 var moduleActive		= [];
 var customArray			= [];
+var notifInterval		= 10000;
+var notifChecker		= 0;
+var notifId				= null;
+var logoutAgent			= 0;
 
 /* packet data variable */
 var pGroup  		= "";
@@ -104,6 +108,10 @@ function r_navigateTo(index, packet, access) {
 		if(packet != 'start') showNotification('danger', 'failure', 'Akses tidak diberikan, hubungi administrator untuk lebih lanjut!');
 		if(r_getCookie('login') != 'yes') { r_fHome(); }
 	}
+
+	if(r_getCookie('login') == 'yes' && r_getCookie('userLevel') != '1' && notifChecker == 0){
+	    setTimeout(function(){ r_notifRequest(); }, 1000);
+	}
 }
 
 function r_auth(index){
@@ -119,9 +127,8 @@ function r_auth(index){
 		case 11  : 
 		case 12  : 
 		case 13  : 
-		
 		case 15  : 
-			res = (r_getCookie('kelembagaanLihat') == '1') ? true : false;
+			res = (r_getCookie('kelembagaanLihat') == '1' || r_getCookie('userLevel') == '1') ? true : false;
 		break;
 
 		case 14  : 
@@ -187,6 +194,20 @@ function r_auth(index){
 	}
 
 	return res;
+}
+
+function r_notifRequest(){
+	res = p_getData('fNotification', 'f111');
+	res = res.feedData.found;
+
+	if(res == 'yes'){
+		$("header.parent .fa.fa-bell").removeClass('active').addClass('active');
+	}else{
+		$("header.parent .fa.fa-bell").removeClass('active');
+	}
+
+	notifChecker = 1;
+	if(logoutAgent != 1) { notifId = setTimeout(function(){ r_notifRequest(); }, notifInterval); }
 }
 
 function r_customCallBack(formType, group, target, recentId, formId, pId){
@@ -448,11 +469,16 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 					r_setCookie(accessList[look].module + 'Tambah',accessList[look].tambah,1);
 					r_setCookie(accessList[look].module + 'Ubah',  accessList[look].ubah,  1);
 					r_setCookie(accessList[look].module + 'Hapus', accessList[look].hapus, 1);
+
+
+					if(accessList[look].module == 'kelembagaan' && accessList[look].lihat == '0') { $('#navigation .kelembagaan').remove(); }
 				} 
 
 				moduleActive  = accessList;
 				moduleCounter = accessList.length;
 			}
+
+			logoutAgent = 0;
 
 			if(recentId.userLevel == 1){
 				r_navigateTo(12, recentId.noRegistrasi);
@@ -526,10 +552,6 @@ function r_autoCompleteCallback(targetIndex, sources, sourcesDetail, ui, targetI
 			});
 		break;
 	}
-}
-
-function r_flexForm(){
-
 }
 
 function r_pageClear(){
@@ -608,7 +630,7 @@ function r_headPageHtml(type, title){
 			break;
 			case 1: 
 				headPart[0] = headPart[0] + '<div class="title"><span>' + title + '</span></div>';
-				headPart[2] = headPart[2] + '<div class="click" id="notif-ring"><span class="fa fa-bell bell active"></span></div>';
+				headPart[2] = headPart[2] + '<div class="click" id="notif-ring"><span class="fa fa-bell bell"></span></div>';
 				headPart[2] = headPart[2] + '<div class="click" syncnav-target="#option"><span class="fa fa-bars"></span></div>';
 			break;
 			case 2: 
@@ -620,7 +642,7 @@ function r_headPageHtml(type, title){
 				headPart[0] = headPart[0] + '<div class="click back-button"><img class="icon-type" src="img/sources/arrow-left.png" /></div>';
 				headPart[0] = headPart[0] + '<div class="title"><span>' + title + '</span></div>';
 				
-				headPart[2] = headPart[2] + '<div class="click" id="notif-ring"><span class="fa fa-bell bell active"></span></div>';
+				headPart[2] = headPart[2] + '<div class="click" id="notif-ring"><span class="fa fa-bell bell"></span></div>';
 				headPart[2] = headPart[2] + '<div class="click" syncnav-target="#option"><span class="fa fa-bars"></span></div>';
 			break;
 			case 4: 
@@ -630,7 +652,7 @@ function r_headPageHtml(type, title){
 				headPart[1] = headPart[1] + '<div class="search-box"><div class="icon-box right"><input class="search-input" placeholder="Cari lembaga" type="text" value="" /></div></div>';
 				
 				headPart[2] = headPart[2] + '<div class="click search-button"><span class="fa fa-search"></span></div>';
-				headPart[2] = headPart[2] + '<div class="click" id="notif-ring"><span class="fa fa-bell bell active"></span></div>';
+				headPart[2] = headPart[2] + '<div class="click" id="notif-ring"><span class="fa fa-bell bell"></span></div>';
 				headPart[2] = headPart[2] + '<div class="click" syncnav-target="#option"><span class="fa fa-bars"></span></div>';
 			break;
 			case 5: 
@@ -856,7 +878,7 @@ function r_fHome() {
 		var indexes = 0;
 		var dataT 	= p_getData('f4', 'f431', '', ''); 
 		dataT 		= dataT.feedData; 
-		console.log(dataT);
+		
 		if(dataT != null){
 			for(var loop = 0; loop < dataT.length; loop++){
 				//--content
@@ -864,7 +886,7 @@ function r_fHome() {
 				'<div class="cards">' +
 					'<div class="navigation-box group-click" p-id="' + dataT[loop].noreg + '" p-caption="' + dataT[loop].caption + '">' +
 						'<div class="caption">' +
-							'<span>' + dataT[loop].caption + ' (' + dataT[loop].counter + ')</span>' +
+							'<span>' + dataT[loop].caption + ' (' + (parseInt(dataT[loop].ajuan) + parseInt(dataT[loop].valid)) + ')</span>' +
 						'</div>' +
 					'</div>' +
 				'</div>';
@@ -1153,16 +1175,6 @@ function r_f0Dashboard() {
 				{'caption':'Total data ajuan', 'counter': '0', 'id': 'ajuan'},
 				{'caption':'Total data sudah verfikasi', 'counter': '0', 'id': 'verifikasi'},
 				{'caption':'Total data akun (lembaga)', 'counter': '0', 'id': 'akun'},
-			],
-			'kolektif':[
-				{'bentukLembaga':'Yayasan', 'jumlahData': '4', 'sudahVerifikasi': '3', 'ajuan': '1'},
-				{'bentukLembaga':'Perkumpulan', 'jumlahData': '2', 'sudahVerifikasi': '1', 'ajuan': '1'},
-				{'bentukLembaga':'Perkumpulan', 'jumlahData': '2', 'sudahVerifikasi': '1', 'ajuan': '1'},
-				{'bentukLembaga':'Perkumpulan', 'jumlahData': '2', 'sudahVerifikasi': '1', 'ajuan': '1'},
-				{'bentukLembaga':'Perkumpulan', 'jumlahData': '2', 'sudahVerifikasi': '1', 'ajuan': '1'},
-				{'bentukLembaga':'Perkumpulan', 'jumlahData': '2', 'sudahVerifikasi': '1', 'ajuan': '1'},
-				{'bentukLembaga':'Perkumpulan', 'jumlahData': '2', 'sudahVerifikasi': '1', 'ajuan': '1'},
-				{'bentukLembaga':'Perkumpulan', 'jumlahData': '2', 'sudahVerifikasi': '1', 'ajuan': '1'},
 			]
 			
 		}];
@@ -1171,6 +1183,7 @@ function r_f0Dashboard() {
 		dataT 	= dataT.feedData; 
 		
 		var counta = 0;
+		var countv = 0;
 
 		//--open
 		head	= 
@@ -1230,7 +1243,8 @@ function r_f0Dashboard() {
 		
 		if(dataT != null){
 			for(var loop = 0; loop < dataT.length; loop++){
-				counta = counta + parseInt(dataT[loop].counter);
+				counta = counta + parseInt(dataT[loop].ajuan);
+				countv = countv + parseInt(dataT[loop].valid);
 				part[1] = part[1] +
 				'<div class="cards">' +
 					'<div class="row default">' +
@@ -1240,7 +1254,7 @@ function r_f0Dashboard() {
 									'<span>' + dataT[loop].caption + '</span>' +
 								'</div>' +
 								'<div class="counter prime">' +
-									'<span id="countT">' + dataT[loop].counter + '</span>' +
+									'<span id="countT">' + dataT[loop].valid + '</span>' +
 								'</div>' +
 							'</div>' +
 						'</div>' +
@@ -1250,7 +1264,7 @@ function r_f0Dashboard() {
 									'<span>Sudah verifikasi</span>' +
 								'</div>' +
 								'<div class="counter second">' +
-									'<span>0</span>' +
+									'<span>' + dataT[loop].ajuan + '</span>' +
 								'</div>' +
 							'</div>' +
 						'</div>' +
@@ -1260,7 +1274,7 @@ function r_f0Dashboard() {
 									'<span>Ajuan</span>' +
 								'</div>' +
 								'<div class="counter">' +
-									'<span>' + dataT[loop].counter + '</span>' +
+									'<span>' + (parseInt(dataT[loop].valid) + parseInt(dataT[loop].ajuan)) + '</span>' +
 								'</div>' +
 							'</div>' +
 						'</div>' +
@@ -1309,11 +1323,11 @@ function r_f0Dashboard() {
 						'</div>' +
 					'</div>' +
 				'</div>' +
-				'<div class="cards go-bantuan">' +
+				'<div class="cards go-prestasi">' +
 					'<div class="navigation-box icon-add">' +
-						'<span class="fa fa-support icon-set text-yellow"></span>' +
+						'<span class="fa fa-trophy icon-set text-yellow"></span>' +
 						'<div class="caption">' +
-							'<span>Bantuan</span>' +
+							'<span>Prestasi</span>' +
 						'</div>' +
 					'</div>' +
 				'</div>' +
@@ -1354,7 +1368,7 @@ function r_f0Dashboard() {
 		$(".go-kelembagaan").unbind().on('click', function(){ r_navigateTo(1); });
 		$(".go-koleksi").unbind().on('click', function(){ r_navigateTo(14); });
 		$(".go-autentikasi").unbind().on('click', function(){ r_navigateTo(3); });
-		$(".go-bantuan").unbind().on('click', function(){ r_navigateTo(01); });
+		$(".go-prestasi").unbind().on('click', function(){ r_navigateTo(16); });
 		$(".go-pengaturan").unbind().on('click', function(){ r_navigateTo(4); });
 		$(".go-keluar").unbind().on('click', function(){ r_navigateTo(); });
 		
@@ -1362,6 +1376,8 @@ function r_f0Dashboard() {
 
 		//sementara
 		$("#ajuan").html(counta);
+		$("#verifikasi").html(countv);
+		$("#akun").html(parseInt(counta) + parseInt(countv));
 	});
 }
 

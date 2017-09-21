@@ -1007,6 +1007,9 @@ footer.parent .author-box img { height: 30px; float: right }
 	text-align: center;
 }
 
+.cards .group-box.body { min-height: 220px; }
+.cards .group-box.foot { min-height: 80px; }
+
 .cards .group-box.fixed { padding: 0px }
 
 .cards .group-box .icon-set { 

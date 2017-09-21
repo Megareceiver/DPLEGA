@@ -379,6 +379,7 @@
 				//user
 				$sql = 	"
 					SELECT 
+						l.`idData`, 
 						l.`noRegistrasi`, 
 						l.`nama`, 
 						l.`jabatan`, 
@@ -416,6 +417,7 @@
 						while($row = mysqli_fetch_assoc($result)) {
 
 							$user = array(
+										"id" 				=> $row['idData'],
 										"noRegistrasi" 		=> $row['noRegistrasi'],
 										"nama" 				=> $row['nama'],
 										"jabatan" 			=> $row['jabatan'],

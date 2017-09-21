@@ -387,11 +387,12 @@
 						$access1  = sessionFecth('kelembagaan');
 						$access2  = sessionFecth('verifikasi');
 						$options = array();
-						if($access1['lihat']  == '1') array_push($options, array("selector" => "view-card", "icon" => "search", "label" => "Lihat selengkapnya"));
-						if($access1['lihat']  == '1') array_push($options, array("selector" => "download-card", "icon" => "download", "label" => "Unduh (.pdf)"));
-						if($access2['tambah'] == '1' || $access2['ubah']   == '1') array_push($options, array("selector" => "verification-card", "icon" => "check", "label" => "Verifikasi"));
-						if($access1['ubah']   == '1') array_push($options, array("selector" => "edit-card", "icon" => "pencil", "label" => "Ubah profil"));
-						if($access1['hapus']  == '1') array_push($options, array("selector" => "delete-card", "icon" => "trash", "label" => "Hapus lembaga"));
+
+						if($access1['lihat']  == '1' || $_SESSION['userLevel'] == '7') array_push($options, array("selector" => "view-card", "icon" => "search", "label" => "Lihat selengkapnya"));
+						// if($access1['lihat']  == '1') array_push($options, array("selector" => "download-card", "icon" => "download", "label" => "Unduh (.pdf)"));
+						if($access2['tambah'] == '1' || $access2['ubah']   == '1' || $_SESSION['userLevel'] == '7') array_push($options, array("selector" => "verification-card", "icon" => "check", "label" => "Verifikasi"));
+						if($access1['ubah']   == '1' || $_SESSION['userLevel'] == '7') array_push($options, array("selector" => "edit-card", "icon" => "pencil", "label" => "Ubah profil"));
+						if($access1['hapus']  == '1' || $_SESSION['userLevel'] == '7') array_push($options, array("selector" => "delete-card", "icon" => "trash", "label" => "Hapus lembaga"));
 						
 						$package = array(
 							"lembaga" => $packageDumb,
@@ -1162,25 +1163,29 @@
 			closeGate($gate);
 
 			if($_SESSION["userLevel"] == '1'){
-				$option = array(
-					array("selector" => "download-card", "icon" => "download", "label" => "Unduh (.pdf) - non aktif"),
+				$options = array(
+					// array("selector" => "download-card", "icon" => "download", "label" => "Unduh (.pdf) - non aktif"),
 					array("selector" => "edit-card", "icon" => "pencil", "label" => "Ubah profil"),
+					array("selector" => "user-card", "icon" => "gears", "label" => "Pengaturan"),
 					array("selector" => "logout-card", "icon" => "power-off", "label" => "Keluar")
 				);
 			}else{
-				$option = array(
-					array("selector" => "download-card", "icon" => "download", "label" => "Unduh (.pdf)"),
-					array("selector" => "verification-card", "icon" => "check", "label" => "Verifikasi"),
-					array("selector" => "edit-card", "icon" => "pencil", "label" => "Ubah profil"),
-					array("selector" => "delete-card", "icon" => "trash", "label" => "Hapus lembaga"),
-					array("selector" => "logout-card", "icon" => "power-off", "label" => "Keluar")
-				);
+				/*session fetch*/
+				$access1  = sessionFecth('kelembagaan');
+				$access2  = sessionFecth('verifikasi');
+				$options = array();
+
+				if($access1['lihat']  == '1' || $_SESSION['userLevel'] == '7') array_push($options, array("selector" => "view-card", "icon" => "search", "label" => "Lihat selengkapnya"));
+				// if($access1['lihat']  == '1') array_push($options, array("selector" => "download-card", "icon" => "download", "label" => "Unduh (.pdf)"));
+				if($access2['tambah'] == '1' || $access2['ubah']   == '1' || $_SESSION['userLevel'] == '7') array_push($options, array("selector" => "verification-card", "icon" => "check", "label" => "Verifikasi"));
+				if($access1['ubah']   == '1' || $_SESSION['userLevel'] == '7') array_push($options, array("selector" => "edit-card", "icon" => "pencil", "label" => "Ubah profil"));
+				if($access1['hapus']  == '1' || $_SESSION['userLevel'] == '7') array_push($options, array("selector" => "delete-card", "icon" => "trash", "label" => "Hapus lembaga"));
 			}
 
 			$record = array(
 				"profile" => $profile,
 				"detail"  => $group,
-				"option"  => $option
+				"option"  => $options
 			);
 
 			$resultList = array( "feedStatus" => "success", "feedMessage" => "Data ditemukan!", "feedData" => $record);
@@ -2602,7 +2607,7 @@
 						$dumbValue = "'".$file_name."',";
 					}
 
-					$usernameTemp = strtolower(preg_replace('/\s+/', '', $data['nama']));
+					$usernameTemp = strtolower(preg_replace('/\s+/', '', $idTemp.$data['nama']));
 					if(strlen($usernameTemp) > 20){ $usernameTemp = substr($usernameTemp, 0, 19); }
 
 					$sql = 

@@ -18,20 +18,22 @@ function r_f3Autentikasi() {
 		var kelurahanHtml = '';
 		var look = 0;
 		
-		for(look = 0; look < optionD[0].provinsi.length; look++){
-			provinsiHtml = provinsiHtml + '<option value="' + optionD[0].provinsi[look].id + '">' + optionD[0].provinsi[look].caption + '</option>';
-		}
-		
-		for(look = 0; look < optionD[0].wilayah.length; look++){
-			wilayahHtml = wilayahHtml + '<option value="' + optionD[0].wilayah[look].id + '">' + optionD[0].wilayah[look].caption + '</option>';
-		}
-		
-		for(look = 0; look < optionD[0].kecamatan.length; look++){
-			kecamatanHtml = kecamatanHtml + '<option value="' + optionD[0].kecamatan[look].id + '">' + optionD[0].kecamatan[look].caption + '</option>';
-		}
-		
-		for(look = 0; look < optionD[0].kelurahan.length; look++){
-			kelurahanHtml = kelurahanHtml + '<option value="' + optionD[0].kelurahan[look].id + '">' + optionD[0].kelurahan[look].caption + '</option>';
+		if(optionD[0] != null){
+			for(look = 0; look < optionD[0].provinsi.length; look++){
+				provinsiHtml = provinsiHtml + '<option value="' + optionD[0].provinsi[look].id + '">' + optionD[0].provinsi[look].caption + '</option>';
+			}
+			
+			for(look = 0; look < optionD[0].wilayah.length; look++){
+				wilayahHtml = wilayahHtml + '<option value="' + optionD[0].wilayah[look].id + '">' + optionD[0].wilayah[look].caption + '</option>';
+			}
+			
+			for(look = 0; look < optionD[0].kecamatan.length; look++){
+				kecamatanHtml = kecamatanHtml + '<option value="' + optionD[0].kecamatan[look].id + '">' + optionD[0].kecamatan[look].caption + '</option>';
+			}
+			
+			for(look = 0; look < optionD[0].kelurahan.length; look++){
+				kelurahanHtml = kelurahanHtml + '<option value="' + optionD[0].kelurahan[look].id + '">' + optionD[0].kelurahan[look].caption + '</option>';
+			}
 		}
 		
 		//--open

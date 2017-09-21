@@ -17,6 +17,9 @@ function p_logout(){
 		data: { session : 'logout' },
 		success: function(result){
 			reStatus = result.status;
+			logoutAgent = 1;
+			notifChecker = 0;
+			clearTimeout(notifId);
 			r_clearCookies();
 		},
 		complete: function(xhr,status) { },
@@ -41,7 +44,7 @@ function p_getData(group, target, keyword, refferences){
 			data = result;
 		},
 		complete: function(xhr,status) { hideNotification('waiting'); },
-		error: function(xhr,status,error) { console.log(xhr); showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!');console.log(xhr); }
+		error: function(xhr,status,error) { showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); }
 	});
 	
 	return data;
@@ -85,7 +88,7 @@ function p_changeData(group, target, pId, refferenceId, dataFetch){
 			showNotification(data.feedType, 'changed', data.feedMessage);
 		},
 		complete: function(xhr,status) { hideNotification('waiting'); },
-		error: function(xhr,status,error) { showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); console.log(xhr); }
+		error: function(xhr,status,error) { showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); }
 	});
 	
 	return reStatus;
@@ -107,7 +110,7 @@ function p_restore(group, target, pId, refferenceId){
 			showNotification(data.feedType, 'changed', data.feedMessage);
 		},
 		complete: function(xhr,status) { hideNotification('waiting'); },
-		error: function(xhr,status,error) { showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); console.log(xhr); }
+		error: function(xhr,status,error) { showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); }
 	});
 	
 	return reStatus;
@@ -133,7 +136,7 @@ function p_formHandler(formId, type){
 				}
 			},
 			complete: function(xhr,status) { hideNotification('waiting'); },
-			error: function(xhr,status,error) { console.log(xhr); showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); console.log(xhr); }
+			error: function(xhr,status,error) { showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); }
 		});
 	});		
 }

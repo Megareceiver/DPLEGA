@@ -140,7 +140,7 @@
 					
 					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => array($package));
 				}else {
-					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => null);
+					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => array(array("provinsi" => '', "wilayah" => '', "kecamatan" => '', "kelurahan" => '')));
 				}
 			}			
 				
@@ -243,7 +243,7 @@
 					
 					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => array($record), "feedDataDetail" =>  array("list" => $recordDetail));
 				}else {
-					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => null);
+					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => array());
 				}
 			}			
 				
@@ -377,7 +377,7 @@
 					
 					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => $record, "feedDataDetail" => $recordDetail);
 				}else {
-					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => null);
+					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => array());
 				}
 			}			
 				
@@ -454,7 +454,7 @@
 					
 					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => array($record), "feedDataDetail" =>  array("list" => $recordDetail));
 				}else {
-					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => null);
+					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => array());
 				}
 			}			
 				
@@ -499,7 +499,7 @@
 				kodeGrupVerifikasi as `noreg`,
 				namaGrupVerifikasi as `caption`
 			 FROM
-				dplega_220_grupVerifikasi
+				dplega_220_grupverifikasi
 			 ORDER BY caption ASC";
 						
 			$result = mysqli_query($gate, $sql);
@@ -521,7 +521,7 @@
 					
 					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => $record);
 				}else {
-					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => null);
+					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => array());
 				}
 			}			
 				
@@ -597,7 +597,7 @@
 					
 					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => $record);
 				}else {
-					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => null);
+					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => array());
 				}
 			}			
 				
@@ -750,10 +750,8 @@
 					b.namaBentukLembaga as `caption`,
 					b.deskripsi as `description`,
 					COALESCE(b.urlGambar, 'icon-1.png') as `picture`,
-					(
-						(SELECT COUNT(noRegistrasi) FROM dplega_000_lembaga l WHERE l.kodeBentukLembaga = b.kodeBentukLembaga ".$dumbQueryS.") +
-						(SELECT COUNT(noRegistrasi) FROM dplega_000_lembaga_temp lt WHERE lt.kodeBentukLembaga = b.kodeBentukLembaga ".$dumbQueryS.")
-					) as `counter`
+					(SELECT COUNT(noRegistrasi) FROM dplega_000_lembaga l WHERE l.kodeBentukLembaga = b.kodeBentukLembaga ".$dumbQueryS.") as `valid`,
+					(SELECT COUNT(noRegistrasi) FROM dplega_000_lembaga_temp lt WHERE lt.kodeBentukLembaga = b.kodeBentukLembaga ".$dumbQueryS.") as `ajuan`
 				 FROM
 					dplega_200_bentuklembaga b
 				 ORDER BY noreg ASC";
@@ -795,7 +793,8 @@
 								"caption" 		=> $row['caption'],
 								"description" 	=> $row['description'],
 								"picture" 		=> $row['picture'],
-								"counter" 		=> $row['counter']
+								"valid" 		=> $row['valid'],
+								"ajuan" 		=> $row['ajuan']
 							);
 						}elseif($target == "f432"){
 							$fetch = array(
@@ -818,7 +817,7 @@
 					
 					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => $record);
 				}else {
-					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => null);
+					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => array());
 				}
 			}			
 				
