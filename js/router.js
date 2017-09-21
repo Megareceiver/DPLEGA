@@ -94,6 +94,8 @@ function r_navigateTo(index, packet, access) {
 
 			case 99 : r_fLogin(); 						break;
 			case 999: r_fNotification();				break;
+
+			case 91 : r_fDaftarLembagaPublic(packet); 	break;
 			default : r_fHome(); 						break;
 		}
 		
@@ -117,11 +119,16 @@ function r_auth(index){
 		case 11  : 
 		case 12  : 
 		case 13  : 
-		case 14  : 
+		
 		case 15  : 
 			res = (r_getCookie('kelembagaanLihat') == '1') ? true : false;
 		break;
-		
+
+		case 14  : 
+		case 16 : 
+			res = true;
+		break;
+
 		case 3  : 
 			res = (r_getCookie('userLevel') != '1') ? true : false;
 		break;
@@ -165,6 +172,7 @@ function r_auth(index){
 			res = (r_getCookie('login') == 'yes') ? true : false;
 		break;
 
+		case 91 : 
 		case 99 : 
 			res = true;
 		break;
@@ -625,7 +633,14 @@ function r_headPageHtml(type, title){
 				headPart[2] = headPart[2] + '<div class="click" id="notif-ring"><span class="fa fa-bell bell active"></span></div>';
 				headPart[2] = headPart[2] + '<div class="click" syncnav-target="#option"><span class="fa fa-bars"></span></div>';
 			break;
-			
+			case 5: 
+				headPart[0] = headPart[0] + '<div class="click back-button"><img class="icon-type" src="img/sources/arrow-left.png" /></div>';
+				headPart[0] = headPart[0] + '<div class="title"><span>' + title + '</span></div>';
+				
+				headPart[1] = headPart[1] + '<div class="search-box clear-right"><div class="icon-box right"><input class="search-input" placeholder="Cari lembaga" type="text" value="" /></div></div>';
+				
+				headPart[2] = headPart[2] + '<div class="click search-button"><span class="fa fa-search"></span></div>';
+			break;
 		}
 		
 		/*--left */  headPart[0] = headPart[0] +	'</div>';
@@ -697,20 +712,6 @@ function r_fHome() {
 		content = '';
 		data 	= [
 			{
-				'news':[
-					{'id':'news1', 'judul': 'Pembukaan Bantuan Dana Hibah 2017 telah dibuka !', 'deskripsi': 'Bantuan Dana Hibah kini telah dibuka, kepada para lembaga yang membutuhkan data, untuk segera mengirimkan proposal permohonan dan persyaratan-persyaratan yang diperlukan be ...'},
-					{'id':'news2', 'judul': 'Penutupan Bantuan Dana Hibah 2016 !', 'deskripsi': 'Lembaga yang ikut serta diwajibkan melaporkan penggunaan dana secara lengkap dan baik, pelaporan dilakukan terakhir pada tanggal yang telah ditentukan sebelumnya, de ...'},
-				],
-				'quicknav': [
-					{'target':'', 'menu': 'Yayasan', 'count': '2'},
-					{'target':'', 'menu': 'Perkumpulan', 'count': '0'},
-					{'target':'', 'menu': 'Pondok Pesantren', 'count': '4'},
-					{'target':'', 'menu': 'Madrasah Ibtidaiyah', 'count': '1'},
-					{'target':'', 'menu': 'Madrasah Tsanawiyah', 'count': '0'},
-					{'target':'', 'menu': 'Madrasah Aliyah', 'count': '0'},
-					{'target':'', 'menu': 'Perguruan Tinggi', 'count': '7'},
-					{'target':'', 'menu': 'RA', 'count': '2'},
-				],
 				'contact': [
 					{
 						'alamat': 'Jl. Diponegoro No. 22  Bandung Jawa Barat',
@@ -722,6 +723,9 @@ function r_fHome() {
 				]
 			}
 		];
+
+		dataNews = p_getData('f4','f441','');
+		dataNews = dataNews.feedData;
 		
 		//--open
 		head	= 
@@ -779,23 +783,33 @@ function r_fHome() {
 		body = body +
 			'<div id="berita-section" class="cards clear-bold no-shadow bg-smooth">' +
 				'<div class="col-md-8 col-md-offset-2">' +
-					'<div class="row default">' +
+					'<div class="row">' +
 						'<div class="cards-header">' +
 							'<h4>BERITA TERKINI</h4>' +
 						'</div>';
 				
 		//--render data
-		for(var loop = 0; loop < data[0].news.length; loop++){
+		for(var loop = 0; loop < dataNews.length; loop++){
 			//--content
 			body = body +
 			'<div class="article-box">' +
 				'<div class="body">' +
-					'<p class="title">' + data[0].news[loop].judul +  '</p>' +
-					'<p class="content">' + data[0].news[loop].deskripsi +  '</p>' +
+					'<h4 class="title">' + dataNews[loop].judul +  '</h4>' +
+					'<p class="title">' + timeSince(new Date(Date.parse(dataNews[loop].createdDate))) +  '</p>' +
+					'<p class="content">' + dataNews[loop].isiBerita +  '</p>' +
 				'</div>' +
 				'<div class="foot">' +
-					'<button type="button" class="clear btn-link detail-click" p-id="' + data[0].news[loop].id +  '">Baca lebih lanjut</button>' +
+					'<button type="button" class="clear btn-link detail-click" p-id="' + dataNews[loop].idBerita +  '">Baca lebih lanjut</button>' +
 				'</div>	' +
+			'</div>';
+		}
+
+		if(dataNews.length == 0){
+			body = body +
+			'<div class="article-box">' +
+				'<div class="body">' +
+					'<p class="title">Belum ada berita.</p>' +
+				'</div>' +
 			'</div>';
 		}
 		
@@ -842,13 +856,13 @@ function r_fHome() {
 		var indexes = 0;
 		var dataT 	= p_getData('f4', 'f431', '', ''); 
 		dataT 		= dataT.feedData; 
-		
+		console.log(dataT);
 		if(dataT != null){
 			for(var loop = 0; loop < dataT.length; loop++){
 				//--content
 				part[indexes] = part[indexes] +
 				'<div class="cards">' +
-					'<div class="navigation-box">' +
+					'<div class="navigation-box group-click" p-id="' + dataT[loop].noreg + '" p-caption="' + dataT[loop].caption + '">' +
 						'<div class="caption">' +
 							'<span>' + dataT[loop].caption + ' (' + dataT[loop].counter + ')</span>' +
 						'</div>' +
@@ -873,9 +887,9 @@ function r_fHome() {
 					'</p>' +
 				'</div>' +
 				'<div class="col-md-6">' +
-					'<div class="row default left">' +
-						'<div class="cards flush">' +
-							'<div class="navigation-box">' +
+					'<div class="row default">' +
+						'<div class="cards">' +
+							'<div class="navigation-box koleksi-click">' +
 								'<div class="caption">' +
 									'<span>Koleksi</span>' +
 								'</div>' +
@@ -884,9 +898,9 @@ function r_fHome() {
 					'</div>' +
 				'</div>' +
 				'<div class="col-md-6">' +
-					'<div class="row default left">' +
-						'<div class="cards flush">' +
-							'<div class="navigation-box">' +
+					'<div class="row default">' +
+						'<div class="cards">' +
+							'<div class="navigation-box prestasi-click">' +
 								'<div class="caption">' +
 									'<span>Prestasi</span>' +
 								'</div>' +
@@ -904,7 +918,7 @@ function r_fHome() {
 		/*--static footer*/
 		body	= body + 
 		'<div id="kontak-section" class="row foot">' +
-			'<div class="container">' +
+			'<div class="row">' +
 				'<div class="space-box"></div>' +
 				'<div class="col-md-8 col-md-offset-2 relative bg-gsate">' +
 					'<h4>KONTAK</h4>' +
@@ -939,7 +953,10 @@ function r_fHome() {
 		//--command reactor
 		$(".go-login").unbind().on('click', function(){ r_navigateTo(99); });
 		$(".more-click").unbind().on('click', function(){ r_navigateTo(44); });
-		// $(".detail-click").unbind().on('click', function(){ r_navigateTo(441, $(this).attr('p-id')); });
+		$(".detail-click").unbind().on('click', function(){ r_navigateTo(441, $(this).attr('p-id')); });
+		$(".group-click").unbind().on('click', function(){ r_navigateTo(91, [$(this).attr('p-id'), $(this).attr('p-caption')]); });
+		$(".koleksi-click").unbind().on('click', function(){ r_navigateTo(14); });
+		$(".prestasi-click").unbind().on('click', function(){ r_navigateTo(16); });
 		
 		//scrolling
 		var sec1 = $(window).innerHeight();
@@ -1377,6 +1394,206 @@ function r_f0Bantuan(){
 		$(".back-button").unbind().on('click', function(){ r_navigateTo(0); });
 		r_navbarReactor();
 	});
+}
+
+//F DAFTAR LEMBAGA PUBLIC
+//=====================================
+function r_fDaftarLembagaPublic(packet) {
+	
+	//-- get direct load
+	var kodeBentukLembagaState = null;
+	var namaBentukLembagaState = null;
+	var dumbBentukLembagaState = null;
+	
+	if(Array.isArray(packet) == true){
+		kodeBentukLembagaState = packet[0];
+		namaBentukLembagaState = packet[1];
+	}
+	
+	if(kodeBentukLembagaState == "" || kodeBentukLembagaState == null || kodeBentukLembagaState == "start"){
+		dumbBentukLembagaState = r_bentukLembagaReader();
+		kodeBentukLembagaState = dumbBentukLembagaState[0];
+		namaBentukLembagaState = dumbBentukLembagaState[1];
+	}
+	
+	r_bentukLembagaSet([kodeBentukLembagaState,namaBentukLembagaState]);
+	
+	$("body").prepend(preload);
+	$('main.parent').animate({'opacity': '0.6'},'fast','linear', function(){
+		mainPage.html('');
+		head  	= '';
+		body  	= '';
+		part	= ['',''];
+		content = '';
+		data = p_getData('support', 'f91', "", 'single,'+ kodeBentukLembagaState);
+		data = data.feedData; 
+		
+		//--open
+		head	= '';
+		body	= '<div class="row no-head"><div class="container">';
+		part[0] = '<div class="col-md-3">';
+		part[1] = '<div class="col-md-8" id="lembaga-list">';
+		
+		//--left
+		part[0] = part[0] +
+		'<form id="f-filter-select">' +
+			'<div class="cards">' +
+				'<div class="cards-header">' +
+					'<p class="fixed offset">Filter lembaga</p>' +
+					'<div class="btn-collapse right">' +
+						'<button class="clear" type="reset"><span class="fa fa-refresh"></span></button>' +
+						'<button class="clear" type="submit"><span class="fa fa-filter text-yellow"></span></button>' +
+					'</div>' +
+				'</div>' +
+			'</div>' +
+			'<div class="cards flush">' +
+				'<div class="select-box">' +
+					'<select id="filter-provinsi">' +
+						'<option value="" selected>Provinsi</option>' +
+						r_optionDHtml('provinsi') +
+					'</select>' +
+				'</div>' +
+				'<div class="select-box">' +
+					'<select id="filter-wilayah">' +
+						'<option value="" selected>Wilayah</option>' +
+						r_optionDHtml('wilayah') +
+					'</select>' +
+				'</div>' +
+				'<div class="select-box">' +
+					'<select id="filter-kecamatan">' +
+						'<option value="" selected>Kecamatan</option>' +
+						r_optionDHtml('kecamatan') +
+					'</select>' +
+				'</div>' +
+				'<div class="select-box">' +
+					'<select id="filter-kelurahan">' +
+						'<option value="" selected>Kelurahan</option>' +
+						r_optionDHtml('kelurahan') +
+					'</select>' +
+				'</div>' +
+				'<div class="space-box"></div>' +
+			'</div>' +
+		'</form>';
+			
+		//--render data
+		var tempP = "";
+		var tempB = ""; 
+
+		part[1] = part[1] + r_fLembagaGenerator(data);
+		
+		part[0] = part[0] + '</div>';
+		part[1] = part[1] + '</div>';
+		body	= body 	  + part[0] + part[1] + '</div></div>';
+		content = '<section id="kelembagaan">' + head + body + '</section>';
+		//--close
+		
+		//--gen
+		headPage.html(r_headPageHtml(5, namaBentukLembagaState));
+		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
+		
+		var ul = r_getCookie('kelembagaanTambah');
+		if(ul == '1') footPage.html(r_footPageHtml('add'));
+		$("#preload").remove();
+		
+		//--command reactor
+		$(".back-button").unbind().on('click', function(){ r_navigateTo(); });
+		
+		//navbar
+		r_navbarReactor();
+
+		//search-box
+		searchBoxActivator();
+		$(".search-input").on('keyup', function(){ 
+			var dumbBentukLembagaState = r_bentukLembagaReader();
+			var kodeBentukLembagaState = dumbBentukLembagaState[0];
+			var dataKey = p_getData('support', 'f91', $(this).val(), 
+						'multipart,' + kodeBentukLembagaState + ',' +
+						$('#f-filter-select #filter-provinsi').val()  + ',' + 
+						$('#f-filter-select #filter-wilayah').val()   + ',' + 
+						$('#f-filter-select #filter-kecamatan').val() + ',' + 
+						$('#f-filter-select #filter-kelurahan').val());
+				dataKey = dataKey.feedData;
+			$("#lembaga-list").html(r_fLembagaGenerator(dataKey));
+			r_fLembagaEventctivator();
+		});
+
+		//filter activation
+		$('#f-filter-select').unbind().on('submit', function(e) {
+			e.preventDefault();
+			var dumbBentukLembagaState = r_bentukLembagaReader();
+			var kodeBentukLembagaState = dumbBentukLembagaState[0];
+			var dataKey = p_getData('support', 'f91', $(".search-input").val(), 
+						'multipart,' + kodeBentukLembagaState + ',' +
+						$('#f-filter-select #filter-provinsi').val()  + ',' + 
+						$('#f-filter-select #filter-wilayah').val()   + ',' + 
+						$('#f-filter-select #filter-kecamatan').val() + ',' + 
+						$('#f-filter-select #filter-kelurahan').val());
+				dataKey = dataKey.feedData;
+			$("#lembaga-list").html(r_fLembagaGenerator(dataKey));
+			r_fLembagaEventctivator();
+		});
+
+		//event on list activator
+		r_fLembagaEventctivator();
+	});
+}
+
+function r_fLembagaEventctivator(){
+	//$(".detail-click").unbind().on('click', function(){ r_navigateTo(12, $(this).attr('p-id')); });
+	detailBoxActivator();
+}
+
+function r_fLembagaGenerator(data){
+	var genHtml = "";
+	var tempB 	= "";
+	var tempP	= "";
+	if(data.lembaga != null){
+		lembagaCounter = data.lembaga.length;
+		for(var loop = 0; loop < data.lembaga.length; loop++){	
+			var placeImg = data.lembaga[loop].noreg;
+			placeImg = placeImg.substr((placeImg.length-1), 1);
+			temPic   = (data.lembaga[loop].picture != "") ? 'img/logo/' + data.lembaga[loop].picture : 'img/logo/avatar-' + placeImg + '.jpg';
+			genHtml  = genHtml +
+			'<div id="' + data.lembaga[loop].id + '" class="cards clear">' +
+				'<div class="description-box">' +
+					'<div class="click-frame">' +
+						'<img class="icon-set" src="' + temPic + '"/>' +
+						'<p class="title-set">' + data.lembaga[loop].nama + '</p>' +
+						'<div class="text-set">' +
+							'<span class="id-set">' + data.lembaga[loop].nama + '</span>' +
+							'<span class="desc-text">' + data.lembaga[loop].telp + ' | ' + data.lembaga[loop].email + '</span>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+				'<div class="detail-box">' +
+					'<div class="list-box">' +
+						'<div class="list-icon"><span class="fa fa-phone"></span></div>' +
+						'<p class="list-text">' + data.lembaga[loop].telp + '</p>' +
+					'</div>' +
+					'<div class="list-box">' +
+						'<div class="list-icon"><span class="fa fa-envelope"></span></div>' +
+						'<p class="list-text">' + data.lembaga[loop].email + '</p>' +
+					'</div>' +
+					'<div class="list-box">' +
+						'<div class="list-icon"><span class="fa fa-map-marker"></span></div>' +
+						'<p class="list-text">' + data.lembaga[loop].alamat + '</p>' +
+					'</div>' +
+					'<!--div class="list-box foot">' +
+						'<button type="button" class="clear list-text btn-link detail-click" p-id="' + data.lembaga[loop].id + '">Lihat selengkapnya</button>' +
+					'</div-->' +
+				'</div>' +
+			'</div>';
+		}
+	}else{
+		genHtml = genHtml +
+		'<div class="cards">' +
+			'<div class="cards-header">' +
+				'<p class="fixed offset text-black">Data tidak ditemukan.</p>' +
+			'</div>' +
+		'</div>';
+	}
+
+	return genHtml;
 }
 
 /* maintance */

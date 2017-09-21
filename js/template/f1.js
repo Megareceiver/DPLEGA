@@ -2425,11 +2425,13 @@ function r_f1KoleksiLembaga() {
 		//--close
 		
 		//--gen
-		headPage.html(r_headPageHtml(4, 'Koleksi'));
+		accm = 5;
+		if(r_getCookie('login') == 'yes') { accm = 4; }
+		headPage.html(r_headPageHtml(accm, 'Koleksi'));
 		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
 		$("#preload").remove();
 		//--command reactor
-		$(".back-button").unbind().on('click', function(){ r_navigateTo(0); });
+		$(".back-button").unbind().on('click', function(){ r_navigateTo(r_pagePreviousReader()); });
 		searchBoxActivator();
 		r_f1KoleksiGenerator();
 		$(".search-input").on("keyup", function(){ 
@@ -2444,12 +2446,12 @@ function r_f1KoleksiGenerator(keyword){
 	
 	if(keyword == null || keyword == ''){
 		data = p_getData('f1','f141','');
-		$('#daftarKoleksi').remove();
+		$('#koleksi').html('');
 	}else{
 		 data = p_getData('f1','f141',keyword);
-		$('#daftarKoleksi').remove();
+		$('#koleksi').html('');
 	}
-
+	console.log(data);
 	if(data.feedData != null){
 		genHtml = genHtml + '<div id = "daftarKoleksi">';
 		for(var loop = 0; loop < data.feedData.length; loop++){	
@@ -2584,11 +2586,13 @@ function r_f1PrestasiLembaga() {
 		//--close
 		
 		//--gen
-		headPage.html(r_headPageHtml(4, 'Prestasi'));
+		accm = 5;
+		if(r_getCookie('login') == 'yes') { accm = 4; }
+		headPage.html(r_headPageHtml(accm, 'Prestasi'));
 		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
 		$("#preload").remove();
 		//--command reactor
-		$(".back-button").unbind().on('click', function(){ r_navigateTo(0); });
+		$(".back-button").unbind().on('click', function(){ r_navigateTo(r_pagePreviousReader()); });
 		searchBoxActivator();
 		
 		r_f1PrestasiGenerator(data, "list");
@@ -2629,7 +2633,7 @@ function r_f1PrestasiGenerator(data, type){
 						'</div>' +
 						'<div class="col-xs-5">' +
 							'<div class="list-box clear-small">' +
-								'<p class="list-text">'+ data.feedData[counter].nama + '</p>' +
+								'<p class="list-text">('+ data.feedData[counter].namaBentukLembaga + ") " + data.feedData[counter].nama + '</p>' +
 							'</div>' +
 						'</div>' +
 						'<div class="clearfix"></div>' +

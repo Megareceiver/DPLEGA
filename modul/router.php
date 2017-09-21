@@ -12,6 +12,7 @@
 			case "fNotification": require_once('protected/fNotification.php'); break;
 			case "fLogin"		: require_once('protected/authentication.php'); break;
 			case "dumb"			: require_once('protected/dumb.php'); break;
+			case "support"		: require_once('protected/support.php'); break;
 			default  			: $error = 1; break;
 		}
 		

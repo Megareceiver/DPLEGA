@@ -443,6 +443,10 @@ header.parent div.search-box {
 	z-index: 1;
 }
 
+header.parent div.search-box.clear-right {
+	padding-right: 0;
+}
+
 header.parent div.search-box .icon-box { 
 	position: relative;
 	width: 100%;
@@ -1416,7 +1420,7 @@ footer.parent .author-box img { height: 30px; float: right }
 
 #home .scroll-up {
 	position: absolute;
-    right: 0;
+    right: 20px;
     top: 0;
 	padding: 8px 5px;
 }
@@ -1656,8 +1660,8 @@ footer.parent .author-box img { height: 30px; float: right }
 	/*home*/
 	#home .button-box button, #home .button-box button.clear { display: inline-block; padding: 10px 20px 10px 0 }
 	#home .jumbotron-content { top: 200px; bottom: inherit; padding-top: 10px; padding-bottom: 25px }
-	#home .cards.clear-bold { padding: 35px 30px }
-	#home .cards-label { padding-left: 30px }
+	
+	#home .cards-label { padding-left: 20px }
 	#home .logo-user { position: relative; top: auto; right: 0; left: 0; margin: auto; }
 	#home .bg-gsate { background-image: none; }
 	#home .banner-box .link { margin: 10px }

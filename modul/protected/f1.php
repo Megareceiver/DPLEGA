@@ -2251,44 +2251,44 @@
 		$error		= 0;
 		$errorType  = "";
 		$errorMsg	= "";
+		$keyword	= "";
 	
 		/* open connection */ 
 		$gate = openGate();
 		if($gate){		
 			// connection = true
-			if(isset($data['keyword']) && $data['keyword'] != ""){
-				$sql = 
-				"
+			if(isset($data['keyword']) && $data['keyword'] != ""){ $keyword = "WHERE p.deskripsi like '%".$data['keyword']."%' OR l.nama like '%".$data['keyword']."%'"; }
+
+			$sql = 
+			"
+				SELECT * FROM (
 					SELECT 
 						p.idData,
 						p.noRegistrasi,
 						l.nama,
-						p.deskripsi 
+						p.deskripsi,
+						c.namaBentukLembaga
 					FROM 
-						dplega_006_prestasi_temp p
+						 dplega_006_prestasi_temp p
 					JOIN
-						dplega_000_lembaga_temp l
-					ON 	p.noRegistrasi = l.noRegistrasi
-					WHERE 
-						p.deskripsi like '%".$data['keyword']."%'
-					OR
-						l.nama like '%".$data['keyword']."%'
-				";
-			}else{
-				$sql = 
-				"
+						 dplega_000_lembaga_temp l ON p.noRegistrasi = l.noRegistrasi
+					JOIN dplega_200_bentuklembaga as c	ON l.kodeBentukLembaga = c.kodeBentukLembaga
+				".$keyword.") as tabel_1
+				UNION
+				SELECT * FROM (
 					SELECT 
 						p.idData,
 						p.noRegistrasi,
 						l.nama,
-						p.deskripsi 
+						p.deskripsi,
+						c.namaBentukLembaga
 					FROM 
-						dplega_006_prestasi_temp p
+						dplega_006_prestasi p
 					JOIN
-						dplega_000_lembaga_temp l
-					ON 	p.noRegistrasi = l.noRegistrasi
-				";
-			}
+						 dplega_000_lembaga l ON 	p.noRegistrasi = l.noRegistrasi
+					JOIN dplega_200_bentuklembaga as c	ON l.kodeBentukLembaga = c.kodeBentukLembaga
+				".$keyword.") as tabel_2
+			";
 						
 			$result = mysqli_query($gate, $sql);
 			if($result){
@@ -2298,10 +2298,11 @@
 					// output data of each row 
 					while($row = mysqli_fetch_assoc($result)) {
 						$fetch = array(
-							"idData"   		=> $row['idData'],
-							"noreg" 		=> $row['noRegistrasi'],
-							"nama" 			=> $row['nama'],
-							"deskripsi"		=> $row['deskripsi']
+							"idData"   			=> $row['idData'],
+							"noreg" 			=> $row['noRegistrasi'],
+							"nama" 				=> $row['nama'],
+							"namaBentukLembaga" => $row['namaBentukLembaga'],
+							"deskripsi"			=> $row['deskripsi']
 						);
 				
 						array_push($record, $fetch); 
@@ -2346,26 +2347,40 @@
 		$error		= 0;
 		$errorType  = "";
 		$errorMsg	= "";
+		$keyword	= "";
 	
 		/* open connection */ 
 		$gate = openGate();
 		if($gate){		
 			// connection = true
-			if($data['keyword'] ==''){
-				$sql = 	
-				"SELECT b.judulKoleksi, a.nama, c.namaBentukLembaga
-				FROM dplega_005_koleksi_temp as b 
-				JOIN  dplega_000_lembaga_temp as a ON b.noRegistrasi = a.noRegistrasi
-				JOIN dplega_200_bentuklembaga as c	ON c.kodeBentukLembaga = a.kodeBentukLembaga";
-			}else{
-			$sql = 	
-				"SELECT b.judulKoleksi, a.nama, c.namaBentukLembaga
-				FROM dplega_005_koleksi_temp as b 
-				JOIN  dplega_000_lembaga_temp as a ON b.noRegistrasi = a.noRegistrasi
-				JOIN dplega_200_bentuklembaga as c	ON c.kodeBentukLembaga = a.kodeBentukLembaga
-				WHERE b.judulKoleksi like '%".$data['keyword']."%'
-				";
+			if($data['keyword'] !=''){
+				$keyword = "WHERE b.judulKoleksi like '%".$data['keyword']."%'";
 			}
+
+			$sql = 	
+			"	
+				SELECT * FROM (
+					SELECT 
+						b.judulKoleksi, 
+						a.nama, 
+						c.namaBentukLembaga
+					FROM dplega_005_koleksi_temp  as b 
+					JOIN dplega_000_lembaga_temp  as a ON b.noRegistrasi = a.noRegistrasi
+					JOIN dplega_200_bentuklembaga as c	ON c.kodeBentukLembaga = a.kodeBentukLembaga
+					".$keyword."
+				) as tabel_1
+				UNION
+				SELECT * FROM (
+					SELECT 
+						b.judulKoleksi, 
+						a.nama, 
+						c.namaBentukLembaga
+					FROM dplega_005_koleksi  as b 
+					JOIN dplega_000_lembaga  as a ON b.noRegistrasi = a.noRegistrasi
+					JOIN dplega_200_bentuklembaga as c	ON c.kodeBentukLembaga = a.kodeBentukLembaga
+					".$keyword."
+				) as tabel_1
+			";
 						
 			$result = mysqli_query($gate, $sql);
 			if($result){
