@@ -107,19 +107,13 @@
 					$fetch 	   = array();
 					$record    = array();
 					$package   = array();
+					$group['provinsi'] = array();
+					$group['wilayah'] = array();
+					$group['kecamatan'] = array();
+					$group['kelurahan'] = array();
 					while($row = mysqli_fetch_assoc($result)) {
 						
 						unset($fetch); $fetch = array();
-						
-						if($statLoop == 0) { $next  = $row['group']; }
-						
-						if($next != $row['group']){
-							$package[$next] = $record;
-							unset($record); 
-							$record = array();
-							$next   = $row['group'];
-						}
-						
 						$fetch = array(
 									"idData"   		=> $row['idData'],
 									"noreg"   		=> $row['code'],
@@ -129,14 +123,15 @@
 									"referencesKey" => $row['referencesKey']
 								);
 						
-						array_push($record, $fetch); 
-						$statLoop++;
-						if($statLoop == $counter){
-							$package[$row['group']] = $record;
-							unset($record); 
-							$record = array();
-						}
+						array_push($group[$row['group']], $fetch); 
 					}
+
+					$package = array(
+						"provinsi"  => $group['provinsi'],
+						"wilayah"   => $group['wilayah'],
+						"kecamatan" => $group['kecamatan'],
+						"kelurahan" => $group['kelurahan']
+					);
 					
 					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => array($package));
 				}else {

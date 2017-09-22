@@ -2,7 +2,7 @@
 	define('db_host', "localhost");
 	define('db_user', "root");
 	define('db_pass', "");
-	define('db_name', "dplega_dumb");
+	define('db_name', "dplega_empty");
 	
 	function openGate(){
 		

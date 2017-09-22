@@ -1213,13 +1213,13 @@ function r_f4DaftarVerifikasi() {
 						'<div class="col-md-6">' +
 							'<div class="input-box">' +
 								'<input name="pId" tabindex="1" type="hidden" value="" />' +
-								'<input placeholder="verifikasi" name="nama" tabindex="2" type="text" value="" />' +
+								'<input placeholder="verifikasi (*)" name="nama" tabindex="2" type="text" value="" />' +
 							'</div>' +
 						'</div>' +
 						'<div class="col-md-6">' +
 							'<div class="select-box">' +
 								'<select tabindex="1" name="referensi">' +
-									'<option value="" selected>Grup verifikasi</option>' +
+									'<option value="" selected>Grup verifikasi (*)</option>' +
 									grupHtml +
 								'</select>' +
 							'</div>' +
@@ -1368,7 +1368,7 @@ function r_f4GrupVerifikasi() {
 						'<div class="col-md-12">' +
 							'<div class="input-box">' +
 								'<input name="pId" tabindex="1" type="hidden" value="" />' +
-								'<input placeholder="Grup verifikasi" name="nama" tabindex="1" type="text" value="" />' +
+								'<input placeholder="Grup verifikasi (*)" name="nama" tabindex="1" type="text" value="" />' +
 							'</div>' +
 						'</div>' +
 					'</div>' +
@@ -1631,12 +1631,12 @@ function r_f4BentukLembaga() {
 						'<div class="col-md-12">' +
 							'<div class="input-box">' +
 								'<input name="pId" tabindex="1" type="hidden" value="" />' +
-								'<input placeholder="Bentuk lembaga" name="nama" tabindex="1" type="text" value="" />' +
+								'<input placeholder="Bentuk lembaga (*)" name="nama" tabindex="1" type="text" value="" />' +
 							'</div>' +
 						'</div>' +
 						'<div class="col-md-6">' +
 							'<div class="input-box rows-2">' +
-								'<textarea placeholder="Deskripsi" name="deskripsi" tabindex="2" class="rows-2"></textarea>' +
+								'<textarea placeholder="Deskripsi (*)" name="deskripsi" tabindex="2" class="rows-2"></textarea>' +
 							'</div>' +
 						'</div>' +
 					'</div>' +
@@ -1787,13 +1787,13 @@ function r_f4LegalitasLembaga() {
 						'<div class="col-md-8">' +
 							'<div class="input-box">' +
 								'<input tabindex="2" name="pId" type="hidden" value="" />' +
-								'<input placeholder="legalitas" name="nama" tabindex="2" type="text" value="" />' +
+								'<input placeholder="legalitas (*)" name="nama" tabindex="2" type="text" value="" />' +
 							'</div>' +
 						'</div>' +
 						'<div class="col-md-4">' +
 							'<div class="select-box">' +
 								'<select tabindex="1" name="referensi">' +
-									'<option value="" selected>Bentuk lembaga</option>' +
+									'<option value="" selected>Bentuk lembaga (*)</option>' +
 									grupHtml +
 								'</select>' +
 							'</div>' +
@@ -1937,7 +1937,7 @@ function r_f4BidangGerakLembaga() {
 						'<div class="col-md-12">' +
 							'<div class="input-box">' +
 								'<input name="pId" tabindex="2" type="hidden" value="" />' +
-								'<input placeholder="Bidang gerak lembaga" name="nama" tabindex="2" type="text" value="" />' +
+								'<input placeholder="Bidang gerak lembaga (*)" name="nama" tabindex="2" type="text" value="" />' +
 							'</div>' +
 						'</div>' +
 					'</div>' +
