@@ -7,6 +7,18 @@
 			$this->db = openGate();
 		}
 
+		public function requestData($target){
+			switch($target){
+				case "f40" : $resultList = $this->getAllLingkupArea(); break;
+				default	   : $resultList = array( "feedStatus" => "failed", "feedType" => "danger", "feedMessage" => "Terjadi kesalahan fatal, proses dibatalkan!", "feedData" => array()); break;
+			}
+
+			/* result fetch */
+			$json = $resultList;
+		
+	        return $json;
+		}
+
 		public function getAllLingkupArea(){
 	     	 /* initial condition */
 			$error				= 0;
@@ -22,24 +34,24 @@
 			$gate = $this->db;
 			if($gate){		
 				// connection = true
-				$sql  = "SELECT * from (select 'provinsi' as `group`, 'f411' as `target`, a.idData, kodeProvinsi as code, namaProvinsi as name, '' as `referencesKey`, '' as `references` FROM `dplega_100_provinsi` a LEFT JOIN  `dplega_101_wilayah` b ON a.idData = b.idProvinsi LEFT JOIN  `dplega_102_kecamatan` c ON b.idData = c.idWilayah ".$dumbQuery['provinsi']." order by a.idData) as table_1";
+				$sql  = "SELECT * from (select 'f411' as `group`, a.idData, kodeProvinsi as noreg, namaProvinsi as caption, '' as `referencesKey`, '' as `references` FROM `dplega_100_provinsi` a LEFT JOIN  `dplega_101_wilayah` b ON a.idData = b.idProvinsi LEFT JOIN  `dplega_102_kecamatan` c ON b.idData = c.idWilayah order by a.idData) as table_1";
 		        $dumb = $this->db->query($sql); 
-		        $data['provinsi'] = $stmt->fetchAll(PDO::FETCH_OBJ);
+		        $data['provinsi'] = $dumb->fetchAll(PDO::FETCH_OBJ);
 
-		        $sql = 	"SELECT * from (SELECT 'wilayah' as `group`, 'f412' as `target`, a.idData, a.kodeWilayah as code, a.namaWilayah as name, a.idProvinsi as `referencesKey`, namaProvinsi as `references` FROM `dplega_101_wilayah` a LEFT JOIN  `dplega_100_provinsi` b ON a.idProvinsi = b.idData LEFT JOIN  `dplega_102_kecamatan` c ON c.idWilayah = a.idData ".$dumbQuery['wilayah']." order by a.idData) as table_2";
+		        $sql = 	"SELECT * from (SELECT 'f412' as `group`, a.idData, a.kodeWilayah as noreg, a.namaWilayah as caption, a.idProvinsi as `referencesKey`, namaProvinsi as `references` FROM `dplega_101_wilayah` a LEFT JOIN  `dplega_100_provinsi` b ON a.idProvinsi = b.idData LEFT JOIN  `dplega_102_kecamatan` c ON c.idWilayah = a.idData order by a.idData) as table_2";
 		        $dumb = $this->db->query($sql); 
-		        $data['wilayah'] = $stmt->fetchAll(PDO::FETCH_OBJ);
+		        $data['wilayah'] = $dumb->fetchAll(PDO::FETCH_OBJ);
 
-		        $sql = 	"SELECT * from (SELECT 'kecamatan' as `group`, 'f413' as `target`, a.idData, a.kodeKecamatan as code, a.namaKecamatan as name, a.idWilayah as `referencesKey`, namaWilayah as `references` FROM `dplega_102_kecamatan` a LEFT JOIN  `dplega_101_wilayah` b ON a.idWilayah = b.idData LEFT JOIN  `dplega_100_provinsi` c ON b.idProvinsi = c.idData ".$dumbQuery['kecamatan']." order by a.idData) as table_3";
+		        $sql = 	"SELECT * from (SELECT 'f413' as `group`, a.idData, a.kodeKecamatan as noreg, a.namaKecamatan as caption, a.idWilayah as `referencesKey`, namaWilayah as `references` FROM `dplega_102_kecamatan` a LEFT JOIN  `dplega_101_wilayah` b ON a.idWilayah = b.idData LEFT JOIN  `dplega_100_provinsi` c ON b.idProvinsi = c.idData order by a.idData) as table_3";
 		        $dumb = $this->db->query($sql); 
-		        $data['kecamatan'] = $stmt->fetchAll(PDO::FETCH_OBJ);
+		        $data['kecamatan'] = $dumb->fetchAll(PDO::FETCH_OBJ);
 
-		        $sql = 	"SELECT * from (SELECT 'kelurahan' as `group`, 'f414' as `target`, a.idData, a.kodeKelurahan as code, a.namaKelurahan as name, a.idKecamatan as `referencesKey`, namaKecamatan as `references` FROM `dplega_103_kelurahan` a LEFT JOIN  `dplega_102_kecamatan` b ON a.idKecamatan = b.idData  LEFT JOIN `dplega_101_wilayah` c ON b.idWilayah = c.idData  LEFT JOIN  `dplega_100_provinsi` d ON c.idProvinsi = d.idData ".$dumbQuery['kelurahan']." order by a.idData) as table_4";
+		        $sql = 	"SELECT * from (SELECT 'f414' as `group`, a.idData, a.kodeKelurahan as noreg, a.namaKelurahan as caption, a.idKecamatan as `referencesKey`, namaKecamatan as `references` FROM `dplega_103_kelurahan` a LEFT JOIN  `dplega_102_kecamatan` b ON a.idKecamatan = b.idData  LEFT JOIN `dplega_101_wilayah` c ON b.idWilayah = c.idData  LEFT JOIN  `dplega_100_provinsi` d ON c.idProvinsi = d.idData order by a.idData) as table_4";
 		        $dumb = $this->db->query($sql); 
-		        $data['kelurahan'] = $stmt->fetchAll(PDO::FETCH_OBJ); 
+		        $data['kelurahan'] = $dumb->fetchAll(PDO::FETCH_OBJ); 
 
 		        $resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => array($data));
-				closeGate($gate);
+				$gate = null;
 			}else {
 				//error state
 				$error		= 1;

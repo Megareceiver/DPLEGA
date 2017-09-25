@@ -13,15 +13,18 @@
 
 	// get the action (resource, collection)
 	$action = $url_array[0];
+	$group  = $url_array[1];
+	$target = $url_array[2];
 	// get the method
 	$method = $_SERVER['REQUEST_METHOD'];
 
 
 	//declare 
-	$error = 0; //error init state
-	$response['data'] = array( "feedStatus" => "forbidden", "feedType" => "danger", "feedMessage" => "Akses ditolak!", "feedData" => array());
+	$error = 0;
+	$response['status'] = 400; //error init state
+	$response['data']   = array( "feedStatus" => "forbidden", "feedType" => "danger", "feedMessage" => "Akses ditolak!", "feedData" => array());
 
-	switch($action){
+	switch($group){
 		// case "f1"			: require_once('protected/f1.php');break;
 		// case "f3"			: require_once('protected/f3.php'); break;
 		case "f4"				: require_once('protected/f4.php'); $func = new F4(); break;
@@ -33,17 +36,21 @@
 	}
 	
 	if($error != 1){
+		switch ($action) {
+			case 'requestData':
+				$response['data']   = $func->requestData($target);
+				$response['status'] = 200;
+			break;
+			
 			/* auth session */
 			// case 'login':  
 			// 	$response['data']= login($_POST);
 			// break;
 
 
-			if($method=='GET'){
 				//if(!isset($url_array[1])){
-					$data=$func->getAll();
-					$response['status'] = 200;
-					$response['data'] 	= $data;
+					
+					
 				//}else{
 					// METHOD : GET api/barang/:idBarang
 					// $idBarang=$url_array[1];
@@ -56,16 +63,13 @@
 					// 	$response['data'] = $data;	
 					// }
 				//}
-			}	
 
-			// case 'requestData':
-			// 	$response['data'] = getData($_POST, $_GET['target']);
-			// break;
+			
 			
 			// default:
 			// 	$json = array( "feedStatus" => "failed", "feedType" => "danger", "feedMessage" => "Terjadi kesalahan fatal, proses dibatalkan!", "feedData" => array());
 			// break;
-
+		}
 	}
 
 	// Return Response to browser

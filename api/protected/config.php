@@ -2,7 +2,7 @@
 	define('db_host', "localhost");
 	define('db_user', "root");
 	define('db_pass', "");
-	define('db_name', "dplega_empty");
+	define('db_name', "dplega_dumb");
 	
 	function openGate(){
 		$gate = new PDO("mysql:host=".db_host.";dbname=".db_name, db_user, db_pass); 
