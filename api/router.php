@@ -27,9 +27,9 @@
 	switch($group){
 		// case "f1"			: require_once('protected/f1.php');break;
 		// case "f3"			: require_once('protected/f3.php'); break;
-		case "f4"				: require_once('protected/f4.php'); $func = new F4(); break;
+		case "f4"				: require_once('protected/f4.php'); $route = new F4(); break;
 		// case "fNotification": require_once('protected/fNotification.php'); break;
-		// case "fLogin"		: require_once('protected/authentication.php'); break;
+		case "flogin"			: require_once('protected/authentication.php'); $route = new Auth(); break;
 		// case "dumb"			: require_once('protected/dumb.php'); break;
 		// case "support"		: require_once('protected/support.php'); break;
 		default  			: $error = 1; break;
@@ -38,33 +38,22 @@
 	if($error != 1){
 		switch ($action) {
 			case 'requestData':
-				$response['data']   = $func->requestData($target);
+				$response['data']   = $route->requestData($target);
 				$response['status'] = 200;
 			break;
 			
 			/* auth session */
-			// case 'login':  
-			// 	$response['data']= login($_POST);
-			// break;
-
-
-				//if(!isset($url_array[1])){
-					
-					
-				//}else{
-					// METHOD : GET api/barang/:idBarang
-					// $idBarang=$url_array[1];
-					// $data=$barang->getBarang($idBarang);
-					// if(empty($data)) {
-					// 	$response['status'] = 404;
-					// 	$response['data'] = array('error' => 'Barang tidak ditemukan');	
-					// }else{
-					// 	$response['status'] = 200;
-					// 	$response['data'] = $data;	
-					// }
-				//}
-
-			
+			case 'login':  
+				if($method=='POST'){
+					$json = file_get_contents('php://input');
+					$post = json_decode($json);
+					$response['data']   = $route->login($post);
+					$response['status'] = 200;
+				}
+				// $post = array('username'=>'admin', 'password'=>'admin');
+				// $response['data']  = $route->login($post);
+				// $response['status'] = 200;
+			break;	
 			
 			// default:
 			// 	$json = array( "feedStatus" => "failed", "feedType" => "danger", "feedMessage" => "Terjadi kesalahan fatal, proses dibatalkan!", "feedData" => array());
