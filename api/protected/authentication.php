@@ -22,9 +22,10 @@
 			$access			= array();
 			$accessDumb		= array();
 			$loginStatus	= "no";	
-			$error			= 0;
+			$lembagaState	= 0;
+			$error			= 1;
 			$errorType  	= "";
-			$errorMsg		= "";
+			$errorMsg 		= "username atau password yang anda masukan salah!";
 			$resultList 	= array( "feedStatus" => "failed", "feedType" => "danger", "feedMessage" => "username atau password yang anda masukan salah!", "feedData" => array());
 			$dum = 0;
 			//validation 
@@ -52,50 +53,71 @@
 				if($res){
 					$data = $res->fetchAll();
 					foreach($data as $row) {
-					
-						$sql2 = 	
-						"SELECT u.*, a.appsName FROM dplega_911_useraccess u
-						 JOIN 
-							dplega_912_apps a 
-						 ON u.idApps = a.idData
-						 WHERE username = '".$username."'";
 
-						$ress = $this->db->query($sql2);
-						if($ress){
-							$datas = $ress->fetchAll();
-							foreach($datas as $list2) {
-								$accessTemp = array(
-									"module" 		=> $list2['module'],
-									"lihat" 		=> $list2['lihat'],
-									"tambah" 		=> $list2['tambah'],
-									"ubah" 			=> $list2['ubah'],
-									"hapus" 		=> $list2['hapus'],
-									"statusAccess" 	=> $list2['statusAktif']
-								);
+						if($row['noRegistrasi'] != ''){
+							$sqlC  = 
+							"	SELECT noRegistrasi FROM 
+									dplega_000_lembaga
+								WHERE 
+									noRegistrasi = '".$row['noRegistrasi']."' 
+								AND statusAktif = '1'
+							";
 
-								array_push($accessDumb, $accessTemp);
-								unset($accessTemp); $accessTemp = array();
+							$resC = $this->db->query($sqlC);
+
+							if(!empty($resC->fetch())){
+								$lembagaState = 1;
 							}
 						}
-							
-						$noRegistrasi	= $row['noRegistrasi'];
-						$nama 			= $row['nama'];
-						$userLevel 		= $row['userLevel'];
-						$avatar 		= (($row['urlGambar'] != null) ? $row['urlGambar'] : 'avatar-'.substr($row['idData'], strlen($row['idData']) -1, 1).".jpg");
-						$lingkupArea	= $row['lingkupArea'];
-						$idBatasArea	= $row['idBatasArea'];
-						$statusActive 	= $row['statusActive'];
-						$access			= $accessDumb;
-						
-					}
 
-					$loginStatus = "yes";
-					$error = 0;
+						if($row['noRegistrasi'] == '' || $lembagaState == 1){
+							$sql2 = 	
+							"SELECT u.*, a.appsName FROM dplega_911_useraccess u
+							 JOIN 
+								dplega_912_apps a 
+							 ON u.idApps = a.idData
+							 WHERE username = '".$username."'";
+
+							$ress = $this->db->query($sql2);
+							if($ress){
+								$datas = $ress->fetchAll();
+								foreach($datas as $list2) {
+									$accessTemp = array(
+										"module" 		=> $list2['module'],
+										"lihat" 		=> $list2['lihat'],
+										"tambah" 		=> $list2['tambah'],
+										"ubah" 			=> $list2['ubah'],
+										"hapus" 		=> $list2['hapus'],
+										"statusAccess" 	=> $list2['statusAktif']
+									);
+
+									array_push($accessDumb, $accessTemp);
+									unset($accessTemp); $accessTemp = array();
+								}
+							}
+								
+							$noRegistrasi	= $row['noRegistrasi'];
+							$nama 			= $row['nama'];
+							$userLevel 		= $row['userLevel'];
+							$avatar 		= (($row['urlGambar'] != null) ? $row['urlGambar'] : 'avatar-'.substr($row['idData'], strlen($row['idData']) -1, 1).".jpg");
+							$lingkupArea	= $row['lingkupArea'];
+							$idBatasArea	= $row['idBatasArea'];
+							$statusActive 	= $row['statusActive'];
+							$access			= $accessDumb;
+
+							$loginStatus = "yes";
+							$error = 0;
+							
+						}else{
+							$error = 1;
+							$errorMsg = "Anda tidak dapat mengakses sementara karena dalam proses verifikasi!";
+						}
+					}
 				}else{
 					$error = 1;
 				}
 			}else{
-				$error = 0;
+				$error = 1;
 			}
 			
 			/* result fetch */
@@ -115,6 +137,8 @@
 				);
 
 				$resultList = array( "feedStatus" => "success", "feedType" => "success", "feedMessage" => "Selamat datang!", "feedId" => $feedData);
+			}else{
+				$resultList = array( "feedStatus" => "failed", "feedType" => "danger", "feedMessage" => $errorMsg, "feedData" => array());
 			}
 
 			/* result fetch */

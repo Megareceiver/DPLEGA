@@ -25,21 +25,35 @@
 	$response['data']   = array( "feedStatus" => "forbidden", "feedType" => "danger", "feedMessage" => "Akses ditolak!", "feedData" => array());
 
 	switch($group){
-		// case "f1"			: require_once('protected/f1.php');break;
+		case "f1"				: require_once('protected/f1.php');  $route = new F1(); break;
 		// case "f3"			: require_once('protected/f3.php'); break;
 		case "f4"				: require_once('protected/f4.php'); $route = new F4(); break;
 		// case "fNotification": require_once('protected/fNotification.php'); break;
 		case "flogin"			: require_once('protected/authentication.php'); $route = new Auth(); break;
 		// case "dumb"			: require_once('protected/dumb.php'); break;
 		// case "support"		: require_once('protected/support.php'); break;
-		default  			: $error = 1; break;
+		default  				: $error = 1; break;
 	}
 	
 	if($error != 1){
 		switch ($action) {
 			case 'requestData':
-				$response['data']   = $route->requestData($target);
-				$response['status'] = 200;
+				if($method=='POST'){
+					$json = file_get_contents('php://input');
+					$post = json_decode($json);
+					$response['data']   = $route->requestData($post, $target);
+					$response['status'] = 200;
+				}else{
+					$response['data']   = $route->requestData($target);
+					$response['status'] = 200;
+				}
+
+				
+				//for test
+				// $post = new \stdClass();
+				// $post->refferences = '44330900001';
+				// $response['data']  = $route->requestData($post, 'f1111');
+				// $response['status'] = 200;
 			break;
 			
 			/* auth session */
@@ -50,7 +64,11 @@
 					$response['data']   = $route->login($post);
 					$response['status'] = 200;
 				}
-				// $post = array('username'=>'admin', 'password'=>'admin');
+
+				//for test
+				// $post = new \stdClass();
+				// $post->username = 'b';
+				// $post->password = 'jabarprov';
 				// $response['data']  = $route->login($post);
 				// $response['status'] = 200;
 			break;	
