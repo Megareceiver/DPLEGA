@@ -2223,15 +2223,27 @@
 				$sql = 	
 				" 	DELETE FROM dplega_110_timwilayah
 					WHERE 
-						idData =
-						'".$data['pId']."'
+						idData = '".$data['pId']."'
 				";
 				
 				$result = mysqli_query($gate, $sql);
 				if($result){	
+
+					$sql = 	
+					" 	DELETE FROM dplega_111_anggotatimwilayah
+						WHERE 
+							idTimWilayah = '".$data['pId']."'
+					";
+					$result = mysqli_query($gate, $sql);
+
 					$error	    = 0;
-					$resultType = "success";
-					$resultMsg  = "data berhasil dihapus.";		
+					if($result){
+						$resultType = "success";
+						$resultMsg  = "data berhasil dihapus.";	
+					}else{
+						$resultType = "warning";
+						$resultMsg  = "Peringatan!, data induk berhasil dihapus, gagal menghapus data detail!.";	
+					}
 				}else{
 					//error state
 					$error		= 1;

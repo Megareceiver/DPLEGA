@@ -455,19 +455,7 @@ function r_f4LingkupArea() {
 						'</div>' +
 					'</div>' +
 				'</div>' +
-			'</form>' +
-			'<!--div class="cards">' +
-				'<div class="row default">' +
-					'<div class="col-md-12">' +
-						'<div class="input-box fixed">' +
-							'<div class="icon-box left">' +
-								'<input placeholder="Pencarian" tabindex="33" type="text" value="" />' +
-								'<span class="fa fa-search"></span>' +
-							'</div>' +
-						'</div>' +
-					'</div>' +
-				'</div>' +
-			'</div-->';
+			'</form>';
 		}
 		
 		if(data[0].kecamatan.length > 0){
