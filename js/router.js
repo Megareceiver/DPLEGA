@@ -11,6 +11,7 @@ var body  	 			= '';
 var part	 			= ['',''];
 var content  			= '';
 var data 	 			= [];
+var optionSpecial		= [];
 var optionD	 			= [];
 var optionBatch 		= [];
 var autoData			= [];
@@ -360,9 +361,11 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 							'idData' 		: recentId, 
 							'namaWilayah'	: $('#f-anggotaTimWilayah-create select[name="idWilayah"] option:selected').text(),
 					}];
-				
+					
+					r_f4RemoveLingkupAreaArray(optionSpecial, recentId);
+					r_f4AnggotaTimWilayahOptionGenerator();
 					r_f4AnggotaTimWilayahDataGenerator(formType, dataFec);
-					clearTargetForm('f-anggotaTimWilayah-create');
+					$('#f-anggotaTimWilayah-create select[name="idWilayah"]').val('');
 					p_formHandler("f-anggotaTimWilayah-create" , "addData");
 				break;
 				case 'f411':
@@ -601,6 +604,18 @@ function r_optionDHtml(group){
 			if(optionD != null && optionD[0].wilayah != undefined){
 				for(var loop=0; loop<optionD[0].wilayah.length; loop++){
 					optionHtml = optionHtml + '<option value="' + optionD[0].wilayah[loop].idData + '">' + optionD[0].wilayah[loop].caption + '</option>';
+				}
+			}
+		break;
+		case "wilayahSpecial": 
+			if(optionSpecial.length == 0){
+				optionSpecial = p_getData('f4', 'f4010');
+				optionSpecial = optionSpecial.feedData;
+			}
+
+			if(optionSpecial != null && optionSpecial.length > 0){
+				for(var loop=0; loop<optionSpecial.length; loop++){
+					optionHtml = optionHtml + '<option value="' + optionSpecial[loop].idData + '">' + optionSpecial[loop].caption + '</option>';
 				}
 			}
 		break;

@@ -1130,7 +1130,7 @@ function r_f4AnggotaTimWilayah(packet) {
 
 		tim_look_set(packet + "::" + packetLabel);
 
-		data = p_getData('f4', 'f410', packet); console.log(data);
+		data = p_getData('f4', 'f410', packet);
 		data = data.feedData;
 		optionBatch = r_f4OptionList(410); 
 		
@@ -1163,7 +1163,7 @@ function r_f4AnggotaTimWilayah(packet) {
 								'<input name="idTim" tabindex="1" type="hidden" value="' + packet + '" />' +
 								'<select tabindex="1" name="idWilayah">' +
 									'<option value="" selected>Pilih Wilayah (*)</option>' +
-									r_optionDHtml('wilayah') +
+									r_optionDHtml('wilayahSpecial') +
 								'</select>' +
 							'</div>' +
 						'</div>' +
@@ -1242,6 +1242,9 @@ function r_f4AnggotaTimWilayah(packet) {
 				$(".option-yes").unbind().on("click", function(){ 
 					hideOptionList(); 
 					if(p_removeData(pGroup, pTarget, pId, pReferencesKey) == 'success'){ 
+						dataAdd = {'idData': pReferencesKey, "caption": pLabel};
+						r_f4AddArrayList(optionSpecial, dataAdd);
+						r_f4AnggotaTimWilayahOptionGenerator();
 						$('#' + pContainer).remove();
 						clearPacket();
 					}; 
@@ -1254,6 +1257,11 @@ function r_f4AnggotaTimWilayah(packet) {
 		//form reactor
 		p_formHandler("f-anggotaTimWilayah-create" , "addData");
 	});
+}
+
+function r_f4AnggotaTimWilayahOptionGenerator(){
+	$("#f-anggotaTimWilayah-create [name=idWilayah]").html('<option value="" selected>Pilih Wilayah (*)</option>');
+	$("#f-anggotaTimWilayah-create [name=idWilayah]").append(r_optionDHtml('wilayahSpecial'));
 }
 
 function r_f4AnggotaTimWilayahDataGenerator(formType, data){
@@ -1326,6 +1334,9 @@ function r_f4AnggotaTimWilayahDataGenerator(formType, data){
 			$(".option-yes").unbind().on("click", function(){ 
 				hideOptionList(); 
 				if(p_removeData(pGroup, pTarget, pId, pReferencesKey) == 'success'){ 
+					dataAdd = {'idData': pReferencesKey, "caption": pLabel};
+					r_f4AddArrayList(optionSpecial, dataAdd);
+					r_f4AnggotaTimWilayahOptionGenerator();
 					$('#' + pContainer).remove();
 					clearPacket();
 				}; 

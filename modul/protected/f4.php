@@ -20,6 +20,7 @@
 			case "f400": $resultList = getTimWilayahListSection(); break;
 			case "f410": $resultList = getAnggotaTimWilayahListSection($data); break;
 			case "f401": $resultList = getLingkupAreaListSection(); break;
+			case "f4010": $resultList = getWilayahNoTeamListSection(); break;
 			case "f402": $resultList = getBatasAreaListSection(); break;
 			case "f412": $resultList = getWilayahOnlyListSection($data); break;
 
@@ -362,6 +363,66 @@
 						array_push($record, array(
 									"idData" 		=> $row['idAnggota'],
 									"namaWilayah" 	=> $row['namaWilayah']
+								));
+					}
+					
+					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => $record);
+				}else {
+					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => array());
+				}
+			}			
+				
+			closeGate($gate);
+		}else {
+			//error state
+			$error		= 1;
+			$errorType  = "danger";
+			$errorMsg	= "Terjadi kesalahan, tidak dapat terhubung ke server!";
+		}
+		
+		
+		if($error == 1){
+			//error state
+			$resultList = array( "feedStatus" => "failed", "feedType" => $errorType, "feedMessage" => $errorMsg);
+		}
+		
+		/* result fetch */
+		$json = $resultList;
+		
+		return $json;
+	}
+
+	function getWilayahNoTeamListSection(){
+		/* initial condition */
+		$resultList = array();
+		$table 		= "";
+		$field 		= array();
+		$rows		= 0;
+		$condition 	= "";
+		$orderBy	= "";
+		$error		= 0;
+		$errorType  = "";
+		$errorMsg	= "";
+	
+		/* open connection */ 
+		$gate = openGate();
+		if($gate){		
+			// connection = true
+			$sql = 	"	SELECT 
+							w.idData,
+						    w.namaWilayah
+						FROM `dplega_101_wilayah` w WHERE w.idData NOT IN (SELECT a.idAnggota FROM `dplega_111_anggotatimwilayah` a)
+					";
+						
+			$result = mysqli_query($gate, $sql);
+			if($result){
+				if(mysqli_num_rows($result) > 0) {
+					// output data of each row
+					$record    		= array();
+					while($row = mysqli_fetch_assoc($result)) {
+						array_push($record, array(
+									"idData" 	=> $row['idData'],
+									"caption" 	=> $row['namaWilayah']
 								));
 					}
 					
