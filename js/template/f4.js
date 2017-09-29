@@ -28,6 +28,7 @@ function r_f4Pengaturan() {
 					'<div class="group-box foot fixed">' +
 						'<div class="button-set">' +
 							'<div class="button-frame"><button type="button" class="btn-link" id="pLingkupArea">Atur konten</button></div>' +
+							'<div class="button-frame"><button type="button" class="btn-link" id="pPembagianTim">Tim wilayah</button></div>' +
 							'<div class="button-frame"><button type="button" class="btn-link" id="pTransferLembaga">Transfer lembaga</button></div>' +
 						'</div>' +
 					'</div>' +
@@ -154,6 +155,7 @@ function r_f4Pengaturan() {
 		
 		//--command reactor
 		$("#pLingkupArea").unbind().on		 ('click', function(){ r_navigateTo(41); });
+		$("#pPembagianTim").unbind().on		 ('click', function(){ r_navigateTo(400); });
 		$("#pTransferLembaga").unbind().on	 ('click', function(){ r_navigateTo(411); });
 		$("#pDaftarVerifikasi").unbind().on	 ('click', function(){ r_navigateTo(42); });
 		$("#pGrupVerifikasi").unbind().on	 ('click', function(){ r_navigateTo(421); });
@@ -888,6 +890,453 @@ function r_f4LingkupAreaDataGenerator(formType, type, data, sectionId){
 		});
 	});
 }
+
+function r_f4TimWilayah() {
+	$("body").prepend(preload);
+	$('main.parent').animate({'opacity': '0.6'},'fast','linear', function(){
+		mainPage.html('');
+		head  	= '';
+		body  	= '';
+		part	= ['','','',''];
+		content = '';
+		counter = 0;
+
+		data = p_getData('f4', 'f400');
+		data = data.feedData;
+		optionBatch = r_f4OptionList(400); 
+		
+		//--open
+		head = '';
+		body = '<div class="row no-head"><div class="container">';
+		
+		//-- open part
+		part[0] = '<div id="timWilayah" class="col-md-8 col-md-offset-2">';
+		
+		//-- fill part
+		//-- Provinsi ==========================================================================
+		if(r_getCookie('lingkupAreaTambah') == '1' || r_getCookie('lingkupAreaUbah') == '1'){
+			part[0] = part[0] +
+			'<form id="f-timWilayah-create" f-group = "f4" f-target = "f400">' +
+				'<div class="cards">' +
+					'<div class="cards-header">' +
+						'<h4>Tim wilayah</h4>' +
+						'<p class="offset">form untuk menambahkan data pembagian tim wilayah.</p>' +
+						'<div class="btn-collapse right">' +
+							'<button class="clear" type="reset"><span class="fa fa-refresh"></span></button>' +
+							'<button class="clear" type="submit"><span class="fa fa-check-circle-o"></span></button>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+				'<div class="cards flush">' +
+					'<div class="row default">' +
+						'<div class="col-md-12">' +
+							'<div class="input-box">' +
+								'<input name="idData" tabindex="1" type="hidden" value="" />' +
+								'<input placeholder="Tim wilayah (*)" name="nama" tabindex="1" type="text" value="" />' +
+							'</div>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+			'</form>';
+		}
+		
+		if(data != null && data.length > 0){
+			for(var loop = 0; loop < data.length; loop++){
+				part[0] = part[0] + 
+				'<div class="cards timWilayah-list list-edit" id ="'+ loop +'timWilayah-' + data[loop].idData + '">' +
+					'<div class="row default">' +
+						'<div class="col-xs-12">' +
+							'<div class="list-box">' +
+								'<div class="list-icon bg-green"><span class="fa fa-object-group"></span></div>' +
+								'<p class="list-text">' + data[loop].namaTim + '</p>' +
+								'<div class="list-button click-option"' + 
+									'p-label		="' + data[loop].namaTim + '"' + 
+									'p-id			="' + data[loop].idData + '"' +
+									'p-group		="f4"' + 
+									'p-target		="f400"' +
+									'p-container	="' + loop + 'timWilayah-' + data[loop].idData + '">' +
+									'<span class="fa fa-ellipsis-v"></span>' +
+								'</div>' +
+							'</div>' +
+						'</div>' +
+						'<div class="clearfix"></div>' +
+					'</div>' +
+				'</div>';
+			}
+		}else{
+			part[0] = part[0] + 
+			'<div class="cards emptyList">' +
+				'<div class="row default">' +
+					'<div class="col-xs-12">' +
+						'<div class="list-box text-center clear">' +
+							'<p class="list-text">Data tidak ditemukan</p>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+			'</div>';
+		}
+		
+		//-- close part
+		part[0] = part[0] + '</div>';
+		body       = body + part[0];
+		
+		body	= body + '</div></div>';
+		content = '<section>' + head + body + '</section>';
+		//--close
+		
+		//--gen
+		headPage.html(r_headPageHtml(3, 'Tim wilayah'));
+		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
+		$("#preload").remove();
+		
+		//--command reactor
+		$(".back-button").unbind().on('click', function(){ r_navigateTo(4); });
+		$(".click-option").unbind().on("click", function(){ 
+			//packet session
+			clearPacket();
+			pGroup 			= $(this).attr('p-group');
+			pTarget			= $(this).attr('p-target')
+			pId				= $(this).attr('p-id');
+			pLabel			= $(this).attr('p-label');
+			pContainer		= $(this).attr('p-container');
+			showOptionList(); 
+			
+			//-- option activator
+			$("#add-card").unbind().on("click", function(){ hideOptionList(); r_navigateTo(410, pId + "::" + pLabel); });
+			$("#edit-card").unbind().on("click", function(){ 
+				hideOptionList(); 
+				r_f4TimWilayahEditor(pId, pLabel); 
+			});
+			
+			$("#delete-card").unbind().on("click", function(){ 
+				hideOptionList(); 
+				showOptionConfirm('delete');
+				$(".option-yes").unbind().on("click", function(){ 
+					hideOptionList(); 
+					if(p_removeData(pGroup, pTarget, pId) == 'success'){ 
+						$('#' + pContainer).remove();
+						clearPacket();
+					}; 
+				});
+			});
+		});
+		
+		r_navbarReactor();
+	
+		//form reactor
+		p_formHandler("f-timWilayah-create" , "addData");
+	});
+}
+
+function r_f4TimWilayahEditor(id, label){
+	$("#f-timWilayah-create [name='idData']").val(id).attr('readonly','readonly');
+	$("#f-timWilayah-create [name='nama']").val(label);
+	p_formHandler("f-timWilayah-create" , "updateData");
+} 
+
+function r_f4TimWilayahDataGenerator(formType, data){
+	var genHtml = "";
+	if(data.length > 0){
+		for(var loop=0; loop<data.length; loop++){
+			genHtml = genHtml +
+			'<div class="cards timWilayah-list list-edit" id ="timWilayah-' + data[loop].idData + '">' +
+				'<div class="row default">' +
+					'<div class="col-xs-12">' +
+						'<div class="list-box">' +
+							'<div class="list-icon bg-green"><span class="fa fa-object-group"></span></div>' +
+							'<p class="list-text">' + data[loop].namaTim + '</p>' +
+							'<div class="list-button click-option"' + 
+								'p-label		="' + data[loop].namaTim + '"' + 
+								'p-id			="' + data[loop].idData + '"' +
+								'p-group		="f4"' + 
+								'p-target		="f400"' +
+								'p-container	="timWilayah-' + data[loop].idData + '">' +
+								'<span class="fa fa-ellipsis-v"></span>' +
+							'</div>' +
+						'</div>' +
+					'</div>' +
+					'<div class="clearfix"></div>' +
+				'</div>' +
+			'</div>';
+		}
+	}else{
+		genHtml = genHtml +
+		'<div class="cards emptyList">' +
+			'<div class="row default">' +
+				'<div class="col-xs-12">' +
+					'<div class="list-box text-center clear">' +
+						'<p class="list-text">Data tidak ditemukan</p>' +
+					'</div>' +
+				'</div>' +
+			'</div>' +
+		'</div>';
+	}
+
+	if(formType == "addData"){
+		$("#timWilayah .emptyList").remove();
+		$("#timWilayah").append(genHtml);
+	}else if (formType == "updateData"){
+		$("#" + pContainer).replaceWith(genHtml);
+	}
+	
+	//reactor
+	$(".click-option").unbind().on("click", function(){ 
+		//packet session
+		clearPacket();
+		pGroup 		= $(this).attr('p-group');
+		pTarget		= $(this).attr('p-target')
+		pId			= $(this).attr('p-id');
+		pLabel		= $(this).attr('p-label');
+		pContainer	= $(this).attr('p-container');
+		showOptionList(); 
+		
+		//-- option activator
+		$("#edit-card").unbind().on("click", function(){ 
+			hideOptionList(); 
+			r_f4TimWilayahEditor(pId, pLabel); 
+		});
+		
+		$("#delete-card").unbind().on("click", function(){ 
+			hideOptionList(); 
+			showOptionConfirm('delete');
+			$(".option-yes").unbind().on("click", function(){ 
+				hideOptionList(); 
+				if(p_removeData(pGroup, pTarget, pId) == 'success'){ 
+					$('#' + pContainer).remove();
+					clearPacket();
+				}; 
+			});
+		});
+	});
+}
+
+function r_f4AnggotaTimWilayah(packet) {
+	$("body").prepend(preload);
+	$('main.parent').animate({'opacity': '0.6'},'fast','linear', function(){
+		mainPage.html('');
+		head  	= '';
+		body  	= '';
+		part	= ['','','',''];
+		content = '';
+		counter = 0;
+
+		if(packet[0] == undefined || packet == "" || packet == null || packet == "start"){
+			packet = tim_look_reader();
+		}
+
+		packet 		= packet.split("::");
+		packetLabel = packet[1];
+		packet 		= packet[0];
+
+		tim_look_set(packet + "::" + packetLabel);
+
+		data = p_getData('f4', 'f410', packet); console.log(data);
+		data = data.feedData;
+		optionBatch = r_f4OptionList(410); 
+		
+		//--open
+		head = '';
+		body = '<div class="row no-head"><div class="container">';
+		
+		//-- open part
+		part[0] = '<div id="anggotaTimWilayah" class="col-md-8 col-md-offset-2">';
+		
+		//-- fill part
+		//-- Provinsi ==========================================================================
+		if(r_getCookie('lingkupAreaTambah') == '1' || r_getCookie('lingkupAreaUbah') == '1'){
+			part[0] = part[0] +
+			'<form id="f-anggotaTimWilayah-create" f-group = "f4" f-target = "f410">' +
+				'<div class="cards">' +
+					'<div class="cards-header">' +
+						'<h4>Tambah anggota wilayah</h4>' +
+						'<p class="offset">form untuk menambahkan data wilayah kedalam tim wilayah.</p>' +
+						'<div class="btn-collapse right">' +
+							'<button class="clear" type="reset"><span class="fa fa-refresh"></span></button>' +
+							'<button class="clear" type="submit"><span class="fa fa-check-circle-o"></span></button>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+				'<div class="cards flush">' +
+					'<div class="row default">' +
+						'<div class="col-md-12">' +
+							'<div class="select-box">' +
+								'<input name="idTim" tabindex="1" type="hidden" value="' + packet + '" />' +
+								'<select tabindex="1" name="idWilayah">' +
+									'<option value="" selected>Pilih Wilayah (*)</option>' +
+									r_optionDHtml('wilayah') +
+								'</select>' +
+							'</div>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+			'</form>';
+		}
+		
+		if(data != null && data.length > 0){
+			for(var loop = 0; loop < data.length; loop++){
+				part[0] = part[0] + 
+				'<div class="cards anggotaTimWilayah-list list-edit" id ="'+ loop +'anggotaTimWilayah-' + data[loop].idData + '">' +
+					'<div class="row default">' +
+						'<div class="col-xs-12">' +
+							'<div class="list-box">' +
+								'<div class="list-icon bg-green"><span class="fa fa-map-marker"></span></div>' +
+								'<p class="list-text">' + data[loop].namaWilayah + '</p>' +
+								'<div class="list-button click-option"' + 
+									'p-label		="' + data[loop].namaWilayah + '"' + 
+									'p-id			="' + packet + '"' +
+									'p-references	="' + data[loop].idData + '"' +
+									'p-group		="f4"' + 
+									'p-target		="f410"' +
+									'p-container	="' + loop + 'anggotaTimWilayah-' + data[loop].idData + '">' +
+									'<span class="fa fa-ellipsis-v"></span>' +
+								'</div>' +
+							'</div>' +
+						'</div>' +
+						'<div class="clearfix"></div>' +
+					'</div>' +
+				'</div>';
+			}
+		}else{
+			part[0] = part[0] + 
+			'<div class="cards emptyList">' +
+				'<div class="row default">' +
+					'<div class="col-xs-12">' +
+						'<div class="list-box text-center clear">' +
+							'<p class="list-text">Data tidak ditemukan</p>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+			'</div>';
+		}
+		
+		//-- close part
+		part[0] = part[0] + '</div>';
+		body       = body + part[0];
+		
+		body	= body + '</div></div>';
+		content = '<section>' + head + body + '</section>';
+		//--close
+		
+		//--gen
+		headPage.html(r_headPageHtml(3, packetLabel));
+		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
+		$("#preload").remove();
+		
+		//--command reactor
+		$(".back-button").unbind().on('click', function(){ r_navigateTo(400); });
+		$(".click-option").unbind().on("click", function(){ 
+			//packet session
+			clearPacket();
+			pGroup 			= $(this).attr('p-group');
+			pTarget			= $(this).attr('p-target')
+			pId				= $(this).attr('p-id');
+			pLabel			= $(this).attr('p-label');
+			pContainer		= $(this).attr('p-container');
+			pReferencesKey  = $(this).attr('p-references');
+			showOptionList(); 
+			
+			//-- option activator
+			$("#delete-card").unbind().on("click", function(){ 
+				hideOptionList(); 
+				showOptionConfirm('delete');
+				$(".option-yes").unbind().on("click", function(){ 
+					hideOptionList(); 
+					if(p_removeData(pGroup, pTarget, pId, pReferencesKey) == 'success'){ 
+						$('#' + pContainer).remove();
+						clearPacket();
+					}; 
+				});
+			});
+		});
+		
+		r_navbarReactor();
+	
+		//form reactor
+		p_formHandler("f-anggotaTimWilayah-create" , "addData");
+	});
+}
+
+function r_f4AnggotaTimWilayahDataGenerator(formType, data){
+	var genHtml = "";
+	if(data.length > 0){
+		packet = tim_look_reader();
+		packet 		= packet.split("::");
+		packetLabel = packet[1];
+		packet 		= packet[0];
+
+		for(var loop=0; loop<data.length; loop++){
+			genHtml = genHtml +
+			'<div class="cards anggotaTimWilayah-list list-edit" id ="'+ loop +'anggotaTimWilayah-' + data[loop].idData + '">' +
+				'<div class="row default">' +
+					'<div class="col-xs-12">' +
+						'<div class="list-box">' +
+							'<div class="list-icon bg-green"><span class="fa fa-map-marker"></span></div>' +
+							'<p class="list-text">' + data[loop].namaWilayah + '</p>' +
+							'<div class="list-button click-option"' + 
+								'p-label		="' + data[loop].namaWilayah + '"' + 
+								'p-id			="' + packet + '"' +
+								'p-references	="' + data[loop].idData + '"' +
+								'p-group		="f4"' + 
+								'p-target		="f410"' +
+								'p-container	="' + loop + 'anggotaTimWilayah-' + data[loop].idData + '">' +
+								'<span class="fa fa-ellipsis-v"></span>' +
+							'</div>' +
+						'</div>' +
+					'</div>' +
+					'<div class="clearfix"></div>' +
+				'</div>' +
+			'</div>';
+		}
+	}else{
+		genHtml = genHtml +
+		'<div class="cards emptyList">' +
+			'<div class="row default">' +
+				'<div class="col-xs-12">' +
+					'<div class="list-box text-center clear">' +
+						'<p class="list-text">Data tidak ditemukan</p>' +
+					'</div>' +
+				'</div>' +
+			'</div>' +
+		'</div>';
+	}
+
+	if(formType == "addData"){
+		$("#anggotaTimWilayah .emptyList").remove();
+		$("#anggotaTimWilayah").append(genHtml);
+	}else if (formType == "updateData"){
+		$("#" + pContainer).replaceWith(genHtml);
+	}
+	
+	//reactor
+	$(".click-option").unbind().on("click", function(){ 
+		//packet session
+		clearPacket();
+		pGroup 		= $(this).attr('p-group');
+		pTarget		= $(this).attr('p-target')
+		pId			= $(this).attr('p-id');
+		pLabel		= $(this).attr('p-label');
+		pContainer	= $(this).attr('p-container');
+		pReferencesKey  = $(this).attr('p-references');
+		showOptionList(); 
+		
+		//-- option activator
+		$("#delete-card").unbind().on("click", function(){ 
+			hideOptionList(); 
+			showOptionConfirm('delete');
+			$(".option-yes").unbind().on("click", function(){ 
+				hideOptionList(); 
+				if(p_removeData(pGroup, pTarget, pId, pReferencesKey) == 'success'){ 
+					$('#' + pContainer).remove();
+					clearPacket();
+				}; 
+			});
+		});
+	});
+}
+
+
+//======================================================
+//BERITA
 
 function r_f4BeritaGenerator(data){
 	var genHtml = "";
@@ -2331,10 +2780,11 @@ function r_f4DetailBerita(packet) {
 			packet = news_look_reader();
 		}
 
+		news_look_set(packet);
+
 		data = p_getData('f4','f441', packet);
 		data = data.feedData;
 
-		news_look_set(packet);
 
 		//--open
 		head	= '';
@@ -3044,6 +3494,16 @@ function r_f4OptionList(target){
 		case 41 :
 		case 411: 			
 			if(r_getCookie('lingkupAreaUbah') == '1'){ res.push({'selector': 'edit-card', 'icon': 'pencil', 'label': 'Ubah data'}); }
+			if(r_getCookie('lingkupAreaHapus') == '1'){ res.push({'selector': 'delete-card', 'icon': 'trash', 'label': 'Hapus data'}); }
+		break;
+
+		case 400: 			
+			if(r_getCookie('lingkupAreaUbah') == '1'){ res.push({'selector': 'add-card', 'icon': 'plus', 'label': 'Tambah wilayah'}); }
+			if(r_getCookie('lingkupAreaUbah') == '1'){ res.push({'selector': 'edit-card', 'icon': 'pencil', 'label': 'Ubah data'}); }
+			if(r_getCookie('lingkupAreaHapus') == '1'){ res.push({'selector': 'delete-card', 'icon': 'trash', 'label': 'Hapus data'}); }
+		break;
+
+		case 410: 			
 			if(r_getCookie('lingkupAreaHapus') == '1'){ res.push({'selector': 'delete-card', 'icon': 'trash', 'label': 'Hapus data'}); }
 		break;
 

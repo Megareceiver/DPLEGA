@@ -76,6 +76,8 @@ function r_navigateTo(index, packet, access) {
 			
 			case 4  : r_f4Pengaturan();					break;
 			case 41 : r_f4LingkupArea();				break;
+			case 400: r_f4TimWilayah();					break;
+			case 410: r_f4AnggotaTimWilayah(packet);	break;
 			case 411: r_f4TransferLembaga();			break;
 			
 			case 42 : r_f4DaftarVerifikasi();			break;
@@ -145,6 +147,8 @@ function r_auth(index){
 		break;
 
 		case 41 :
+		case 400: 			
+		case 410: 			
 		case 411: 			
 			res = (r_getCookie('lingkupAreaLihat') == '1') ? true : false;
 		break;
@@ -339,6 +343,28 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 		break;
 		case 'f4': //megan
 			switch(target){
+				case 'f400':
+
+					dataFec = [{ 
+							'idData' 		: recentId, 
+							'namaTim'		: $('#f-timWilayah-create input[name="nama"]').val(),
+					}];
+				
+					r_f4TimWilayahDataGenerator(formType, dataFec);
+					clearTargetForm('f-timWilayah-create');
+					p_formHandler("f-timWilayah-create" , "addData");
+				break;
+				case 'f410':
+
+					dataFec = [{ 
+							'idData' 		: recentId, 
+							'namaWilayah'	: $('#f-anggotaTimWilayah-create select[name="idWilayah"] option:selected').text(),
+					}];
+				
+					r_f4AnggotaTimWilayahDataGenerator(formType, dataFec);
+					clearTargetForm('f-anggotaTimWilayah-create');
+					p_formHandler("f-anggotaTimWilayah-create" , "addData");
+				break;
 				case 'f411':
 					dataFec = [{ 
 							'idData' 		: recentId, 
@@ -1711,6 +1737,9 @@ function profile_look_reader(){	return String(r_getCookie('profile_look'));}
 
 function news_look_set(id){ r_setCookie('news_look', id, 1); }
 function news_look_reader(){ return String(r_getCookie('news_look'));}
+
+function tim_look_set(id){ r_setCookie('tim_look', id, 1); }
+function tim_look_reader(){	return String(r_getCookie('tim_look'));}
 
 // function r_initCookie(){
 	//r_setCookie('profile_look', '', 1);

@@ -17,6 +17,8 @@
 		
 		switch($target){
 			case "f40" : $resultList = getLingkupAreaSection(); break;
+			case "f400": $resultList = getTimWilayahListSection(); break;
+			case "f410": $resultList = getAnggotaTimWilayahListSection($data); break;
 			case "f401": $resultList = getLingkupAreaListSection(); break;
 			case "f402": $resultList = getBatasAreaListSection(); break;
 			case "f412": $resultList = getWilayahOnlyListSection($data); break;
@@ -237,6 +239,133 @@
 					}
 					
 					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => array($record), "feedDataDetail" =>  array("list" => $recordDetail));
+				}else {
+					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => array());
+				}
+			}			
+				
+			closeGate($gate);
+		}else {
+			//error state
+			$error		= 1;
+			$errorType  = "danger";
+			$errorMsg	= "Terjadi kesalahan, tidak dapat terhubung ke server!";
+		}
+		
+		
+		if($error == 1){
+			//error state
+			$resultList = array( "feedStatus" => "failed", "feedType" => $errorType, "feedMessage" => $errorMsg);
+		}
+		
+		/* result fetch */
+		$json = $resultList;
+		
+		return $json;
+	}
+
+	function getTimWilayahListSection(){
+		/* initial condition */
+		$resultList = array();
+		$table 		= "";
+		$field 		= array();
+		$rows		= 0;
+		$condition 	= "";
+		$orderBy	= "";
+		$error		= 0;
+		$errorType  = "";
+		$errorMsg	= "";
+	
+		/* open connection */ 
+		$gate = openGate();
+		if($gate){		
+			// connection = true
+			$sql = 	"	SELECT 
+							idData,
+							namaTim
+						FROM
+							dplega_110_timwilayah
+						ORDER BY namaTim ASC
+					";
+						
+			$result = mysqli_query($gate, $sql);
+			if($result){
+				if(mysqli_num_rows($result) > 0) {
+					// output data of each row
+					$record    		= array();
+					while($row = mysqli_fetch_assoc($result)) {
+						array_push($record, array(
+									"idData" 	=> $row['idData'],
+									"namaTim" 	=> $row['namaTim']
+								));
+					}
+					
+					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => $record);
+				}else {
+					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => array());
+				}
+			}			
+				
+			closeGate($gate);
+		}else {
+			//error state
+			$error		= 1;
+			$errorType  = "danger";
+			$errorMsg	= "Terjadi kesalahan, tidak dapat terhubung ke server!";
+		}
+		
+		
+		if($error == 1){
+			//error state
+			$resultList = array( "feedStatus" => "failed", "feedType" => $errorType, "feedMessage" => $errorMsg);
+		}
+		
+		/* result fetch */
+		$json = $resultList;
+		
+		return $json;
+	}
+
+	function getAnggotaTimWilayahListSection($data){
+		/* initial condition */
+		$resultList = array();
+		$table 		= "";
+		$field 		= array();
+		$rows		= 0;
+		$condition 	= "";
+		$orderBy	= "";
+		$error		= 0;
+		$errorType  = "";
+		$errorMsg	= "";
+		$key 		= $data['keyword'];
+	
+		/* open connection */ 
+		$gate = openGate();
+		if($gate){		
+			// connection = true
+			$sql = 	"	SELECT 
+							a.idAnggota,
+							w.namaWilayah
+						FROM
+							dplega_111_anggotatimwilayah a
+						JOIN dplega_101_wilayah w ON a.idAnggota = w.idData
+						WHERE idTimWilayah = '".$key."'
+						ORDER BY namaWilayah ASC
+					";
+						
+			$result = mysqli_query($gate, $sql);
+			if($result){
+				if(mysqli_num_rows($result) > 0) {
+					// output data of each row
+					$record    		= array();
+					while($row = mysqli_fetch_assoc($result)) {
+						array_push($record, array(
+									"idData" 		=> $row['idAnggota'],
+									"namaWilayah" 	=> $row['namaWilayah']
+								));
+					}
+					
+					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => $record);
 				}else {
 					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => array());
 				}
@@ -852,6 +981,8 @@
 		/* refferences */
 		
 		switch($target){
+			case "f400": $resultList = createTimWilayahSection($target, $data); break;
+			case "f410": $resultList = createAnggotaTimWilayahSection($target, $data); break;
 			case "f411": $resultList = createLingkupAreaSection($target, $data); break;
 			case "f412": $resultList = createLingkupAreaSection($target, $data); break;
 			case "f413": $resultList = createLingkupAreaSection($target, $data); break;
@@ -866,6 +997,163 @@
 
 			case "f441": $resultList = createDaftarBeritaSection($target, $data); break;
 			default	  : $resultList = array( "feedStatus" => "failed", "feedType" => "danger", "feedMessage" => "Terjadi kesalahan fatal, proses dibatalkan!"); break;
+		}
+		
+		/* result fetch */
+		$json = $resultList;
+		
+		return $json;
+	}
+
+	function createTimWilayahSection($target, $data){
+		/* initial condition */
+		$resultList = array();
+		$table 		= "";
+		$field 		= array();
+		$rows		= 0;
+		$condition 	= "";
+		$orderBy	= "";
+		$error		= 0;
+		$resultType = "";
+		$resultMsg	= "";
+		$counter	= "";
+		$recentId	= "";
+		
+		/* validation */
+		if(!isset($data['nama']) || $data['nama']==""){ $error = 1; }
+			
+		if($error != 1){
+			
+			/* open connection */ 
+			$gate = openGate();
+			if($gate){		
+				// connection = true
+				$sql = 	
+				" 	INSERT INTO dplega_110_timwilayah
+					(
+						namaTim,
+						createdBy, createdDate
+					)
+					VALUES
+					(
+						'".$data['nama']."',
+						'".$_SESSION['username']."', NOW()
+					)
+				";
+
+				$result = mysqli_query($gate, $sql);
+				if($result){	
+					$recentId	= mysqli_insert_id($gate);
+					$error	    = 0;
+					$resultType = "success";
+					$resultMsg  = "Input berhasil disimpan.";		
+				}else{
+					//error state
+					$error		= 1;
+					$resultType = "danger";
+					$resultMsg	= "Terjadi kesalahan fatal, input gagal disimpan!";
+				}
+				
+				closeGate($gate);
+			}else{
+				//error state
+				$error		= 1;
+				$resultType = "danger";
+				$resultMsg	= "Terjadi kesalahan, tidak dapat terhubung ke server!";
+			}
+		}else{
+			//error state
+			$error		= 1;
+			$resultType = "danger";
+			$resultMsg	= "Terjadi kesalahan, mandatory tidak boleh kosong!";
+		}
+		
+		if($error == 1){
+			//error state
+			$resultList = array( "feedStatus" => "failed", "feedType" => $resultType, "feedMessage" => $resultMsg);
+		}else{
+			$resultList = array( "feedStatus" => "success", "feedType" => $resultType, "feedMessage" => $resultMsg, "feedId" => $recentId);
+		}
+		
+		/* result fetch */
+		$json = $resultList;
+		
+		return $json;
+	}
+
+	function createAnggotaTimWilayahSection($target, $data){
+		/* initial condition */
+		$resultList = array();
+		$table 		= "";
+		$field 		= array();
+		$rows		= 0;
+		$condition 	= "";
+		$orderBy	= "";
+		$error		= 0;
+		$resultType = "";
+		$resultMsg	= "";
+		$counter	= "";
+		$recentId	= "";
+		
+		/* validation */
+		if(
+			   !isset($data['idWilayah']) || $data['idWilayah']==""
+			|| !isset($data['idTim']) || $data['idTim']==""
+		){ $error = 1; }
+			
+		if($error != 1){
+			
+			/* open connection */ 
+			$gate = openGate();
+			if($gate){		
+				// connection = true
+				$sql = 	
+				" 	INSERT INTO dplega_111_anggotatimwilayah
+					(
+						idTimWilayah,
+						idAnggota,
+						createdBy, createdDate
+					)
+					VALUES
+					(
+						'".$data['idTim']."',
+						'".$data['idWilayah']."',
+						'".$_SESSION['username']."', NOW()
+					)
+				";
+
+				$result = mysqli_query($gate, $sql);
+				if($result){	
+					$recentId	= $data['idWilayah'];
+					$error	    = 0;
+					$resultType = "success";
+					$resultMsg  = "Input berhasil disimpan.";		
+				}else{
+					//error state
+					$error		= 1;
+					$resultType = "danger";
+					$resultMsg	= "Terjadi kesalahan fatal, input gagal disimpan!";
+				}
+				
+				closeGate($gate);
+			}else{
+				//error state
+				$error		= 1;
+				$resultType = "danger";
+				$resultMsg	= "Terjadi kesalahan, tidak dapat terhubung ke server!";
+			}
+		}else{
+			//error state
+			$error		= 1;
+			$resultType = "danger";
+			$resultMsg	= "Terjadi kesalahan, mandatory tidak boleh kosong!";
+		}
+		
+		if($error == 1){
+			//error state
+			$resultList = array( "feedStatus" => "failed", "feedType" => $resultType, "feedMessage" => $resultMsg);
+		}else{
+			$resultList = array( "feedStatus" => "success", "feedType" => $resultType, "feedMessage" => $resultMsg, "feedId" => $recentId);
 		}
 		
 		/* result fetch */
@@ -1371,6 +1659,7 @@
 		/* refferences */
 		
 		switch($target){
+			case "f400": $resultList = changeTimWilayahSection($target, $data); break;
 			case "f411": $resultList = changeLingkupAreaSection($target, $data); break;
 			case "f412": $resultList = changeLingkupAreaSection($target, $data); break;
 			case "f413": $resultList = changeLingkupAreaSection($target, $data); break;
@@ -1383,6 +1672,79 @@
 			case "f432": $resultList = changeKelembagaanSection($target, $data); break;
 			case "f433": $resultList = changeKelembagaanSection($target, $data); break;
 			default	  : $resultList = array( "feedStatus" => "failed", "feedType" => "danger", "feedMessage" => "Terjadi kesalahan fatal, proses dibatalkan!"); break;
+		}
+		
+		/* result fetch */
+		$json = $resultList;
+		
+		return $json;
+	}
+
+	function changeTimWilayahSection($target, $data){
+		/* initial condition */
+		$resultList = array();
+		$table 		= "";
+		$field 		= array();
+		$rows		= 0;
+		$condition 	= "";
+		$orderBy	= "";
+		$error		= 0;
+		$resultType = "";
+		$resultMsg	= "";
+		$counter	= "";
+		$recentId	= "";
+		
+		/* validation */
+		if(!isset($data['nama']) || $data['nama']==""){ $error = 1; }
+			
+		if($error != 1){
+			
+			/* open connection */ 
+			$gate = openGate();
+			if($gate){		
+				// connection = true
+				$sql = 	
+				" 	UPDATE dplega_110_timwilayah
+					SET
+						namaTim 	 = '".$data['nama']."',
+						changedBy 	 = '".$_SESSION['username']."',
+						changedDate  = NOW()
+					WHERE 
+						idData = '".$data['idData']."'
+				";
+
+				$result = mysqli_query($gate, $sql);
+				if($result){	
+					$recentId	= $data['idData'];
+					$error	    = 0;
+					$resultType = "success";
+					$resultMsg  = "data berhasil diubah.";		
+				}else{
+					//error state
+					$error		= 1;
+					$resultType = "danger";
+					$resultMsg	= "Terjadi kesalahan fatal, data gagal diubah!";
+				}
+				
+				closeGate($gate);
+			}else{
+				//error state
+				$error		= 1;
+				$resultType = "danger";
+				$resultMsg	= "Terjadi kesalahan, tidak dapat terhubung ke server!";
+			}
+		}else{
+			//error state
+			$error		= 1;
+			$resultType = "danger";
+			$resultMsg	= "Terjadi kesalahan, ID tidak ditemukan atau data tidak lengkap!";
+		}
+		
+		if($error == 1){
+			//error state
+			$resultList = array( "feedStatus" => "failed", "feedType" => $resultType, "feedMessage" => $resultMsg);
+		}else{
+			$resultList = array( "feedStatus" => "success", "feedType" => $resultType, "feedMessage" => $resultMsg, "feedId" => $recentId);
 		}
 		
 		/* result fetch */
@@ -1749,12 +2111,10 @@
 		$errorMsg	= "";
 	
 		/* refferences */
-		// f41 : provinsi
-		// f42 : wilayah
-		// f43 : kecamatan
-		// f44 : kelurahan
 		
 		switch($target){
+			case "f400": $resultList = deleteTimWilayahSection($target, $data); break;
+			case "f410": $resultList = deleteAnggotaTimWilayahSection($target, $data); break;
 			case "f411": $resultList = deleteLingkupAreaSection($target, $data); break;
 			case "f412": $resultList = deleteLingkupAreaSection($target, $data); break;
 			case "f413": $resultList = deleteLingkupAreaSection($target, $data); break;
@@ -1777,6 +2137,142 @@
 		return $json;
 	}
 	
+	function deleteTimWilayahSection($target, $data){
+		/* initial condition */
+		$resultList = array();
+		$table 		= "";
+		$field 		= array();
+		$rows		= 0;
+		$condition 	= "";
+		$orderBy	= "";
+		$error		= 0;
+		$resultType = "";
+		$resultMsg	= "";
+		$counter	= "";
+		
+		/* validation */
+		if(
+			isset($data['pId']) && $data['pId']!=""
+		){
+			
+			/* open connection */ 
+			$gate = openGate();
+			if($gate){		
+				// connection = true
+				$sql = 	
+				" 	DELETE FROM dplega_110_timwilayah
+					WHERE 
+						idData =
+						'".$data['pId']."'
+				";
+				
+				$result = mysqli_query($gate, $sql);
+				if($result){	
+					$error	    = 0;
+					$resultType = "success";
+					$resultMsg  = "data berhasil dihapus.";		
+				}else{
+					//error state
+					$error		= 1;
+					$resultType = "danger";
+					$resultMsg	= "Terjadi kesalahan fatal, data gagal dihapus!";
+				}
+				
+				closeGate($gate);
+			}else{
+				//error state
+				$error		= 1;
+				$resultType = "danger";
+				$resultMsg	= "Terjadi kesalahan, tidak dapat terhubung ke server!";
+			}
+		}else{
+			//error state
+			$error		= 1;
+			$resultType = "danger";
+			$resultMsg	= "Terjadi kesalahan, ID tidak ditemukan!";
+		}
+		
+		if($error == 1){
+			//error state
+			$resultList = array( "feedStatus" => "failed", "feedType" => $resultType, "feedMessage" => $resultMsg);
+		}else{
+			$resultList = array( "feedStatus" => "success", "feedType" => $resultType, "feedMessage" => $resultMsg);
+		}
+		
+		/* result fetch */
+		$json = $resultList;
+		
+		return $json;
+	}
+
+	function deleteAnggotaTimWilayahSection($target, $data){
+		/* initial condition */
+		$resultList = array();
+		$table 		= "";
+		$field 		= array();
+		$rows		= 0;
+		$condition 	= "";
+		$orderBy	= "";
+		$error		= 0;
+		$resultType = "";
+		$resultMsg	= "";
+		$counter	= "";
+		
+		/* validation */
+		if(
+			isset($data['pId']) && $data['pId']!="" &&
+			isset($data['refferenceId']) && $data['refferenceId']!=""
+		){
+			
+			/* open connection */ 
+			$gate = openGate();
+			if($gate){		
+				// connection = true
+				$sql = 	
+				" 	DELETE FROM dplega_111_anggotatimwilayah
+					WHERE 
+						idTimWilayah = '".$data['pId']."'
+					AND idAnggota = '".$data['refferenceId']."'
+				";
+				
+				$result = mysqli_query($gate, $sql);
+				if($result){	
+					$error	    = 0;
+					$resultType = "success";
+					$resultMsg  = "data berhasil dihapus.";		
+				}else{
+					//error state
+					$error		= 1;
+					$resultType = "danger";
+					$resultMsg	= "Terjadi kesalahan fatal, data gagal dihapus!";
+				}
+				
+				closeGate($gate);
+			}else{
+				//error state
+				$error		= 1;
+				$resultType = "danger";
+				$resultMsg	= "Terjadi kesalahan, tidak dapat terhubung ke server!";
+			}
+		}else{
+			//error state
+			$error		= 1;
+			$resultType = "danger";
+			$resultMsg	= "Terjadi kesalahan, ID tidak ditemukan!";
+		}
+		
+		if($error == 1){
+			//error state
+			$resultList = array( "feedStatus" => "failed", "feedType" => $resultType, "feedMessage" => $resultMsg);
+		}else{
+			$resultList = array( "feedStatus" => "success", "feedType" => $resultType, "feedMessage" => $resultMsg);
+		}
+		
+		/* result fetch */
+		$json = $resultList;
+		
+		return $json;
+	}
 	
 	function deleteLingkupAreaSection($target, $data){
 		/* initial condition */
