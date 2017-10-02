@@ -950,7 +950,7 @@
 				 FROM
 					dplega_201_persyaratan a
 				 JOIN 
-					dplega_200_bentukLembaga b
+					dplega_200_bentuklembaga b
 				 ON
 					a.kodeBentukLembaga = b.kodeBentukLembaga
 				 ORDER BY caption ASC";
@@ -960,7 +960,7 @@
 					kodeBidangGerak as `noreg`,
 					namaBidangGerak as `caption`
 				 FROM
-					dplega_210_bidangGerak
+					dplega_210_bidanggerak
 				 ORDER BY caption ASC";
 			}
 			
@@ -1508,7 +1508,7 @@
 				// connection = true
 				if($target == "f431"){
 					$sql = 	
-					" 	INSERT INTO dplega_200_bentukLembaga
+					" 	INSERT INTO dplega_200_bentuklembaga
 						(
 							namaBentukLembaga,
 							deskripsi,
@@ -1538,7 +1538,7 @@
 					";
 				}elseif($target == "f433"){
 					$sql = 	
-					" 	INSERT INTO dplega_210_bidangGerak
+					" 	INSERT INTO dplega_210_bidanggerak
 						(
 							namaBidangGerak,
 							createdBy, createdDate
@@ -2088,7 +2088,7 @@
 				
 				if($target == "f431"){
 					$sql = 	
-					" 	UPDATE dplega_200_bentukLembaga
+					" 	UPDATE dplega_200_bentuklembaga
 						SET
 							namaBentukLembaga = '".$data['nama']."',
 							deskripsi 	 = '".$data['deskripsi']."',
@@ -2110,7 +2110,7 @@
 					";
 				}elseif($target == "f433"){
 					$sql = 	
-					" 	UPDATE dplega_210_bidangGerak
+					" 	UPDATE dplega_210_bidanggerak
 						SET
 							namaBidangGerak = '".$data['nama']."'
 							changedBy 	 	= '".$_SESSION['username']."',
@@ -2530,11 +2530,11 @@
 				// connection = true
 				$sql = "";
 				if($target == "f431"){
-					$sql = "DELETE FROM dplega_200_bentukLembaga WHERE kodeBentukLembaga ='".$data['pId']."'";
+					$sql = "DELETE FROM dplega_200_bentuklembaga WHERE kodeBentukLembaga ='".$data['pId']."'";
 				}elseif($target == "f432"){
 					$sql = "DELETE FROM dplega_201_persyaratan WHERE kodePersyaratan ='".$data['pId']."'";
 				}elseif($target == "f433"){
-					$sql = "DELETE FROM dplega_210_bidangGerak WHERE kodeBidangGerak ='".$data['pId']."'";
+					$sql = "DELETE FROM dplega_210_bidanggerak WHERE kodeBidangGerak ='".$data['pId']."'";
 				}
 					
 				$result = mysqli_query($gate, $sql);

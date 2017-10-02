@@ -426,7 +426,7 @@ function r_f1DetailLembaga(packet) {
 		
 		//data = p_getData('f1', 'f1111', '', '12121300001');
 		data = p_getData('f1', 'f1111', '', packet);
-		data = data.feedData;
+		data = data.feedData; console.log(data)
 		
 		//-- set option list on a session
 		if(data != null && data.option != undefined){
@@ -444,7 +444,10 @@ function r_f1DetailLembaga(packet) {
 		//--left
 		if(data.profile[0] != null){
 			var temPic = "";
-			temPic = (data.profile[0].avatar != "") ? 'img/logo/' + data.profile[0].avatar : 'img/logo/avatar-5.jpg';
+			var placeImg = data.profile[0].noreg;
+				placeImg = placeImg.substr((placeImg.length-1), 1);
+				temPic   = (data.profile[0].avatar != "") ? 'img/logo/' + data.profile[0].avatar : 'img/logo/avatar-' + placeImg + '.jpg';
+				// temPic = (data.profile[0].avatar != "") ? 'img/logo/' + data.profile[0].avatar : 'img/logo/avatar-3.jpg';
 			part[0] = part[0] +
 			'<div class="cards clear">' +
 				'<div class="cards-banner-blank long smalltron-ground">' +
@@ -452,7 +455,7 @@ function r_f1DetailLembaga(packet) {
 						'<img src="' + temPic + '">' +
 						'<p class="caption">' +
 							'<span class="big">' + data.profile[0].nama + '</span>' +
-							'<span>Yayasan</span>' +
+							'<span>' + data.profile[0].bentukLembaga + '</span>' +
 						'</p>' +
 						'<button class="btn-option btn-default click-option" ' + 
 							'p-group		="f1"' + 
@@ -505,10 +508,9 @@ function r_f1DetailLembaga(packet) {
 					var endLoopY = 0;
 					switch(data.detail[loop].type){
 						case 'table'		: part[1] = part[1] + '<div class="cards flush toggle-content ' + data.detail[loop].groupId + '-group">' + '<div class="desc-frame">';  endLoopY = data.detail[loop].items.length; break;
-						case 'list'			: part[1] = part[1] + '<div class="cards flush toggle-content ' + data.detail[loop].groupId + '-group">' + '<div class="row">'; endLoopY = data.detail[loop].items.length; break;
-						case 'table-list'	: part[1] = part[1] + '<div class="cards flush toggle-content ' + data.detail[loop].groupId + '-group">' + '<div class="row default">'; endLoopY = data.detail[loop].items[0].set.length;  break;
+						case 'list'			: part[1] = part[1] + '<div class="cards flush toggle-content ' + data.detail[loop].groupId + '-group">' + '<div class="row">'; 		endLoopY = data.detail[loop].items.length; break;
+						case 'table-list'	: part[1] = part[1] + '<div class="cards flush toggle-content ' + data.detail[loop].groupId + '-group">' + '<div class="row default">'; endLoopY = data.detail[loop].items.length;  break;
 					}
-					
 					
 					for(var loopY = 0; loopY < endLoopY; loopY++){	
 						switch(data.detail[loop].type){
@@ -527,30 +529,32 @@ function r_f1DetailLembaga(packet) {
 								'</div>';
 							break;
 							case 'table-list'	:
-									 if(data.detail[loop].items[0].set[loopY].size == "large") { part[1] = part[1] + '<div class="col-md-4">'; }
-								else if(data.detail[loop].items[0].set[loopY].size == "medium"){ part[1] = part[1] + '<div class="col-md-3">'; }
-								else if(data.detail[loop].items[0].set[loopY].size == "small") { part[1] = part[1] + '<div class="col-md-2">'; }
-								
-								var classAdd = "";
-								if(loopY > 0){ classAdd = "clear"; }
-								part[1] = part[1] +
-								'<div class="list-box ' + classAdd + '">';
-								
-								if(data.detail[loop].items[0].set[loopY].form == "text-icon"){ 
+								for(var loopZ = 0; loopZ < data.detail[loop].items[loopY].set.length; loopZ++){	
+										 if(data.detail[loop].items[loopY].set[loopZ].size == "large") { part[1] = part[1] + '<div class="col-md-4">'; }
+									else if(data.detail[loop].items[loopY].set[loopZ].size == "medium"){ part[1] = part[1] + '<div class="col-md-3">'; }
+									else if(data.detail[loop].items[loopY].set[loopZ].size == "small") { part[1] = part[1] + '<div class="col-md-2">'; }
+									
+									var classAdd = "";
+									if(loopZ > 0){ classAdd = "clear"; }
 									part[1] = part[1] +
-									'<div class="list-icon bg-' + data.detail[loop].items[0].set[loopY].color + '"><span class="fa fa-' + data.detail[loop].items[0].set[loopY].icon + '"></span></div>' +
-									'<p class="list-text"><strong>' + data.detail[loop].items[0].set[loopY].text + '</strong></p>';
-								}else if(data.detail[loop].items[0].set[loopY].form == "text"){
-									part[1] = part[1] +
-									'<p class="list-text">' + data.detail[loop].items[0].set[loopY].text + '</p>';
-								}else if(data.detail[loop].items[0].set[loopY].form == "button"){
-									part[1] = part[1] +
-									'<button type="button" class="clear list-text btn-link">' + data.detail[loop].items[0].set[loopY].text + '</button>';
+									'<div class="list-box ' + classAdd + '">';
+									
+									if(data.detail[loop].items[loopY].set[loopZ].form == "text-icon"){ 
+										part[1] = part[1] +
+										'<div class="list-icon bg-' + data.detail[loop].items[loopY].set[loopZ].color + '"><span class="fa fa-' + data.detail[loop].items[loopY].set[loopZ].icon + '"></span></div>' +
+										'<p class="list-text"><strong>' + data.detail[loop].items[loopY].set[loopZ].text + '</strong></p>';
+									}else if(data.detail[loop].items[loopY].set[loopZ].form == "text"){
+										part[1] = part[1] +
+										'<p class="list-text">' + data.detail[loop].items[loopY].set[loopZ].text + '</p>';
+									}else if(data.detail[loop].items[loopY].set[loopZ].form == "button"){
+										part[1] = part[1] +
+										'<button type="button" class="clear list-text btn-link" preview-target="' + data.detail[loop].items[loopY].set[loopZ].preview + '">' + data.detail[loop].items[loopY].set[loopZ].text + '</button>';
+									}
+									
+									part[1] = part[1] + 
+										'</div>' +
+									'</div>';
 								}
-								
-								part[1] = part[1] + 
-									'</div>' +
-								'</div>';
 							break;
 						}
 					}
@@ -615,6 +619,7 @@ function r_f1DetailLembaga(packet) {
 		
 		//--command reactor
 		$(".back-button").unbind().on('click', function(){ r_navigateTo(r_pagePreviousReader()); });
+		$("[preview-target]").unbind().on('click', function(){ showPreviewBox($(this).attr('preview-target')); });
 		$(".click-option").unbind().on("click", function(){ 
 			//packet session
 			clearPacket();
@@ -1645,7 +1650,7 @@ function r_f1FormKelembagaan(packet){
 		$("#preload").remove();
 		
 		//--command reactor
-		navito = ((String(r_getCookie('userLevel')) == '1') ? 12 : 1);
+		navito = ((String(r_getCookie('userLevel')) == '1') ? 12 : 11);
 		$(".back-button").unbind().on('click', function(){ r_navigateTo(navito); });
 		
 		// $(".reset").unbind().on('click', function(){ clearTargetForm('f-kelembagaan-create'); });
@@ -1969,6 +1974,7 @@ function r_f1legaitasGenerator(dataFecth){
 						'<div class="icon-box both">' +
 							'<label class="browser-box" id="legalitas-' + dataFecth.items[loop].kodePersyaratan + '">' +
 								'<p class="placeholder" name="imageName">' + fileChecker + '</p>' +
+								'<input name="imageTemp" type="hidden" value="' + fileChecker + '" />' +
 								'<input name="imageUrl" accept="image/*" type="file" tabindex="5" />' +
 								'<input browser-state="fileState" name="fileState" type="hidden" tabindex="5" value="add" />' +
 							'</label>' +

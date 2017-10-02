@@ -305,6 +305,48 @@
 					UNION
 					SELECT * FROM (
 						SELECT  
+							'Perubahan' as `group`,
+							l.`noRegistrasi` as id,
+							l.`noRegistrasi` as noreg,
+							l.`nama` as nama,
+							l.`noTelp` as telp,
+							l.`email` as email,
+							`username` as username,
+							namaProvinsi as np,
+							namaWilayah as nw,
+							namaKecamatan as nc,
+							namaKelurahan as nk,
+							namaBentukLembaga as nb,
+							CONCAT_WS(' ', l.`alamat`, 'RT.',l.`noRt`, '/', 'RW.', l.`noRw`, `namaKelurahan`, `namaKecamatan`, `namaWilayah`, `namaProvinsi`) as alamat,
+							COALESCE(`urlGambarLogo`, 'avatar-default.jpg') as picture,
+							l.createdDate as sort
+						FROM 
+							dplega_000_lembaga l 
+						LEFT JOIN
+							dplega_100_provinsi p ON l.kodeProvinsi = p.idData
+						LEFT JOIN
+							dplega_101_wilayah w ON l.kodeWilayah = w.idData
+						LEFT JOIN
+							dplega_102_kecamatan kc ON l.kodeKecamatan = kc.idData
+						LEFT JOIN
+							dplega_103_kelurahan kl ON l.kodeKelurahan = kl.idData
+						JOIN
+							dplega_200_bentuklembaga bl ON l.kodeBentukLembaga = bl.kodeBentukLembaga
+						JOIN
+							dplega_910_user u ON l.noRegistrasi = u.noRegistrasi
+						WHERE 
+						l.statusAktif = '2'
+						".$dumbQuery['refferences']."
+						".$dumbQuery['keyword']."
+						".$dumbQuery['provinsi' ]."
+						".$dumbQuery['wilayah'  ]."
+						".$dumbQuery['kecamatan']." 
+						".$dumbQuery['kelurahan']." 
+						 ORDER BY sort DESC
+					) as table_2
+					UNION
+					SELECT * FROM (
+						SELECT  
 							'Valid' as `group`,
 							l.`noRegistrasi` as id,
 							l.`noRegistrasi` as noreg,
@@ -709,8 +751,8 @@
 						misiLembaga
 					FROM
 						dplega_000_lembaga".$dumbTable." l
-						JOIN
-						dplega_210_bidangGerak b
+						LEFT JOIN
+						dplega_210_bidanggerak b
 					ON l.kodeBidangGerak = b.kodeBidangGerak
 					WHERE
 					l.noRegistrasi = '".$noreg."'
@@ -769,7 +811,7 @@
 							array_push($items, array('color' => 'purple', 'icon' => 'file-text', 'size' => 'large', 'form' => 'text-icon', 'text' => $row['namaPersyaratan'])); 
 							array_push($items, array('color' => '', 'icon' => '', 'size' => 'medium', 'form' => 'text', 'text' => $row['noLegalitas'])); 
 							array_push($items, array('color' => '', 'icon' => '', 'size' => 'small', 'form' => 'text', 'text' => $row['tanggalLegalitas'])); 
-							array_push($items, array('color' => '', 'icon' => '', 'size' => 'medium', 'form' => 'button', 'text' => $row['urlFile'])); 
+							array_push($items, array('color' => '', 'icon' => '', 'size' => 'medium', 'form' => 'button', 'text' => $row['urlFile'], 'preview' => "img/legalitas/".$row['urlFile'])); 
 							 
 							array_push($itemsPack, array("set" => $items));
 
@@ -2799,6 +2841,7 @@
 								kodePersyaratan 	= '".$data['kodePersyaratan']."',
 								noLegalitas 		= '".$data['nomorLegalitas']."',
 								tanggalLegalitas 	= '".$data['tanggalLegalitas']."',
+								statusVerifikasi	= '0',
 								changedBy 	  		= '".$_SESSION['username']."',
 								changedDate   		= NOW()
 							WHERE
@@ -2814,6 +2857,7 @@
 								kodePersyaratan,
 								noLegalitas,
 								tanggalLegalitas,
+								statusVerifikasi,
 								createdBy, createdDate
 							)
 							VALUES
@@ -2822,6 +2866,7 @@
 								'".$data['kodePersyaratan']."',
 								'".$data['nomorLegalitas']."',
 								'".$data['tanggalLegalitas']."',
+								'0',
 								'".$_SESSION['username']."', NOW()
 							)
 						";
@@ -2835,7 +2880,7 @@
 						$error	    = 0;
 						$resultType = "success";
 						$resultMsg  = "Input berhasil disimpan. ";
-
+						$file_name = ((isset($data['imageTemp'])) ? $data['imageTemp'] : "berkas belum diunggah...");
 						if(isset($data['fileState']) && $data['fileState'] == "remove"){
 							$sql 	= "
 								SELECT urlFile FROM dplega_009_legalitas".$dumbTable." 
@@ -2857,32 +2902,50 @@
 								$result = mysqli_query($gate, $sql);
 
 						}else{
-							/*upload image*/
-							$Validextensions = array("jpeg", "jpg", "png", "gif");
-							$temporary = explode(".", $_FILES["imageUrl"]["name"]);
-							$file_extension = end($temporary);
-							$file_name = "berkas belum diunggah...";			
-							if (in_array($file_extension, $Validextensions)) {						
-								if ($_FILES["imageUrl"]["error"] > 0)
-								{
-									$upload_message = $_FILES["imageUrl"];
-								}
-								else
-								{					
-									$file_name = $noreg."_".$data['kodePersyaratan']."_legalitas.".$file_extension;		
-									$sourcePath = $_FILES['imageUrl']['tmp_name']; // Storing source path of the file in a variable
-									$targetPath = "img/legalitas/".$file_name; // Target path where file is to be stored
-									if(move_uploaded_file($sourcePath,"../".$targetPath)){ /*Moving Uploaded file*/
-										$sql = "
-												UPDATE dplega_009_legalitas".$dumbTable." SET urlFile = '".$file_name."' 
-												WHERE noRegistrasi = '".$noreg."' AND kodePersyaratan = '".$data['kodePersyaratan']."'";			
-										$result = mysqli_query($gate, $sql);									
-									}								
+							if(isset($_FILES["imageUrl"]["name"]) && $_FILES["imageUrl"]["name"] != ""){
+								/*upload image*/
+								$Validextensions = array("jpeg", "jpg", "png", "gif");
+								$temporary = explode(".", $_FILES["imageUrl"]["name"]);
+								$file_extension = end($temporary);
+								$file_name = "berkas belum diunggah...";
+								if (in_array($file_extension, $Validextensions)) {						
+									if ($_FILES["imageUrl"]["error"] > 0)
+									{
+										$upload_message = $_FILES["imageUrl"];
+									}
+									else
+									{					
+										$file_name = $noreg."_".$data['kodePersyaratan']."_legalitas.".$file_extension;		
+										$sourcePath = $_FILES['imageUrl']['tmp_name']; // Storing source path of the file in a variable
+										$targetPath = "img/legalitas/".$file_name; // Target path where file is to be stored
+										if(move_uploaded_file($sourcePath,"../".$targetPath)){ /*Moving Uploaded file*/
+											$sql = "
+													UPDATE dplega_009_legalitas".$dumbTable." SET urlFile = '".$file_name."' 
+													WHERE noRegistrasi = '".$noreg."' AND kodePersyaratan = '".$data['kodePersyaratan']."'";			
+											$result = mysqli_query($gate, $sql);									
+										}								
+									}
 								}
 							}
 							/*upload end*/
 						}
 
+						if($states == "diubah"){
+							$sql = 
+							"	UPDATE dplega_000_lembaga".$dumbTable. "
+								SET statusAktif = '2'
+								WHERE
+									noRegistrasi = '".$noreg."'
+							";
+
+							mysqli_query($gate, $sql);
+
+							$post['refferenceId'] = $noreg;
+							$post['dataFetch'] ='0';
+							if($dumbTable != "_temp"){ $post['dataFetch'] == '1'; }
+							moveLembaga($target, $post);
+						}
+							
 
 						/*add notif*/
 						$namaPersyaratan = "";
@@ -4702,6 +4765,7 @@
 							mysqli_query($gate, "INSERT INTO dplega_011_hirarkilembaga 		SELECT * FROM dplega_011_hirarkilembaga_temp 	WHERE noRegistrasi = '".$noreg."'");
 							mysqli_query($gate, "INSERT INTO dplega_012_verifikasi 			SELECT * FROM dplega_012_verifikasi_temp 		WHERE noRegistrasi = '".$noreg."'");
 							mysqli_query($gate, "INSERT INTO dplega_013_verifikasilogs 		SELECT * FROM dplega_013_verifikasilogs_temp 	WHERE noRegistrasi = '".$noreg."'");
+							mysqli_query($gate, "UPDATE dplega_000_lembaga SET statusAktif = '1' WHERE noRegistrasi = '".$noreg."'");
 							
 
 							mysqli_query($gate, "DELETE FROM dplega_000_lembaga_temp 			WHERE noRegistrasi = '".$noreg."'");
@@ -4717,6 +4781,8 @@
 							mysqli_query($gate, "DELETE FROM dplega_011_hirarkilembaga_temp 	WHERE noRegistrasi = '".$noreg."'");
 							mysqli_query($gate, "DELETE FROM dplega_012_verifikasi_temp 		WHERE noRegistrasi = '".$noreg."'");
 							mysqli_query($gate, "DELETE FROM dplega_013_verifikasilogs_temp 	WHERE noRegistrasi = '".$noreg."'");
+
+
 						}elseif($data['dataFetch'] == '0' && $dumbTable == ""){
 							mysqli_query($gate, "INSERT INTO dplega_000_lembaga_temp 			SELECT * FROM dplega_000_lembaga 			WHERE noRegistrasi = '".$noreg."'");
 							mysqli_query($gate, "INSERT INTO dplega_001_sejarah_temp 			SELECT * FROM dplega_001_sejarah			WHERE noRegistrasi = '".$noreg."'");

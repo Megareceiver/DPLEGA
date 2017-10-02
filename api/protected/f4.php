@@ -10,6 +10,8 @@
 		public function requestData($target){
 			switch($target){
 				case "f40" : $resultList = $this->getAllLingkupArea(); break;
+				case "f401": $resultList = $this->getTimWilayah(); break;
+				case "f431": $resultList = $this->getBentukLembaga(); break;
 				default	   : $resultList = array( "feedStatus" => "failed", "feedType" => "danger", "feedMessage" => "Terjadi kesalahan fatal, proses dibatalkan!", "feedData" => array()); break;
 			}
 
@@ -71,34 +73,85 @@
 	        return $json;
 		}
 
-		// public function getBarang($idBarang){
-	 //        $sql = "SELECT * FROM barang WHERE idBarang=?";
-	 //        $stmt = $this->db->prepare($sql); 
-	 //        $stmt->execute(array($idBarang));
-	 //        $data = $stmt->fetch(PDO::FETCH_OBJ);
-	 //        return $data;
-		// }
+		public function getTimWilayah(){
+	     	 /* initial condition */
+			$error				= 0;
+			$errorType  		= "";
+			$errorMsg			= "";
+			$dumb 				= ""; 
+			$data 				= ""; 
+		
+			/* open connection */ 
+			$gate = $this->db;
+			if($gate){		
+				// connection = true
+				$sql  = "SELECT idData, namaTim FROM dplega_110_timwilayah ORDER BY namaTim ASC";
+		        $dumb = $this->db->query($sql); 
+		        $data = $dumb->fetchAll(PDO::FETCH_OBJ);
 
-		// public function insertBarang($namaBarang, $kategori, $stok, $hargaBeli, $hargaJual){
-	 //        $sql = "INSERT INTO barang (namaBarang, kategori, stok, hargaBeli, hargaJual) VALUES (?,?,?,?,?)";
-	 //        $stmt = $this->db->prepare($sql); 
-	 //        $status = $stmt->execute(array($namaBarang, $kategori, $stok, $hargaBeli, $hargaJual));
-	 //        return $status;
-		// }
+		        $resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => $data);
+				$gate = null;
+			}else {
+				//error state
+				$error		= 1;
+				$errorType  = "danger";
+				$errorMsg	= "Terjadi kesalahan, tidak dapat terhubung ke server!";
+			}
+			
+			
+			if($error == 1){
+				//error state
+				$resultList = array( "feedStatus" => "failed", "feedType" => $errorType, "feedMessage" => $errorMsg);
+			}
+			
+			/* result fetch */
+			$json = $resultList;
+		
+	        return $json;
+		}
 
-		// public function updateBarang($idBarang, $namaBarang, $kategori, $stok, $hargaBeli, $hargaJual){
-	 //        $sql = "UPDATE barang SET namaBarang=?, kategori=?, stok=?, hargaBeli=?, hargaJual=? WHERE idBarang=?";
-	 //        $stmt = $this->db->prepare($sql); 
-	 //        $status = $stmt->execute(array($namaBarang, $kategori, $stok, $hargaBeli, $hargaJual, $idBarang));
-	 //        return $status;
-		// }
+		public function getBentukLembaga(){
+	     	 /* initial condition */
+			$error				= 0;
+			$errorType  		= "";
+			$errorMsg			= "";
+			$dumb 				= ""; 
+			$data 				= ""; 
+		
+			/* open connection */ 
+			$gate = $this->db;
+			if($gate){		
+				// connection = true
+				$sql  = "SELECT 
+					kodeBentukLembaga,
+					namaBentukLembaga
+				 FROM
+					dplega_200_bentuklembaga
+				 ORDER BY kodeBentukLembaga ASC";
 
-		// public function deleteBarang($idBarang){
-	 //        $sql = "DELETE FROM barang WHERE idBarang=?";
-	 //        $stmt = $this->db->prepare($sql); 
-	 //        $status = $stmt->execute(array($idBarang));
-	 //        return $status;
-		// }
+		        $dumb = $this->db->query($sql); 
+		        $data = $dumb->fetchAll(PDO::FETCH_OBJ);
+
+		        $resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => $data);
+				$gate = null;
+			}else {
+				//error state
+				$error		= 1;
+				$errorType  = "danger";
+				$errorMsg	= "Terjadi kesalahan, tidak dapat terhubung ke server!";
+			}
+			
+			
+			if($error == 1){
+				//error state
+				$resultList = array( "feedStatus" => "failed", "feedType" => $errorType, "feedMessage" => $errorMsg);
+			}
+			
+			/* result fetch */
+			$json = $resultList;
+		
+	        return $json;
+		}
 	}
 
 ?>

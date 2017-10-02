@@ -2821,7 +2821,7 @@ function r_f4DetailBerita(packet) {
 		$("#preload").remove();
 		
 		//--command reactor
-		$(".back-button").unbind().on('click', function(){ r_navigateTo(44); });
+		$(".back-button").unbind().on('click', function(){ r_navigateTo(r_pagePreviousReader()); });
 		r_navbarReactor();
 	});
 }
@@ -3168,7 +3168,7 @@ function r_f4GantiPassword() {
 		$("#preload").remove();
 		
 		//--command reactor
-		$(".back-button").unbind().on('click', function(){ r_navigateTo(4); });
+		$(".back-button").unbind().on('click', function(){ r_navigateTo(r_pagePreviousReader()); });
 		r_navbarReactor();
 
 		//form reactor
@@ -3235,6 +3235,9 @@ function r_f4InfoPersonal() {
 					'<div class="desc-box">' +
 						'<div class="labels"><p class="text-set">Email</p></div>' +
 						'<div class="divider"><p class="text-set">' + ((dataProfile.email) ? dataProfile.email : '...') + '</p></div>' +
+					'</div>' +
+					'<div class="desc-box">' +
+						'<div class="labels"><p class="text-set text-cyan click" id="pChangePassword">Ganti Password</p></div>' +
 					'</div>' +
 				'</div>' +
 			'</div>' +
@@ -3323,6 +3326,7 @@ function r_f4InfoPersonal() {
 		//--command reactor
 		res = (r_getCookie('userLevel') == '1') ? 12 : 4;
 		$("#pEditInformasiPersonal").unbind().on('click', function(){ r_navigateTo(462); });
+		$("#pChangePassword").unbind().on('click', function(){ r_navigateTo(461); });
 		$(".back-button").unbind().on('click', function(){ r_navigateTo(res); });
 		toggleBoxActivator();
 		r_navbarReactor();
@@ -3339,7 +3343,7 @@ function r_f4FormInfoPersonal() {
 		content = '';
 
 		data    = p_getData('f3', 'f3111');
-		data 	= data.feedData;
+		data 	= data.feedData; console.log(data);
 		
 		//-- get data lingkup area
 		dataTemp 		  	= p_getData('f4', 'f401', ''); 
@@ -3515,8 +3519,8 @@ function r_f4OptionList(target){
 		case 43 : 
 		case 431:
 		case 432: 
-			if(r_getCookie('pengaturanKelembagaaUbah') == '1'){ res.push({'selector': 'edit-card', 'icon': 'pencil', 'label': 'Ubah data'}); }
-			if(r_getCookie('pengaturanKelembagaaHapus') == '1'){ res.push({'selector': 'delete-card', 'icon': 'trash', 'label': 'Hapus data'}); }
+			if(r_getCookie('pengaturanKelembagaanUbah') == '1'){ res.push({'selector': 'edit-card', 'icon': 'pencil', 'label': 'Ubah data'}); }
+			if(r_getCookie('pengaturanKelembagaanHapus') == '1'){ res.push({'selector': 'delete-card', 'icon': 'trash', 'label': 'Hapus data'}); }
 		break;
 	}
 

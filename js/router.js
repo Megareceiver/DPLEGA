@@ -492,7 +492,7 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 				r_setCookie('idBatasArea'	, recentId.idBatasArea, 1);
 				r_setCookie('statusActive'	, recentId.statusActive,1);
 
-				var accessList = recentId.accessList;
+				var accessList = recentId.accessList; console.log(accessList);
 				for(var look=0; look<accessList.length; look++){
 					r_setCookie(accessList[look].module + 'Lihat', accessList[look].lihat, 1);
 					r_setCookie(accessList[look].module + 'Tambah',accessList[look].tambah,1);
@@ -1295,7 +1295,7 @@ function r_f0Dashboard() {
 									'<span>' + dataT[loop].caption + '</span>' +
 								'</div>' +
 								'<div class="counter prime">' +
-									'<span id="countT">' + dataT[loop].valid + '</span>' +
+									'<span id="countT">' + (parseInt(dataT[loop].valid) + parseInt(dataT[loop].ajuan)) + '</span>' +
 								'</div>' +
 							'</div>' +
 						'</div>' +
@@ -1305,7 +1305,7 @@ function r_f0Dashboard() {
 									'<span>Sudah verifikasi</span>' +
 								'</div>' +
 								'<div class="counter second">' +
-									'<span>' + dataT[loop].ajuan + '</span>' +
+									'<span>' + dataT[loop].valid + '</span>' +
 								'</div>' +
 							'</div>' +
 						'</div>' +
@@ -1315,7 +1315,7 @@ function r_f0Dashboard() {
 									'<span>Ajuan</span>' +
 								'</div>' +
 								'<div class="counter">' +
-									'<span>' + (parseInt(dataT[loop].valid) + parseInt(dataT[loop].ajuan)) + '</span>' +
+									'<span>' + dataT[loop].ajuan + '</span>' +
 								'</div>' +
 							'</div>' +
 						'</div>' +
@@ -1548,8 +1548,6 @@ function r_fDaftarLembagaPublic(packet) {
 		headPage.html(r_headPageHtml(5, namaBentukLembagaState));
 		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
 		
-		var ul = r_getCookie('kelembagaanTambah');
-		if(ul == '1') footPage.html(r_footPageHtml('add'));
 		$("#preload").remove();
 		
 		//--command reactor
@@ -1598,6 +1596,9 @@ function r_fDaftarLembagaPublic(packet) {
 function r_fLembagaEventctivator(){
 	//$(".detail-click").unbind().on('click', function(){ r_navigateTo(12, $(this).attr('p-id')); });
 	detailBoxActivator();
+	$(".go-maps").unbind().on("click", function(){ 
+		openMaps($(this).attr('m-lng'),$(this).attr('m-lat'));
+	});
 }
 
 function r_fLembagaGenerator(data){
@@ -1634,6 +1635,9 @@ function r_fLembagaGenerator(data){
 					'<div class="list-box">' +
 						'<div class="list-icon"><span class="fa fa-map-marker"></span></div>' +
 						'<p class="list-text">' + data.lembaga[loop].alamat + '</p>' +
+					'</div>' +
+					'<div class="list-box">' +
+						'<p class="list-text go-maps text-cyan click" m-lng="' + data.lembaga[loop].langitude + '" m-lat="' + data.lembaga[loop].latitude + '">Lihat maps</p>' +
 					'</div>' +
 					'<!--div class="list-box foot">' +
 						'<button type="button" class="clear list-text btn-link detail-click" p-id="' + data.lembaga[loop].id + '">Lihat selengkapnya</button>' +

@@ -521,13 +521,13 @@
 					FROM
 						dplega_910_user l
 					LEFT JOIN
-						dplega_100_provinsi p ON l.kodeProvinsi = p.kodeProvinsi
+						dplega_100_provinsi p ON l.kodeProvinsi = p.idData
 					LEFT JOIN
-						dplega_101_wilayah w ON l.kodeWilayah = w.kodeWilayah
+						dplega_101_wilayah w ON l.kodeWilayah = w.idData
 					LEFT JOIN
-						dplega_102_kecamatan kc ON l.kodeKecamatan = kc.kodeKecamatan
+						dplega_102_kecamatan kc ON l.kodeKecamatan = kc.idData
 					LEFT JOIN
-						dplega_103_kelurahan kl ON l.kodeKelurahan = kl.kodeKelurahan
+						dplega_103_kelurahan kl ON l.kodeKelurahan = kl.idData
 					WHERE
 						l.username = '".$username."'
 				";
