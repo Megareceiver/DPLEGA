@@ -44,7 +44,7 @@ function p_getData(group, target, keyword, refferences){
 			data = result;
 		},
 		complete: function(xhr,status) { hideNotification('waiting'); },
-		error: function(xhr,status,error) { showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); }
+		error: function(xhr,status,error) { console.log(xhr); showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); }
 	});
 	
 	return data;
