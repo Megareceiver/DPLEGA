@@ -1742,10 +1742,9 @@ function r_f1FormKelembagaan(packet){
 
 			numberOnlyActivator("[name=telp], [name=rt], [name=rw]");
 		}
+		
 		//generate data for editing
 		if(packet != "" && packet != null){ r_f1FormKelembagaanDataGenerator(packet); }		
-		// r_f1FormKelembagaanDataGenerator('00030200110');		
-		//$("input[name=noreg]").val('00030200110');
 	});
 }
 

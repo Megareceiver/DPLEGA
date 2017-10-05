@@ -793,36 +793,83 @@ function r_fHome() {
 		//--open
 		head	= 
 		'<div class="row no-head jumbotron-ground">' +
-			'<div class="col-md-3 bg-black-mirror banner-black">' +
-				'<div class="button-box">' +
-					'<h5 class="theme-color text-bold">NAVIGASI</h5>' +
-					'<button type="button" class="clear text-white" id="go-websiteResmi">WEBSITE RESMI</button>' +
-					'<button type="button" class="clear text-white" id="go-beritaTerkini">BERITA TERKINI</button>' +
-					'<button type="button" class="clear text-white" id="go-kelembagaan">KELEMBAGAAN</button>' +
-					'<button type="button" class="clear text-white" id="go-kontak">KONTAK</button>' +
+			'<div id="slider-background">' +
+				'<div class="col-md-3 bg-black-mirror banner-black">' +
+					'<div class="button-box">' +
+						'<h5 class="theme-color text-bold">NAVIGASI</h5>' +
+						'<button type="button" class="clear text-white" id="go-websiteResmi">WEBSITE RESMI</button>' +
+						'<button type="button" class="clear text-white" id="go-beritaTerkini">BERITA TERKINI</button>' +
+						'<button type="button" class="clear text-white" id="go-kelembagaan">KELEMBAGAAN</button>' +
+						'<button type="button" class="clear text-white" id="go-kontak">KONTAK</button>' +
+					'</div>' +
+				'</div>' +
+				'<div class="col-md-9 jumbotron-content bg-black-mirror">' +
+					'<div class="jumbotron-bg text-shadow">' +
+						'<div class="logo-container"><img class="logo-user" src="img/logo_jabar.png"></div>' +
+						'<h1>PUSAT DATA POTENSI LEMBAGA KEAGAMAAN DI JAWA BARAT</h1>' +
+						'<h5>BIRO PELAYANAN DAN PENGEMBANGAN SOSIAL</h5>' +
+						'<p>' +
+							'Halo pengunjung ! <br/>' +
+							'Kami ucapkan selamat datang, akhirnya kami dapat kembali meningkatkan pelayanan kepada anda, dan tiada ' +
+							'hentinya kami terus melakukan perbaikan agar menjadi lebih baik lagi.<br/><br/>Dplega adalah layanan berbasis online kepada ' +
+							'masyarakat untuk menyediakan data kelembagaan yang telah tercatat secara legal serta telah melewati proses ' +
+							'verifikasi sehingga dinyatakan sah sebagai suatu kelembagaan.' +
+						'</p>' +
+					'</div>' +
 				'</div>' +
 			'</div>' +
-			'<div class="col-md-9 jumbotron-content bg-black-mirror">' +
-				'<div class="jumbotron-bg text-shadow">' +
-					'<div class="logo-container"><img class="logo-user" src="img/logo_jabar.png"></div>' +
-					'<h1>PUSAT DATA POTENSI LEMBAGA KEAGAMAAN DI JAWA BARAT</h1>' +
-					'<h5>BIRO PELAYANAN DAN PENGEMBANGAN SOSIAL</h5>' +
-					'<p>' +
-						'Halo pengunjung ! <br/>' +
-						'Kami ucapkan selamat datang, akhirnya kami dapat kembali meningkatkan pelayanan kepada anda, dan tiada ' +
-						'hentinya kami terus melakukan perbaikan agar menjadi lebih baik lagi.<br/><br/>Dplega adalah layanan berbasis online kepada ' +
-						'masyarakat untuk menyediakan data kelembagaan yang telah tercatat secara legal serta telah melewati proses ' +
-						'verifikasi sehingga dinyatakan sah sebagai suatu kelembagaan.' +
-					'</p>' +
-				'</div>' +
-			'</div>' +
-			'<div class="clearfix"></div>' +
 			'<div class="jumbotron-button">' +
 				'<div class="col-md-12">' +
 					'<button type="button" class="btn-link text-white go-scroll"><i class="fa fa-angle-double-down fa-3x"></i></button>' +
 				'</div>' +
 			'</div>' +
+			'<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="3000">' +
+			  '<!-- Indicators -->' +
+			  '<ol class="carousel-indicators">' +
+			    '<li data-target="#myCarousel" data-slide-to="0" class="active"></li>' +
+			    '<li data-target="#myCarousel" data-slide-to="1"></li>' +
+			    '<li data-target="#myCarousel" data-slide-to="2"></li>' +
+			  '</ol>' +
+
+			  '<!-- Wrapper for slides -->' +
+			  '<div class="carousel-inner">' +
+			    '<div class="item active">' +
+			      '<img src="img/bg-1.jpg" alt="DPLEGA 2.0">' +
+			      '<!--div class="carousel-caption">' +
+			        '<h3>Los Angeles</h3>' +
+			        '<p>LA is always so much fun!</p>' +
+			     '</div-->' +
+			    '</div>' +
+
+			    '<div class="item">' +
+			      '<img src="img/bg-2.jpg" alt="DPLEGA 2.0">' +
+			      '<!--div class="carousel-caption">' +
+			        '<h3>Chicago</h3>' +
+			        '<p>Thank you, Chicago!</p>' +
+			      '</div-->' +
+			    '</div>' +
+
+			    '<div class="item">' +
+			      '<img src="img/bg-3.jpg" alt="DPLEGA 2.0">' +
+			      '<!--div class="carousel-caption">' +
+			        '<h3>New York</h3>' +
+			        '<p>We love the Big Apple!</p>' +
+			      '</div-->' +
+			    '</div>' +
+			  '</div>' +
+
+			  '<!-- Left and right controls -->' +
+			  '<!--a class="left carousel-control" href="#myCarousel" data-slide="prev">' +
+			    '<span class="glyphicon glyphicon-chevron-left"></span>' +
+			    '<span class="sr-only">Previous</span>' +
+			  '</a>' +
+			  '<a class="right carousel-control" href="#myCarousel" data-slide="next">' +
+			    '<span class="glyphicon glyphicon-chevron-right"></span>' +
+			    '<span class="sr-only">Next</span>' +
+			  '</a-->' +
+			'</div>' +
 		'</div>';
+
 		body	= '<div id="website-section" class="row"><div class="col-md-12">';
 		//--license detail
 		body	= body + 
@@ -902,6 +949,7 @@ function r_fHome() {
 			'<div class="empty-box"></div>' +
 			'<h4>KELEMBAGAAN</h4>' +
 			'<p>kami menyediakan daftar lembaga yang berisi data yang berkaitan dengan kontak lembaga, agar baik masyarakat maupun lembaga dapat saling berhubungan atau dapat memanfaatkan data dengan baik.</p>' +
+			'<h4><b>Sumber data dari PAH ' + ((new Date()).getFullYear() - 1) + '</h4></p>' +
 			'<div class="space-box"></div>' +
 			'<div class="row default">' +
 				'<div class="cards-label plus">' +
@@ -1039,6 +1087,11 @@ function r_fHome() {
 		//--css mod
 		if(sec1 >= 600) $(".jumbotron-ground").css('height', ($(window).innerHeight()*1));
 		else $(".jumbotron-ground").css('height', 694);
+
+		$('#myCarousel').carousel({
+		  interval: 3000,
+		  cycle: true
+		}); 
 	});
 }
 

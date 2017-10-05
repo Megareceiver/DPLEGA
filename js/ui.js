@@ -260,7 +260,12 @@ function showToggleBox(elem){
 
 /* datepicker **/
 function datePickerActivator(){
-	$(".date").datepicker({ dateFormat: "yy-mm-dd"});
+	$(".date").datepicker({ 
+		dateFormat: "yy-mm-dd",
+		changeMonth: true,
+     	changeYear: true,
+     	maxDate: "+0D"
+	});
 	$("input.date").on('focus', function(){ $('html, body').css('overflow','hidden'); });
 	$("input.date").on('blur', function(){ $('html, body').css('overflow','initial'); });
 }

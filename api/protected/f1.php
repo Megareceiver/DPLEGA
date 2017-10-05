@@ -48,7 +48,24 @@
 			$gate = $this->db;
 			if($gate){		
 				// connection = true
-				$sql  = "SELECT nama, noTelp, email FROM dplega_000_lembaga WHERE noRegistrasi IN (".$data->noRegistrasi.")";
+				$sql  = "
+				SELECT 
+					l.nama, 
+					l.noTelp, 
+					l.email,
+					CONCAT_WS(' ', l.`alamat`, 'RT.',l.`noRt`, '/', 'RW.', l.`noRw`, `namaKelurahan`, `namaKecamatan`, `namaWilayah`, `namaProvinsi`) as alamat
+				FROM 
+					dplega_000_lembaga l
+				LEFT JOIN
+					dplega_100_provinsi p ON l.kodeProvinsi = p.idData
+				LEFT JOIN
+					dplega_101_wilayah w ON l.kodeWilayah = w.idData
+				LEFT JOIN
+					dplega_102_kecamatan kc ON l.kodeKecamatan = kc.idData
+				LEFT JOIN
+					dplega_103_kelurahan kl ON l.kodeKelurahan = kl.idData
+				WHERE 
+				noRegistrasi IN (".$data->noRegistrasi.")";
 				//$sql  = "";
 				
 		       	$dumb = $this->db->query($sql);

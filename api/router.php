@@ -7,6 +7,7 @@
 
 	$url_array = explode('/', $_SERVER['REQUEST_URI']);
 	array_shift($url_array); // remove first value as it's empty
+	array_shift($url_array); // remove first value as it's empty
 	// remove 2nd and 3rd array, because it's directory
 	array_shift($url_array); // 2nd = 'NativeREST'
 	array_shift($url_array); // 3rd = 'api'
@@ -22,7 +23,7 @@
 	//declare 
 	$error = 0;
 	$response['status'] = 400; //error init state
-	$response['data']   = array( "feedStatus" => "forbidden", "feedType" => "danger", "feedMessage" => "Akses ditolak!", "feedData" => array());
+	$response['data']   = array( "feedStatus" => "forbidden", "feedType" => "danger", "feedMessage" => "Akses ditolak!", "feedData" => $url_array);
 
 	switch($group){
 		case "f1"				: require_once('protected/f1.php');  $route = new F1(); break;
@@ -58,19 +59,19 @@
 			
 			/* auth session */
 			case 'login':  
-				if($method=='POST'){
-					$json = file_get_contents('php://input');
-					$post = json_decode($json);
-					$response['data']   = $route->login($post);
-					$response['status'] = 200;
-				}
+				// if($method=='POST'){
+				// 	$json = file_get_contents('php://input');
+				// 	$post = json_decode($json);
+				// 	$response['data']   = $route->login($post);
+				// 	$response['status'] = 200;
+				// }
 
 				//for test
-				// $post = new \stdClass();
-				// $post->username = 'b';
-				// $post->password = 'jabarprov';
-				// $response['data']  = $route->login($post);
-				// $response['status'] = 200;
+				$post = new \stdClass();
+				$post->username = 'admin';
+				$post->password = 'admin';
+				$response['data']  = $route->login($post);
+				$response['status'] = 200;
 			break;	
 			
 			// default:
