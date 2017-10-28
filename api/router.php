@@ -59,19 +59,19 @@
 			
 			/* auth session */
 			case 'login':  
-				// if($method=='POST'){
-				// 	$json = file_get_contents('php://input');
-				// 	$post = json_decode($json);
-				// 	$response['data']   = $route->login($post);
-				// 	$response['status'] = 200;
-				// }
+				if($method=='POST'){
+					$json = file_get_contents('php://input');
+					$post = json_decode($json);
+					$response['data']   = $route->login($post);
+					$response['status'] = 200;
+				}
 
 				//for test
-				$post = new \stdClass();
-				$post->username = 'admin';
-				$post->password = 'admin';
-				$response['data']  = $route->login($post);
-				$response['status'] = 200;
+				// $post = new \stdClass();
+				// $post->username = 'admin';
+				// $post->password = 'admin';
+				// $response['data']  = $route->login($post);
+				// $response['status'] = 200;
 			break;	
 			
 			// default:

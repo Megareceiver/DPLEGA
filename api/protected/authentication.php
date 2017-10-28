@@ -25,7 +25,7 @@
 			$lembagaState	= 0;
 			$error			= 1;
 			$errorType  	= "";
-			$errorMsg 		= "username atau password yang anda masukan salah!";
+			$errorMsg 		= "Mohon maaf, akun anda dalam keadaan non aktif!";
 			$resultList 	= array( "feedStatus" => "failed", "feedType" => "danger", "feedMessage" => "username atau password yang anda masukan salah!", "feedData" => array());
 			$dum = 0;
 			//validation 
@@ -46,6 +46,7 @@
 					WHERE 
 						u.username = '".$username."' 
 					AND u.password = md5('".$password."') 
+					AND u.noRegistrasi <> ''
 					AND u.statusActive = '1'
 				";
 							
@@ -71,30 +72,30 @@
 						}
 
 						if($row['noRegistrasi'] == '' || $lembagaState == 1){
-							$sql2 = 	
-							"SELECT u.*, a.appsName FROM dplega_911_useraccess u
-							 JOIN 
-								dplega_912_apps a 
-							 ON u.idApps = a.idData
-							 WHERE username = '".$username."'";
+							// $sql2 = 	
+							// "SELECT u.*, a.appsName FROM dplega_911_useraccess u
+							//  JOIN 
+							// 	dplega_912_apps a 
+							//  ON u.idApps = a.idData
+							//  WHERE username = '".$username."'";
 
-							$ress = $this->db->query($sql2);
-							if($ress){
-								$datas = $ress->fetchAll();
-								foreach($datas as $list2) {
-									$accessTemp = array(
-										"module" 		=> $list2['module'],
-										"lihat" 		=> $list2['lihat'],
-										"tambah" 		=> $list2['tambah'],
-										"ubah" 			=> $list2['ubah'],
-										"hapus" 		=> $list2['hapus'],
-										"statusAccess" 	=> $list2['statusAktif']
-									);
+							// $ress = $this->db->query($sql2);
+							// if($ress){
+							// 	$datas = $ress->fetchAll();
+							// 	foreach($datas as $list2) {
+							// 		$accessTemp = array(
+							// 			"module" 		=> $list2['module'],
+							// 			"lihat" 		=> $list2['lihat'],
+							// 			"tambah" 		=> $list2['tambah'],
+							// 			"ubah" 			=> $list2['ubah'],
+							// 			"hapus" 		=> $list2['hapus'],
+							// 			"statusAccess" 	=> $list2['statusAktif']
+							// 		);
 
-									array_push($accessDumb, $accessTemp);
-									unset($accessTemp); $accessTemp = array();
-								}
-							}
+							// 		array_push($accessDumb, $accessTemp);
+							// 		unset($accessTemp); $accessTemp = array();
+							// 	}
+							// }
 								
 							$noRegistrasi	= $row['noRegistrasi'];
 							$nama 			= $row['nama'];
@@ -128,15 +129,14 @@
 					"username" 		=> $username, 
 					"nama" 			=> $nama, 
 					"userLevel" 	=> $userLevel,
-					"avatar" 		=> $avatar, 
+					"urlGambar" 	=> $avatar, 
 					"lingkupArea" 	=> $lingkupArea, 
 					"idBatasArea" 	=> $idBatasArea, 
 					"statusActive" 	=> $statusActive, 
-					"accessList" 	=> $access, 
 					"feedStatus"	=> "success"
 				);
 
-				$resultList = array( "feedStatus" => "success", "feedType" => "success", "feedMessage" => "Selamat datang!", "feedId" => $feedData);
+				$resultList = array( "feedStatus" => "success", "feedType" => "success", "feedMessage" => "Selamat datang!", "feedData" => $feedData);
 			}else{
 				$resultList = array( "feedStatus" => "failed", "feedType" => "danger", "feedMessage" => $errorMsg, "feedData" => array());
 			}

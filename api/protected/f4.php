@@ -12,6 +12,7 @@
 				case "f40" : $resultList = $this->getLingkupAreaSection(); break;
 				case "f401": $resultList = $this->getAllLingkupArea(); break;
 				case "f402": $resultList = $this->getTimWilayah(); break;
+				case "f403": $resultList = $this->fetchAllRequest('dplega_101_wilayah', array("kodeWilayah", "namaWilayah"), "", "ORDER BY namaWilayah ASC"); break;
 				case "f431": $resultList = $this->getBentukLembaga(); break;
 				default	   : $resultList = array( "feedStatus" => "failed", "feedType" => "danger", "feedMessage" => "Terjadi kesalahan fatal, proses dibatalkan!", "feedData" => array()); break;
 			}
@@ -21,6 +22,182 @@
 		
 	        return $json;
 		}
+
+		public function fetchAllRecord($table, $fields, $conditions = "", $orderBy = ""){
+			/* initial condition */
+			$resultList = array();
+			$feedStatus	= "failed";
+			$feedType   = "danger";
+			$feedMessage= "Something went wrong, failed to collect data!";
+			$feedData	= array();
+
+			$temp		= "";
+
+			/* open connection */ 
+			$gate = $this->db;
+			if($gate){		
+
+				if(is_array($fields)) {
+					foreach ($fields as $value) {
+						if($temp  == "") $temp = $value;
+						else $temp = $temp.",".$value;
+					}
+
+					$fields = $temp;
+					$temp   = "";
+				}
+
+				if(is_array($conditions)) {
+					foreach ($conditions as $value) {
+						$temp = $temp." ".$value;
+					}
+
+					$conditions = $temp;
+					$temp   = "";
+				}
+
+				$conditions = ($conditions != "") ? "WHERE ".$conditions : "";
+
+
+				$sql = "SELECT ".$fields." FROM ".$table." ".$conditions." ".$orderBy." ";
+							
+				$result = $this->db->query($sql);
+				if($result){
+					$feedStatus	= "success";
+					$feedType   = "success";
+					$feedMessage= "The process has been successful";
+					$feedData = $result->fetchAll(PDO::FETCH_ASSOC);
+				}	
+
+				$feedType = $sql;
+			}
+			
+			$resultList = array( "feedStatus" => $feedStatus, "feedType" => $feedType, "feedMessage" => $feedMessage, "feedData" => $feedData);
+			
+			/* result fetch */
+			$json = $resultList;
+			
+			return $json;
+		}
+
+		public function fetchAllRequest($table, $fields, $conditions = "", $orderBy = "", $paging = "1"){
+			/* initial condition */
+			$resultList = array();
+			$feedStatus	= "failed";
+			$feedType   = "danger";
+			$feedMessage= "Terjadi kesalahan fatal, gagal meminta data!";
+			$feedData	= array();
+
+			$temp		= "";
+
+			/* open connection */ 
+			$gate = $this->db;
+			if($gate){		
+
+				if(is_array($fields)) {
+					foreach ($fields as $value) {
+						if($temp  == "") $temp = $value;
+						else $temp = $temp.",".$value;
+					}
+
+					$fields = $temp;
+					$temp   = "";
+				}
+
+				if(is_array($conditions)) {
+					foreach ($conditions as $value) {
+						$temp = $temp." ".$value;
+					}
+
+					$conditions = $temp;
+					$temp   = "";
+				}
+
+				$conditions = ($conditions != "") ? "WHERE ".$conditions : "";
+
+
+				$temp = intval($paging);
+				$temp = ($temp - 1) * 20;
+
+				$paging = "LIMIT ".$temp.",20";
+
+				$sql = "SELECT ".$fields." FROM ".$table." ".$conditions." ".$orderBy." ".$paging;
+							
+				$result = $this->db->query($sql);
+				if($result){
+					$feedStatus	= "success";
+					$feedType   = "success";
+					$feedMessage= "Proses berhasil dilakukan";
+					$feedData = $result->fetchAll(PDO::FETCH_ASSOC);
+				}	
+
+				// $feedType = $sql;
+			}
+			
+			$resultList = array( "feedStatus" => $feedStatus, "feedType" => $feedType, "feedMessage" => $feedMessage, "feedData" => $feedData);
+			
+			/* result fetch */
+			$json = $resultList;
+			
+			return $json;
+		}
+
+		public function fetchSingleRequest($table, $fields, $conditions = ""){
+			/* initial condition */
+			$resultList = array();
+			$feedStatus	= "failed";
+			$feedType   = "danger";
+			$feedMessage= "Something went wrong, failed to collect data!";
+			$feedData	= array();
+
+			$temp		= "";
+
+			/* open connection */ 
+			$gate = $this->db;
+			if($gate){		
+
+				if(is_array($fields)) {
+					foreach ($fields as $value) {
+						if($temp  == "") $temp = $value;
+						else $temp = $temp.",".$value;
+					}
+
+					$fields = $temp;
+					$temp   = "";
+				}
+
+				if(is_array($conditions)) {
+					foreach ($conditions as $value) {
+						$temp = $temp." ".$value;
+					}
+
+					$conditions = $temp;
+					$temp   = "";
+				}
+
+				$conditions = ($conditions != "") ? "WHERE ".$conditions : "";
+
+				$sql = "SELECT ".$fields." FROM ".$table." ".$conditions;
+							
+				$result = $this->db->query($sql);
+				if($result){
+					$feedStatus	= "success";
+					$feedType   = "success";
+					$feedMessage= "The process has been successful";
+					$feedData = $result->fetch(PDO::FETCH_ASSOC);
+				}	
+
+					$feedType = $sql;
+			}
+			
+			$resultList = array( "feedStatus" => $feedStatus, "feedType" => $feedType, "feedMessage" => $feedMessage, "feedData" => $feedData);
+			
+			/* result fetch */
+			$json = $resultList;
+			
+			return $json;
+		}
+
 
 		public function getLingkupAreaSection(){
 			/* initial condition */
