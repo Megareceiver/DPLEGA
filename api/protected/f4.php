@@ -11,7 +11,7 @@
 			switch($target){
 				case "f40" : $resultList = $this->getLingkupAreaSection(); break;
 				case "f401": $resultList = $this->getAllLingkupArea(); break;
-				case "f402": $resultList = $this->getTimWilayah(); break;
+				case "f402": $resultList = $resultList = $this->fetchAllRecord('dplega_110_timwilayah', "`idData`, `namaTim`", '', "ORDER BY namaTim ASC"); break;
 				case "f403": $resultList = $this->fetchAllRequest('dplega_101_wilayah', array("kodeWilayah", "namaWilayah"), "", "ORDER BY namaWilayah ASC"); break;
 				case "f431": $resultList = $this->getBentukLembaga(); break;
 				default	   : $resultList = array( "feedStatus" => "failed", "feedType" => "danger", "feedMessage" => "Terjadi kesalahan fatal, proses dibatalkan!", "feedData" => array()); break;
@@ -361,60 +361,60 @@
 				
 		        $dumb = $this->db->query($sql);
 		        if($dumb){
-				$data = $dumb->fetchAll();
-					// output data of each row
-					$fetchTemp		= "";
-					$fetch 	  		= array();
-					$fetchDetail	= array();
-					$record    		= array();
-					$recordDetail   = array();
-					foreach($data as $row) {
-						
-						unset($fetch); $fetch = array();
-						
-						$fetch 		   = $row['namaKelurahan'].", ".$row['namaKecamatan']." ".$row['namaWilayah']." | ".$row['namaProvinsi'];
-						$fetchDetail = array(
-									"idKelurahan" 	=> $row['idKelurahan'],
-									"kodeKelurahan" => $row['kodeKelurahan'],
-									"namaKelurahan" => $row['namaKelurahan'],
-									"idKecamatan" 	=> $row['idKecamatan'],
-									"kodeKecamatan" => $row['kodeKecamatan'],
-									"namaKecamatan" => $row['namaKecamatan'],
-									"idWilayah" 	=> $row['idWilayah'],
-									"kodeWilayah" 	=> $row['kodeWilayah'],
-									"namaWilayah" 	=> $row['namaWilayah'],
-									"idProvinsi" 	=> $row['idProvinsi'],
-									"kodeProvinsi" 	=> $row['kodeProvinsi'],
-									"namaProvinsi" 	=> $row['namaProvinsi']
-								);
-						
-						array_push($record, $fetch); 
-						array_push($recordDetail, $fetchDetail); 
+					$data = $dumb->fetchAll();
+						// output data of each row
+						$fetchTemp		= "";
+						$fetch 	  		= array();
+						$fetchDetail	= array();
+						$record    		= array();
+						$recordDetail   = array();
+						foreach($data as $row) {
+							
+							unset($fetch); $fetch = array();
+							
+							$fetch 		   = $row['namaKelurahan'].", ".$row['namaKecamatan']." ".$row['namaWilayah']." | ".$row['namaProvinsi'];
+							$fetchDetail = array(
+										"idKelurahan" 	=> $row['idKelurahan'],
+										"kodeKelurahan" => $row['kodeKelurahan'],
+										"namaKelurahan" => $row['namaKelurahan'],
+										"idKecamatan" 	=> $row['idKecamatan'],
+										"kodeKecamatan" => $row['kodeKecamatan'],
+										"namaKecamatan" => $row['namaKecamatan'],
+										"idWilayah" 	=> $row['idWilayah'],
+										"kodeWilayah" 	=> $row['kodeWilayah'],
+										"namaWilayah" 	=> $row['namaWilayah'],
+										"idProvinsi" 	=> $row['idProvinsi'],
+										"kodeProvinsi" 	=> $row['kodeProvinsi'],
+										"namaProvinsi" 	=> $row['namaProvinsi']
+									);
+							
+							array_push($record, $fetch); 
+							array_push($recordDetail, $fetchDetail); 
 
+						}
+						
+						$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => array($record), "feedDataDetail" =>  array("list" => $recordDetail));
+					}else {
+						$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => array());
 					}
-					
-					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data ditemukan!", "feedData" => array($record), "feedDataDetail" =>  array("list" => $recordDetail));
 				}else {
-					$resultList = array( "feedStatus" => "succes", "feedMessage" => "Data tidak ditemukan!", "feedData" => array());
-				}
-			}else {
-			//error state
-			$error		= 1;
-			$errorType  = "danger";
-			$errorMsg	= "Terjadi kesalahan, tidak dapat terhubung ke server!";
+				//error state
+				$error		= 1;
+				$errorType  = "danger";
+				$errorMsg	= "Terjadi kesalahan, tidak dapat terhubung ke server!";
+			}
+			
+			
+			if($error == 1){
+				//error state
+				$resultList = array( "feedStatus" => "failed", "feedType" => $errorType, "feedMessage" => $errorMsg);
+			}
+			
+			/* result fetch */
+			$json = $resultList;
+			
+			return $json;
 		}
-		
-		
-		if($error == 1){
-			//error state
-			$resultList = array( "feedStatus" => "failed", "feedType" => $errorType, "feedMessage" => $errorMsg);
-		}
-		
-		/* result fetch */
-		$json = $resultList;
-		
-		return $json;
-	}
 
 		public function getTimWilayah(){
 	     	 /* initial condition */
