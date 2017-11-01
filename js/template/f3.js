@@ -96,8 +96,12 @@ function r_f3Autentikasi() {
 				placeImg 	= placeImg.substr((placeImg.length-1), 1);
 
 				tempL	 	= (data[loop].noreg != "") ? 'Lembaga :: ' : '';
-				temPic   	= (data[loop].picture != "" && data[loop].picture != null) ? 'img/logo/' + data[loop].picture : 'img/logo/avatar-' + placeImg + '.jpg';
-				
+
+				if(data[loop].noreg == ""){
+					temPic   	= (data[loop].picture != "" && data[loop].picture != null) ? 'img/avatar/' + data[loop].picture : 'img/avatar/avatar-' + placeImg + '.jpg';
+				}else{
+					temPic   	= (data[loop].picture != "" && data[loop].picture != null) ? 'img/logo/' + data[loop].picture : 'img/logo/avatar-' + placeImg + '.jpg';
+				}
 
 				if(tempH != data[loop].userLevel){
 					part[1] = part[1] +
