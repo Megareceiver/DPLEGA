@@ -297,14 +297,25 @@ function selectHtmlConverter(dataGrup){
 
 /* autocomplete */
 function autoCompleteActivator(targetId, sources, sourcesDetail, targetIndex){
-	 $("#" + targetId).autocomplete({
-      source: sources,
-	  select: function(event, ui){
-		r_autoCompleteCallback(targetIndex, sources, sourcesDetail, ui, $(this).attr('id'));
+	 // $("#" + targetId).autocomplete({
+  //     source: sources,
+	 //  select: function(event, ui){
+		// r_autoCompleteCallback(targetIndex, sources, sourcesDetail, ui, $(this).attr('id'));
 		
+		// return false;
+	 //  }
+  //   });
+
+	 $("#" + targetId).autocomplete({ 
+	    source: function(request, response) {
+	        var results = $.ui.autocomplete.filter(sources, request.term);
+	        response(results.slice(0, 5));
+	    },
+	    select: function(event, ui){
+		r_autoCompleteCallback(targetIndex, sources, sourcesDetail, ui, $(this).attr('id'));
 		return false;
 	  }
-    });
+	});
 }
 
 /* maps */
