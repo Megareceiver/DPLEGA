@@ -26,7 +26,7 @@ function init(){
 	window.location.hash="?";
 	window.location.hash="#";//again because google chrome don't insert first hash into history
 	window.onhashchange=function(){window.location.hash="?";}
-	window.ondragstart = function() { return false; } 
+	window.ondragstart = function() { return false; }
 
 	document.addEventListener('copy', function (e){
 	    e.preventDefault();
@@ -138,7 +138,7 @@ function hideNotification(notifId){
 
 function notificationTimer(notifId, timerAction){
 	if(timerAction != false){
-		setTimeout(function(){  
+		setTimeout(function(){
 			hideNotification(notifId);
 		}, 5000);
 	}
@@ -180,7 +180,7 @@ function fileSelected(elem){
 	var target = $(elem).attr("id");
 	var value  = $("#" + target + " input").val();
 	var temp   = value.split("\\");
-	
+
 	if(temp.length > 0) { value = temp[temp.length - 1]; }
 	if(value == "") { value = "berkas belum diunggah..."; }
 	else{
@@ -207,7 +207,7 @@ function imagePreviewActivator(){
 }
 
 function imagePreview(elem, targetId) {
-	
+
 	if (elem.files && elem.files[0]) {
 		var reader = new FileReader();
 
@@ -260,7 +260,7 @@ function showToggleBox(elem){
 
 /* datepicker **/
 function datePickerActivator(){
-	$(".date").datepicker({ 
+	$(".date").datepicker({
 		dateFormat: "yy-mm-dd",
 		changeMonth: true,
      	changeYear: true,
@@ -291,7 +291,7 @@ function selectHtmlConverter(dataGrup){
 			'<option value="' + dataGrup[loop].noreg + '">' + dataGrup[loop].caption + '</option>';
 		}
 	}
-	
+
 	return selectHtml;
 }
 
@@ -301,12 +301,12 @@ function autoCompleteActivator(targetId, sources, sourcesDetail, targetIndex){
   //     source: sources,
 	 //  select: function(event, ui){
 		// r_autoCompleteCallback(targetIndex, sources, sourcesDetail, ui, $(this).attr('id'));
-		
+
 		// return false;
 	 //  }
   //   });
 
-	 $("#" + targetId).autocomplete({ 
+	 $("#" + targetId).autocomplete({
 	    source: function(request, response) {
 	        var results = $.ui.autocomplete.filter(sources, request.term);
 	        response(results.slice(0, 5));
@@ -333,9 +333,9 @@ function showOptionConfirm(type){
 		case "status": confirmText = "mengubah status"; break;
 		case "restore": confirmText = "melakukan restore"; break;
 	}
-	
+
 	optionHtml = '<div class="option-pop">';
-	
+
 	optionHtml = optionHtml +
 	'<div id="option-confirm" class="option-list">' +
 		'<div class="option-frame col-md-4 col-sm-8">' +
@@ -353,9 +353,9 @@ function showOptionConfirm(type){
 		'</div>' +
 	'</div>' +
 	'<div class="option-layer"></div>';
-	
+
 	optionHtml = optionHtml + '</div>';
-	
+
 	$("body").append(optionHtml);
 	$(".option-layer, .option-cancel").unbind().on("click", function(){ hideOptionList() });
 	$("html, body").css("overflow","hidden");
@@ -371,9 +371,9 @@ function showPreviewBox(urlFile, type = ""){
 	if(urlFile != '' && urlFile != null){
 		var optionHtml  = '';
 		var confirmText = '';
-		
+
 		optionHtml = '<div class="option-pop">';
-		
+
 		optionHtml = optionHtml +
 		'<div id="option-confirm" class="option-list">' +
 			'<div class="option-frame col-md-12">' +
@@ -381,7 +381,7 @@ function showPreviewBox(urlFile, type = ""){
 			'</div>' +
 		'</div>' +
 		'<div class="option-layer"></div>';
-		
+
 		optionHtml = optionHtml + '</div>';
 
 		$("body").append(optionHtml);

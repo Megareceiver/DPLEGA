@@ -6,14 +6,14 @@
 }
 
 /* main */
-body { 
-	background-color: #F7F7F8; 
-	font-family: Arial, Helvetica, sans-serif; 
+body {
+	background-color: #F7F7F8;
+	font-family: Arial, Helvetica, sans-serif;
 	padding: 60px 0 100px 0;
 	font-size: 12px;
 }
 
-body.clear { padding: 0 } 
+body.clear { padding: 0 }
 
 /* position */
 .relative { position: relative }
@@ -26,10 +26,10 @@ body.clear { padding: 0 }
 
 /* form area */
 /* =============================================================================================== */
-input, select, textarea { 
+input, select, textarea {
 	-webkit-appearance: none;
 	-moz-appearance: none;
-	appearance: none; 
+	appearance: none;
 }
 
 input, select, textarea {
@@ -56,7 +56,7 @@ input[type=file] { margin-top: -2.3px }
 .input-box.pop-right { padding-right: 40px }
 .input-box .half, .select-box .half { width: 45%; }
 .input-box .half:nth-child(2), .select-box .half:nth-child(2) { float: right }
-.input-box .icon-box span { 
+.input-box .icon-box span {
 	 position: absolute;
 	 top: 0;
 	 bottom: 0;
@@ -75,7 +75,7 @@ input[type=file] { margin-top: -2.3px }
 
 /**/
 .select-box { position: relative;  margin: 10px 0 20px 0; display: inline-block; width: 100%; }
-.select-box:after { 
+.select-box:after {
 	position: absolute;
     top: 0.75em;
     right: 0.2em;
@@ -142,9 +142,9 @@ button.main { background-color: #EB1460; color: #FFF !important }
 button.main:hover { background-color: #BF245A; color: #FFF !important }
 
 /* file browser */
-.browser-box { 
-	width: 100%; 
-	font-weight: normal;  
+.browser-box {
+	width: 100%;
+	font-weight: normal;
 	cursor: pointer;
 	position: relative;
 	padding-right: 25px;
@@ -174,7 +174,7 @@ button.main:hover { background-color: #BF245A; color: #FFF !important }
     opacity: 0;
 }
 
-.browser-clear { 
+.browser-clear {
 	display: none;
 	position: absolute;
 	top: 0;
@@ -220,7 +220,7 @@ button.main:hover { background-color: #BF245A; color: #FFF !important }
 
 /* switch box */
 .switch-box { position:relative; display: inline-block; width: 100%; margin: 10px 0 20px 0; padding-top: 5px }
-.switch-box.fixed-position {  
+.switch-box.fixed-position {
 	position: absolute;
     top: 0;
     bottom: 0;
@@ -240,11 +240,11 @@ button.main:hover { background-color: #BF245A; color: #FFF !important }
 	height: 15px;
 	background-color: #898989;
 	cursor: pointer;
-	
+
 	-webkit-border-radius: 100px;
 	   -moz-border-radius: 100px;
 		    border-radius: 100px;
-	
+
 	-webkit-transition: all 0.3s ease;
 	   -moz-transition: all 0.3s ease;
 	        transition: all 0.3s ease;
@@ -263,11 +263,11 @@ button.main:hover { background-color: #BF245A; color: #FFF !important }
 	-webkit-border-radius: 100px;
 	   -moz-border-radius: 100px;
 		    border-radius: 100px;
-			
+
 	-webkit-box-shadow: 0 3px 3px rgba(0,0,0,0.05);
 	   -moz-box-shadow: 0 3px 3px rgba(0,0,0,0.05);
 	        box-shadow: 0 3px 3px rgba(0,0,0,0.05);
-	
+
 	-webkit-transition: all 0.3s ease;
 	   -moz-transition: all 0.3s ease;
 	        transition: all 0.3s ease;
@@ -301,7 +301,7 @@ button.main:hover { background-color: #BF245A; color: #FFF !important }
 
 /* check-box */
 .check-box { display: inline-block; line-height: 0px; padding-top: 5px }
-.check-box.fixed-position {  
+.check-box.fixed-position {
 	position: absolute;
     top: 0;
     bottom: 0;
@@ -447,7 +447,7 @@ header.parent div.search-box.clear-right {
 	padding-right: 0;
 }
 
-header.parent div.search-box .icon-box { 
+header.parent div.search-box .icon-box {
 	position: relative;
 	width: 100%;
 }
@@ -460,9 +460,9 @@ header.parent div.search-box .icon-box span {
 	height: 25px;
 }
 
-header.parent div.search-box input { 
-	height: 30px; 
-	font-size: 16px; 
+header.parent div.search-box input {
+	height: 30px;
+	font-size: 16px;
 	color: #FFF;
 	border-color: #FFF;
 	background-color: #EB1460;
@@ -471,7 +471,7 @@ header.parent div.search-box input {
 
 header.parent div.search-box .search-close { cursor: pointer }
 header .click:hover { background-color: #BF245A; cursor: pointer }
-header.parent input:placeholder-shown, 
+header.parent input:placeholder-shown,
 header.parent input::-webkit-input-placeholder { color: rgba(255,255,255,0.5) }
 
 /**/
@@ -492,7 +492,7 @@ header.parent .bell.active:after{
 	-webkit-border-radius: 50%;
 	   -moz-border-radius: 50%;
 		    border-radius: 50%;
-			
+
 	-webkit-box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 0px 0px rgba(0,0,0,0.23);
 	   -moz-box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 0px 0px rgba(0,0,0,0.23);
 	        box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 0px 0px rgba(0,0,0,0.23);
@@ -506,21 +506,21 @@ main.parent {
 	z-index: 1;
 }
 
-main.parent .row.head { 
+main.parent .row.head {
 	padding-top: 30px;
-	background-color: #EB1460; 
+	background-color: #EB1460;
 }
 
 main.parent .row.head.clear-black { padding: 0; background-color: #333 }
 
-main.parent .row.foot { 
+main.parent .row.foot {
 	position: absolute;
     width: 100%;
     top: 100%;
     left: 0;
 	margin-top: 30px;
 	padding: 15px 0;
-	background-color: #4B4B4D; 
+	background-color: #4B4B4D;
 	color: #FFF;
 	border-bottom: 15px solid #EB1460;
 }
@@ -533,8 +533,8 @@ main.parent .row.default.right { margin-left: 0; }
 main.parent .row.flush { margin-bottom: 20px }
 main.parent .command-box { position: relative; }
 main.parent .command-box .btn-circle {
-	position: absolute; 
-	top: 40px; 
+	position: absolute;
+	top: 40px;
 	left: 0;
 	right: 0;
 	margin: auto;
@@ -558,6 +558,36 @@ main.parent .toggle-content { display: none; opacity: 0 }
 main.parent .toggle-content.active { opacity: 1 }
 main.parent .toggle-click { color: rgba(0,0,0,0.2) }
 
+/* paging area */
+/* =============================================================================================== */
+.data-paging {
+  display: block;
+  width: 100%;
+  text-align: right;
+  margin-top: 30px;
+}
+
+.data-paging a, .data-paging span {
+  display: inline-block;
+  height: 30px;
+  background-color: #EB1460;
+  line-height: 30px;
+  color: #FFF;
+  border: 1px solid #F7F7F8;
+}
+
+.data-paging a {
+  width: 30px;
+}
+
+.data-paging span {
+  width: 50px;
+}
+
+.data-paging a b, .data-paging span b {
+  display: block;
+  text-align: center;
+}
 
 /* footer area */
 /* =============================================================================================== */
@@ -578,8 +608,8 @@ footer.parent.static {
 
 footer.parent .command-box { position: relative; }
 footer.parent .command-box .btn-circle {
-	position: absolute; 
-	bottom: 0; 
+	position: absolute;
+	bottom: 0;
 	left: 0;
 	right: 0;
 	margin: auto;
@@ -616,7 +646,7 @@ footer.parent .author-box img { height: 30px; float: right }
 	top: 70px;
 	left: 0;
 	width: 100%;
-	
+
 	z-index: 2;
 }
 
@@ -659,7 +689,7 @@ footer.parent .author-box img { height: 30px; float: right }
 
 /* UI area */
 /* =============================================================================================== */
-.cards { 
+.cards {
 	position: relative;
 	padding: 10px 25px 10px 35px;
 	background-color: #FFF;
@@ -667,7 +697,7 @@ footer.parent .author-box img { height: 30px; float: right }
 	-webkit-box-shadow: 0 2px 2px rgba(0,0,0,0.12), 0 0px 0px rgba(0,0,0,0.24);
 	   -moz-box-shadow: 0 2px 2px rgba(0,0,0,0.12), 0 0px 0px rgba(0,0,0,0.24);
 	        box-shadow: 0 2px 2px rgba(0,0,0,0.12), 0 0px 0px rgba(0,0,0,0.24);
-	
+
 	-webkit-transition: all 0.3s ease;
 	   -moz-transition: all 0.3s ease;
 	        transition: all 0.3s ease;
@@ -708,7 +738,7 @@ footer.parent .author-box img { height: 30px; float: right }
 .cards .cards-header p.invert { color: #FFF }
 .cards .cards-header p.offset { padding-right: 90px }
 .cards .cards-header p.fixed { margin-top: 10px }
-.cards .cards-header .btn-collapse { 
+.cards .cards-header .btn-collapse {
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -716,7 +746,7 @@ footer.parent .author-box img { height: 30px; float: right }
 	/* width: 100px; */
 	height: 40px;
 	line-height: 40px;
-	display: inline-block; 
+	display: inline-block;
 	text-align: right;
 	color: rgba(0,0,0,0.4);
 	cursor: pointer;
@@ -726,7 +756,7 @@ footer.parent .author-box img { height: 30px; float: right }
 .cards .cards-header .btn-collapse.small { font-size: 12px }
 .cards .cards-header .btn-collapse.left { left: 0 }
 .cards .cards-header .btn-collapse.right { right: 0 }
-.cards .cards-header .btn-collapse .icon-frame { 
+.cards .cards-header .btn-collapse .icon-frame {
 	display: inline-block;
 	width: 40px;
 	height: 40px;
@@ -774,14 +804,14 @@ footer.parent .author-box img { height: 30px; float: right }
 	z-index: 1;
 }
 
-.cards .cards-banner .user-frame img, .cards .cards-banner-blank .user-frame img { 
+.cards .cards-banner .user-frame img, .cards .cards-banner-blank .user-frame img {
 	margin-bottom: 15px;
 	width: 45px;
 	height: 45px;
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
 	-ms-border-radius: 50%;
-    border-radius: 50%;	
+    border-radius: 50%;
 }
 .cards .cards-banner .user-frame .caption, .cards .cards-banner-blank .user-frame .caption {
 	display: block;
@@ -814,15 +844,15 @@ footer.parent .author-box img { height: 30px; float: right }
 
 .cards .cards-banner-blank .user-frame button.btn-option:hover,
 .cards .cards-banner-blank .user-frame button.btn-option:active,
-.cards .cards-banner-blank .user-frame button.btn-option:visited, 
+.cards .cards-banner-blank .user-frame button.btn-option:visited,
 .cards .cards-banner-blank .user-frame button.btn-option:focus { background: transparent }
 
 /**/
 .cards-label { padding-left: 15px }
 .cards-label.plus { margin-top: 22px }
-.cards-label .btn-collapse { 
+.cards-label .btn-collapse {
 	display: inline-block;
-	margin-left: 10px; 
+	margin-left: 10px;
 	color: rgba(0,0,0,0.5);
 	cursor: pointer;
 }
@@ -831,8 +861,8 @@ footer.parent .author-box img { height: 30px; float: right }
 .cards-label .btn-collapse:hover { text-decoration: underline }
 
 /**/
-.cards .list-box { 
-	position: relative; 
+.cards .list-box {
+	position: relative;
 	display: block;
 	padding: 12px 40px;
 }
@@ -842,7 +872,7 @@ footer.parent .author-box img { height: 30px; float: right }
 .cards .list-box.input-clear .input-box { margin: 0; }
 .cards .list-box.clear { padding: 12px 0; }
 .cards .list-box.clear-small { padding: 12px 20px 12px 0; }
-.cards .list-box .list-icon { 
+.cards .list-box .list-icon {
 	left: -5px;
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
@@ -869,7 +899,7 @@ footer.parent .author-box img { height: 30px; float: right }
 
 .cards .list-box .list-text { margin:0; display: inline-block; margin-right: 5px }
 .cards .list-box .list-text.child { padding-left: 30px }
-.cards .list-box .list-text .prime, 
+.cards .list-box .list-text .prime,
 .cards .list-box .list-text .second { display: block }
 .cards .list-box .list-text .prime { line-height: 30px; font-size: 14px; font-weight: bold }
 .cards .list-box .list-text .second { line-height: 10px; font-size: 12px; color: rgba(0,0,0,0.5); margin-bottom: 5px }
@@ -878,14 +908,14 @@ footer.parent .author-box img { height: 30px; float: right }
 .cards .click-option { border: none; background: none; }
 
 /**/
-.cards .desc-frame { 
-	position: relative; 
-	width: 100%; 
+.cards .desc-frame {
+	position: relative;
+	width: 100%;
 	padding: 10px 0px 30px 0px;
 }
 
 .cards .desc-frame img { width: 150px; height: 150px; margin-bottom: 15px }
-.cards .desc-frame .desc-box { 
+.cards .desc-frame .desc-box {
 	display: block;
 	position: relative;
 	min-height: 40px;
@@ -899,11 +929,11 @@ footer.parent .author-box img { height: 30px; float: right }
 .cards .desc-frame .desc-box:last-child { border: none }
 
 
-.cards .desc-frame .desc-box.flush { margin-bottom: 15px } 
+.cards .desc-frame .desc-box.flush { margin-bottom: 15px }
 .cards .desc-frame .desc-box p.big { font-size: 20px }
 .cards .desc-frame .desc-box p { margin: 0; min-height: 16.67px; }
 .cards .desc-frame .desc-box.i-left .text-set { padding-left: 25px; padding-bottom: 10px; }
-.cards .desc-frame .desc-box .icon-set { 
+.cards .desc-frame .desc-box .icon-set {
 	position: absolute;
     top: 10px;
     left: 0;
@@ -942,7 +972,7 @@ footer.parent .author-box img { height: 30px; float: right }
 .cards .label-box div.text-set { color: rgba(0,0,0,0.5); }
 .cards .label-box div.text-set span { display:inline-block; }
 .cards .label-box div.text-set span.id-set { width: 40%; }
-.cards .label-box button.btn-set { 
+.cards .label-box button.btn-set {
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -1013,12 +1043,12 @@ footer.parent .author-box img { height: 30px; float: right }
 
 .cards .group-box.fixed { padding: 0px }
 
-.cards .group-box .icon-set { 
+.cards .group-box .icon-set {
 	display: inline-block;
 	position: relative;
 	width: 80px;
 	height: 80px;
-	font-size: 20px; 
+	font-size: 20px;
 	margin-bottom: 10px ;
 	/* background-color: rgba(0,0,0,0.12); */
 	-webkit-border-radius: 50%;
@@ -1048,7 +1078,7 @@ footer.parent .author-box img { height: 30px; float: right }
 /* == */
 .tumb-cards {
 	position: relative;
-	
+
 	-webkit-transition: all 0.2s ease-in-out;
 	   -moz-transition: all 0.2s ease-in-out;
 	        transition: all 0.2s ease-in-out;
@@ -1089,12 +1119,12 @@ footer.parent .author-box img { height: 30px; float: right }
     left: 0;
     width: 100%;
     text-align: center;
-    z-index: 3; 
+    z-index: 3;
 }
 
-.jumbotron-button button, 
-.jumbotron-button button:active, 
-.jumbotron-button button:focus, 
+.jumbotron-button button,
+.jumbotron-button button:active,
+.jumbotron-button button:focus,
 .jumbotron-button button:hover,
 .jumbotron-button button:visited { color: #FFF }
 
@@ -1128,7 +1158,7 @@ footer.parent .author-box img { height: 30px; float: right }
 }
 
 .option-list .option-frame {
-	margin:auto; 
+	margin:auto;
 	float: none;
 	max-height: 100%;
     max-width: 100%;
@@ -1140,11 +1170,11 @@ footer.parent .author-box img { height: 30px; float: right }
 }
 
 .option-list ul,
-.option-list .button-box { 
+.option-list .button-box {
 	display: inline-block;
 	width: 100%;
-	padding: 0; 
-	margin: 0; 
+	padding: 0;
+	margin: 0;
 	border-top: 1px solid rgba(0,0,0,0.1);
 	background-color: #FFF;
 	-webkit-box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
@@ -1209,7 +1239,7 @@ footer.parent .author-box img { height: 30px; float: right }
 .border-bottom{ border-bottom: 1px solid rgba(0,0,0,0.12) }
 
 /* TAB */
-.tab-header { 
+.tab-header {
 	width: 100%;
 	overflow-x: auto
 }
@@ -1227,8 +1257,8 @@ footer.parent .author-box img { height: 30px; float: right }
 .tab-header ul li:hover { background-color: #BF245A }
 .tab-header ul li.active { border-color: #FBC02D }
 
-.tab-container { display: none } 
-.tab-container.active { display: block } 
+.tab-container { display: none }
+.tab-container.active { display: block }
 
 /**/
 .big-pic {
@@ -1287,7 +1317,7 @@ footer.parent .author-box img { height: 30px; float: right }
 /*#kelembagaan*/ .description-box div.text-set { color: rgba(0,0,0,0.5); }
 /*#kelembagaan*/ .description-box div.text-set span { display:inline-block; padding-right: 25px; }
 /*#kelembagaan*/ .description-box div.text-set span.id-set { width: 40%; }
-/*#kelembagaan*/ .description-box button.btn-set { 
+/*#kelembagaan*/ .description-box button.btn-set {
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -1349,7 +1379,7 @@ footer.parent .author-box img { height: 30px; float: right }
 }
 
 #dashboard .summary-sbody { height: 110px }
-#dashboard .summary-sbody .counter { 
+#dashboard .summary-sbody .counter {
 	line-height: 110px;
 	font-size: 110px;
 }
@@ -1409,13 +1439,13 @@ footer.parent .author-box img { height: 30px; float: right }
 #home .banner-box img { float: left; width: 200px; margin: 0 20px 20px 0; }
 #home .banner-box .text h4, #home .banner-box .text h5 { font-weight: bold }
 #home .banner-box .text h5 { margin-top: 40px }
-#home .banner-box .text { 
+#home .banner-box .text {
 	padding: 20px
 }
 
 #home .banner-box .text.clear-left { padding: 0 }
 
-#home .banner-box .link { 
+#home .banner-box .link {
 	color: #EB1460;
 	font-size: 30px;
     margin: 15px;
@@ -1526,8 +1556,8 @@ footer.parent .author-box img { height: 30px; float: right }
 	-webkit-transition: all 1s ease-in-out;
 	transition: all 1s ease-in-out;
 }*/
-.zoom { 
-	transform: scale(1.05, 1); 
+.zoom {
+	transform: scale(1.05, 1);
 	margin: 15px 5px;
 }
 
@@ -1641,7 +1671,7 @@ footer.parent .author-box img { height: 30px; float: right }
 /* RESPONSIVE */
 /* extra small */
 @media (max-width: 767px) {
-	
+
 }
 
 /* extra small to small */
@@ -1649,20 +1679,20 @@ footer.parent .author-box img { height: 30px; float: right }
 	/**/
 	main.parent .row.default.left,
 	main.parent .row.default.right { margin: 0 -15px; }
-	
+
 	/**/
 	.cards { padding: 10px 20px 10px 20px; }
-	.cards .desc-frame .desc-box .labels, 
+	.cards .desc-frame .desc-box .labels,
 	.cards .desc-frame .desc-box .divider { display: block; width: 100%; padding-left: 0 }
 	.cards .desc-frame .desc-box .divider { margin-bottom: 15px }
 	.cards.clear.min { padding: 0; }
-	
+
 	/**/
 	.picture-box { height: 320px }
 
 	/**/
 	#kelembagaan .filter-box .head { background-position-x: 0 }
-	
+
 	/**/
 	.option-pop, .option-layer, .preview-pop { height: 100vh; }
 
@@ -1670,11 +1700,11 @@ footer.parent .author-box img { height: 30px; float: right }
 	.jumbotron-content h1 { font-size: 20px }
 	.jumbotron-content .logo-container { display: block; text-align: center; }
 	.jumbotron-bg { padding: 10px 10px }
-	
+
 	/*home*/
 	#home .button-box button, #home .button-box button.clear { display: inline-block; padding: 10px 20px 10px 0 }
 	#home .jumbotron-content { top: 200px; bottom: inherit; padding-top: 10px; padding-bottom: 25px }
-	
+
 	#home .cards-label { padding-left: 20px }
 	#home .logo-user { position: relative; top: auto; right: 0; left: 0; margin: auto; }
 	#home .bg-gsate { background-image: none; }
@@ -1684,13 +1714,13 @@ footer.parent .author-box img { height: 30px; float: right }
 
 /* small */
 @media (min-width: 768px) and (max-width: 991px) {
-	
+
 }
 /* medium */
 @media (min-width: 992px) and (max-width: 1199px) {
-	
+
 }
 /* large */
 @media (min-width: 1200px) {
-	
+
 }

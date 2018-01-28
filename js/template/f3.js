@@ -8,8 +8,20 @@ function r_f3Autentikasi() {
 		body  	= '';
 		part	= ['',''];
 		content = '';
-		data = p_getData('f3', 'f31', '', '');
-		data = data.feedData;
+		counter = 0;
+		paging = 0;
+		pagingLink = "";
+		pagingLinkBefore = "";
+		pagingState = 1;
+		paramState = "";
+
+		if(getParam('page') != "" && getParam('page') != null){
+			pagingState = eval(getParam('page'));
+		}
+
+		data 			= p_getData('f3', 'f31', '', '', pagingState);
+		totalPage = data.feedCounter;
+		data 			= data.feedData;
 
 		//--filter render data
 		var provinsiHtml  = '';
@@ -17,81 +29,106 @@ function r_f3Autentikasi() {
 		var kecamatanHtml = '';
 		var kelurahanHtml = '';
 		var look = 0;
-		
-		if(optionD[0] != null){
-			for(look = 0; look < optionD[0].provinsi.length; look++){
-				provinsiHtml = provinsiHtml + '<option value="' + optionD[0].provinsi[look].id + '">' + optionD[0].provinsi[look].caption + '</option>';
-			}
-			
-			for(look = 0; look < optionD[0].wilayah.length; look++){
-				wilayahHtml = wilayahHtml + '<option value="' + optionD[0].wilayah[look].id + '">' + optionD[0].wilayah[look].caption + '</option>';
-			}
-			
-			for(look = 0; look < optionD[0].kecamatan.length; look++){
-				kecamatanHtml = kecamatanHtml + '<option value="' + optionD[0].kecamatan[look].id + '">' + optionD[0].kecamatan[look].caption + '</option>';
-			}
-			
-			for(look = 0; look < optionD[0].kelurahan.length; look++){
-				kelurahanHtml = kelurahanHtml + '<option value="' + optionD[0].kelurahan[look].id + '">' + optionD[0].kelurahan[look].caption + '</option>';
-			}
-		}
-		
+
+		// if(optionD[0] != null){
+		// 	for(look = 0; look < optionD[0].provinsi.length; look++){
+		// 		provinsiHtml = provinsiHtml + '<option value="' + optionD[0].provinsi[look].id + '">' + optionD[0].provinsi[look].caption + '</option>';
+		// 	}
+    //
+		// 	for(look = 0; look < optionD[0].wilayah.length; look++){
+		// 		wilayahHtml = wilayahHtml + '<option value="' + optionD[0].wilayah[look].id + '">' + optionD[0].wilayah[look].caption + '</option>';
+		// 	}
+    //
+		// 	for(look = 0; look < optionD[0].kecamatan.length; look++){
+		// 		kecamatanHtml = kecamatanHtml + '<option value="' + optionD[0].kecamatan[look].id + '">' + optionD[0].kecamatan[look].caption + '</option>';
+		// 	}
+    //
+		// 	for(look = 0; look < optionD[0].kelurahan.length; look++){
+		// 		kelurahanHtml = kelurahanHtml + '<option value="' + optionD[0].kelurahan[look].id + '">' + optionD[0].kelurahan[look].caption + '</option>';
+		// 	}
+		// }
+
 		//--open
 		head	= '';
 		body	= '<div class="row no-head"><div class="container">';
 		part[0] = '<!--div class="col-md-3 col-md-offset-1">';
 		part[1] = '<div class="col-md-8 col-md-offset-2">';
-		
-		//--left
-		part[0] = part[0] +
-		'<div class="cards">' +
-			'<div class="cards-header">' +
-				'<p class="fixed offset">Filter lembaga</p>' +
-				'<div class="btn-collapse right">' +
-					'<button class="clear" type="button"><span class="fa fa-refresh"></span></button>' +
-					'<button class="clear" type="button"><span class="fa fa-filter"></span></button>' +
-				'</div>' +
-			'</div>' +
-		'</div>' +
-		'<div class="cards flush">' +
-			'<form id="f-filter-select">' +
-				'<div class="select-box">' +
-					'<select>' +
-						'<option value="" selected>Provinsi</option>' +
-						provinsiHtml +
-					'</select>' +
-				'</div>' +
-				'<div class="select-box">' +
-					'<select>' +
-						'<option value="" selected>Wilayah</option>' +
-						wilayahHtml +
-					'</select>' +
-				'</div>' +
-				'<div class="select-box">' +
-					'<select>' +
-						'<option value="" selected>Kecamatan</option>' +
-						kecamatanHtml +
-					'</select>' +
-				'</div>' +
-				'<div class="select-box">' +
-					'<select>' +
-						'<option value="" selected>Kelurahan</option>' +
-						kelurahanHtml +
-					'</select>' +
-				'</div>' +
-				'<div class="space-box"></div>' +
-			'</form>' +
-		'</div>';
-		
+
+		// //--left
+		// part[0] = part[0] +
+		// '<div class="cards">' +
+		// 	'<div class="cards-header">' +
+		// 		'<p class="fixed offset">Filter lembaga</p>' +
+		// 		'<div class="btn-collapse right">' +
+		// 			'<button class="clear" type="button"><span class="fa fa-refresh"></span></button>' +
+		// 			'<button class="clear" type="button"><span class="fa fa-filter"></span></button>' +
+		// 		'</div>' +
+		// 	'</div>' +
+		// '</div>' +
+		// '<div class="cards flush">' +
+		// 	'<form id="f-filter-select">' +
+		// 		'<div class="select-box">' +
+		// 			'<select>' +
+		// 				'<option value="" selected>Provinsi</option>' +
+		// 				provinsiHtml +
+		// 			'</select>' +
+		// 		'</div>' +
+		// 		'<div class="select-box">' +
+		// 			'<select>' +
+		// 				'<option value="" selected>Wilayah</option>' +
+		// 				wilayahHtml +
+		// 			'</select>' +
+		// 		'</div>' +
+		// 		'<div class="select-box">' +
+		// 			'<select>' +
+		// 				'<option value="" selected>Kecamatan</option>' +
+		// 				kecamatanHtml +
+		// 			'</select>' +
+		// 		'</div>' +
+		// 		'<div class="select-box">' +
+		// 			'<select>' +
+		// 				'<option value="" selected>Kelurahan</option>' +
+		// 				kelurahanHtml +
+		// 			'</select>' +
+		// 		'</div>' +
+		// 		'<div class="space-box"></div>' +
+		// 	'</form>' +
+		// '</div>';
+
 		//--render data
 		var tempP 	= "";
 		var tempR 	= "";
 		var tempL 	= "";
 		var tempH 	= "";
 		var placeImg= "";
-		
+
 		if(data!= null && data.length != 0){
-			for(var loop = 0; loop < data.length; loop++){	
+
+			/*paging*/
+			paging = totalPage;
+			dtemp  = pagingState - 3;
+			pageStart = (dtemp <= 0) ? 1 : dtemp;
+			for(var loop=pageStart; loop<=paging; loop++){
+				if((paging - pageStart) > 5){
+					if(counter == 5){
+						pagingLink = pagingLink + "<span><b>...</b></span>";
+						pagingLink = pagingLink + "<a href='?page=" + paging + paramState + "'><b>" + paging + "</b></a>";
+						break;
+					}
+				}
+				pagingLink = pagingLink + "<a href='?page=" + loop + paramState + "'><b>" + loop + "</b></a>";
+				counter++;
+			}
+
+			pageRender =
+			'<div class="clearfix"></div>' +
+			'<div class="row">' +
+			"<div class='data-paging'>" + pagingLink + "</div>" +
+			"</div>";
+
+			part[1] = part[1] + pageRender;
+
+			for(var loop = 0; loop < data.length; loop++){
 				placeImg 	= (data[loop].noreg != "") ? data[loop].noreg : data[loop].id;
 				placeImg 	= placeImg.substr((placeImg.length-1), 1);
 
@@ -126,7 +163,7 @@ function r_f3Autentikasi() {
 						'<button class="click-option btn-set toggle-click clear" toggle-target="' + data[loop].id + '-group" type="button"><span class="fa fa-chevron-down"></span></button>' +
 					'</div>' +
 				'</div>';
-				
+
 				if(data[loop].access != null){
 					//-- access list
 					tempP = "";
@@ -134,13 +171,13 @@ function r_f3Autentikasi() {
 						tempPR = "";
 						if(loopY ==  (data[loop].access.length - 1)) { tempP = "flush"; }
 						if(loopY ==  (data[loop].access.length - 1) && data[loop].userLevel == '1') { tempPR = "flush"; }
-						
+
 						switch(data[loop].access[loopY].status){
 							case "0"	 : tempR = ""; break;
 							case "1"	 : tempR = "checked"; break;
 							default		 : tempR = ""; break;
 						}
-						
+
 						part[1] = part[1] +
 						'<div class="cards toggle-content ' + data[loop].id + '-group ' + tempPR + '">' +
 							'<div class="list-box clear">' +
@@ -152,23 +189,23 @@ function r_f3Autentikasi() {
 							'</div>' +
 						'</div>';
 
-						if(loopY ==  (data[loop].access.length - 1) && data[loop].userLevel != '1') { 
-							part[1] = part[1] + 
+						if(loopY ==  (data[loop].access.length - 1) && data[loop].userLevel != '1') {
+							part[1] = part[1] +
 							'<div class="cards ' + tempP + ' toggle-content ' + data[loop].id + '-group">' +
 								'<div class="list-box clear">' +
 									'<p class="list-text">';
 
-										part[1] = part[1] + 
+										part[1] = part[1] +
 										'<span class="click text-cyan" id="' + data[loop].id  + '-group-edit"' +
 											'p-referencesKey="' + data[loop].username + '"' +
 											'p-container	="' + data[loop].id + '-group">Ubah</span> &nbsp; | &nbsp;'
 
-										part[1] = part[1] + 
+										part[1] = part[1] +
 										'<span class="click text-pink"id="' + data[loop].id  + '-group-hapus"' +
-											'p-label		="' + data[loop].nama + '"' + 
+											'p-label		="' + data[loop].nama + '"' +
 											'p-id			="' + data[loop].username+ '"' +
 											'p-referencesKey=""' +
-											'p-group		="f3"' + 
+											'p-group		="f3"' +
 											'p-target		="f31"' +
 											'p-container	="' + data[loop].id + '-group">Hapus</span>' +
 									'</p>' +
@@ -178,6 +215,9 @@ function r_f3Autentikasi() {
 					}
 				}
 			}
+
+			part[1] = part[1] + pageRender;
+
 		}else{
 			part[1] = part[1] +
 			'<div class="cards">' +
@@ -186,35 +226,35 @@ function r_f3Autentikasi() {
 				'</div>' +
 			'</div>';
 		}
-		
+
 		part[0] = part[0] + '</div-->';
 		part[1] = part[1] + '</div>';
 		body	= body 	  + part[0] + part[1] + '</div></div>';
 		content = '<section id="">' + head + body + '</section>';
 		//--close
-		
+
 		//--gen
 		headPage.html(r_headPageHtml(4, 'Autentikasi'));
 		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
-		
+
 		var ul = r_getCookie('userLevel');
 		if(ul == '3' || ul == '7') footPage.html(r_footPageHtml('add'));
 		$("#preload").remove();
-		
+
 		//--command reactor
 		$(".back-button").unbind().on('click', function(){ r_navigateTo(0); });
 		$("#add-button").unbind().on('click', function(){ profile_look_set(""); r_navigateTo(31); });
 
-		for(var loop = 0; loop < data.length; loop++){	
+		for(var loop = 0; loop < data.length; loop++){
 			$('#' + data[loop].id + '-group-edit').unbind().on("click", function(e){
 				clearPacket();
 				pReferencesKey	= $(this).attr('p-referencesKey');
-				hideOptionList(); 
-				r_f3userSectionEditor(pReferencesKey); 
+				hideOptionList();
+				r_f3userSectionEditor(pReferencesKey);
 			});
 
 			$('#' + data[loop].id + '-group-hapus').unbind().on("click", function(e){
-				e.preventDefault(); 
+				e.preventDefault();
 				if($("#" + $(this).attr('p-container') + " [name=p-id]").val() != ""){
 					showOptionConfirm('delete');
 					clearPacket();
@@ -224,41 +264,71 @@ function r_f3Autentikasi() {
 					pId				= $(this).attr('p-id');
 					pLabel			= $(this).attr('p-label');
 					pReferencesKey	= $(this).attr('p-referencesKey');
-					$(".option-yes").unbind().on("click", function(){ 
-						hideOptionList(); 
-						if(p_removeData(pGroup, pTarget, pId, pReferencesKey) == 'success'){ 
+					$(".option-yes").unbind().on("click", function(){
+						hideOptionList();
+						if(p_removeData(pGroup, pTarget, pId, pReferencesKey) == 'success'){
 							$("#" + pContainer + ", ." + pContainer).remove();
 							clearPacket();
-						}; 
+						};
 					});
 				}
 			});
 		}
 
-		$(".userActivator").unbind().on("click", function(){ 
-			hideOptionList(); 
+		$(".userActivator").unbind().on("click", function(){
+			hideOptionList();
 			showOptionConfirm('status');
 			clearPacket();
 			pTarget	= $(this);
 			pId 	= $(this).attr('pId');
 			pReferencesKey = (pTarget.prop('checked') == true ? '1' : '0');
-			$(".option-yes").unbind().on("click", function(){ 
-				hideOptionList(); 
-				if(p_changeData('f3', 'f311', pId, pReferencesKey) == 'success'){ 
+			$(".option-yes").unbind().on("click", function(){
+				hideOptionList();
+				if(p_changeData('f3', 'f311', pId, pReferencesKey) == 'success'){
 					state = (pTarget.prop('checked') == true ? false : true);
 					pTarget.prop('checked', state);
 					clearPacket();
-				}; 
-				
+				};
+
 			});
 			 return false;
 		});
-		
+
 		searchBoxActivator();
 		toggleBoxActivator();
 		r_navbarReactor();
+
+		// $(".search-input").on('keyup', function(){
+		// 	var dumbBentukLembagaState = r_bentukLembagaReader();
+		// 	var kodeBentukLembagaState = dumbBentukLembagaState[0];
+		// 	var dataKey = p_getData('f1', 'f1110', $(this).val(),
+		// 				'multipart,' + kodeBentukLembagaState + ',' +
+		// 				$('#f-filter-select #filter-provinsi').val()  + ',' +
+		// 				$('#f-filter-select #filter-wilayah').val()   + ',' +
+		// 				$('#f-filter-select #filter-kecamatan').val() + ',' +
+		// 				$('#f-filter-select #filter-kelurahan').val());
+		// 		dataKey = dataKey.feedData;
+		// 	$("#lembaga-list").html(r_f1LembagaGenerator(dataKey));
+		// 	r_f1LembagaEventctivator();
+		// });
 	});
 }
+
+function r_f3UserGenerator(data){
+	var html = "";
+
+
+	return html;
+}
+
+// function scrolled(o)
+// {
+//     //visible height + pixel scrolled = total height
+//     if(o.offsetHeight + o.scrollTop == o.scrollHeight)
+//     {
+//         p_getData();
+//     }
+// }
 
 //F3 FORM USER
 //=====================================
@@ -270,10 +340,10 @@ function r_f3FormUser(packet) {
 		body  	= '';
 		part	= ['','','',''];
 		content = '';
-		
+
 		dataAccess = [
 			{
-				'module': 'kelembagaan', 'group': "Kelembagaan", "list": 
+				'module': 'kelembagaan', 'group': "Kelembagaan", "list":
 				[
 					{"id": "kelembagaan-lihat", "state": "checked='checked'"},
 					{"id": "kelembagaan-tambah", "state": ""},
@@ -282,7 +352,7 @@ function r_f3FormUser(packet) {
 				]
 			},
 			{
-				'module': 'lingkupArea', 'group': "Lingkup Area", "list": 
+				'module': 'lingkupArea', 'group': "Lingkup Area", "list":
 				[
 					{"id": "lingkupArea-lihat", "state": ""},
 					{"id": "lingkupArea-tambah", "state": ""},
@@ -291,7 +361,7 @@ function r_f3FormUser(packet) {
 				]
 			},
 			{
-				'module': 'pengaturanKelembagaan', 'group': "Pengaturan kelembagaan", "list": 
+				'module': 'pengaturanKelembagaan', 'group': "Pengaturan kelembagaan", "list":
 				[
 					{"id": "pengaturanKelembagaan-lihat", "state": ""},
 					{"id": "pengaturanKelembagaan-tambah", "state": ""},
@@ -300,7 +370,7 @@ function r_f3FormUser(packet) {
 				]
 			},
 			{
-				'module': 'pengaturanVerifikasi', 'group': "Pengaturan verifikasi", "list": 
+				'module': 'pengaturanVerifikasi', 'group': "Pengaturan verifikasi", "list":
 				[
 					{"id": "pengaturanVerifikasi-lihat", "state": ""},
 					{"id": "pengaturanVerifikasi-tambah", "state": ""},
@@ -309,7 +379,7 @@ function r_f3FormUser(packet) {
 				]
 			},
 			{
-				'module': 'berita', 'group': "Berita", "list": 
+				'module': 'berita', 'group': "Berita", "list":
 				[
 					{"id": "berita-lihat", "state": ""},
 					{"id": "berita-tambah", "state": ""},
@@ -318,7 +388,7 @@ function r_f3FormUser(packet) {
 				]
 			},
 			{
-				'module': 'konfigurasi', 'group': "Konfigurasi & pemeliharaan aplikasi", "list": 
+				'module': 'konfigurasi', 'group': "Konfigurasi & pemeliharaan aplikasi", "list":
 				[
 					{"id": "konfigurasi-lihat", "state": ""},
 					{"id": "konfigurasi-tambah", "state": ""},
@@ -327,7 +397,7 @@ function r_f3FormUser(packet) {
 				]
 			},
 			{
-				'module': 'verifikasi', 'group': "Verifikasi lembaga", "list": 
+				'module': 'verifikasi', 'group': "Verifikasi lembaga", "list":
 				[
 					{"id": "verifikasi-lihat", "state": ""},
 					{"id": "verifikasi-tambah", "state": ""},
@@ -347,7 +417,7 @@ function r_f3FormUser(packet) {
 
 		//-- get data lingkup area
 		dataTemp 		  	= p_getData('f4', 'f401', '');
-		sourcesData 	  	= (dataTemp.feedData != null) ? dataTemp.feedData[0] : ""; 
+		sourcesData 	  	= (dataTemp.feedData != null) ? dataTemp.feedData[0] : "";
 		sourcesDetailData 	= (dataTemp.feedData != null) ? dataTemp.feedDataDetail : "";
 
 		dataTemp 		  	= p_getData('f4', 'f412', '');
@@ -358,11 +428,11 @@ function r_f3FormUser(packet) {
 		data = p_getData('f4', 'f431', '');
 		data = data.feedData;
 		if(data != null && data.length > 0){ counter = data.length; }
-		
+
 		//--open
 		head = '';
 		body = '<div class="row no-head"><div class="container"><div id="section-bentukLembaga" class="col-md-8 col-md-offset-2">';
-		body = body + 
+		body = body +
 		'<form id="f-user-create" f-group="f3" f-target="f31">' +
 			'<div class="cards">' +
 				'<div class="cards-header">' +
@@ -517,7 +587,7 @@ function r_f3FormUser(packet) {
 			'</div>';
 
 		for(loop=0; loop<dataAccess.length; loop++){
-			body = body + 
+			body = body +
 			'<div class="cards">' +
 				'<div class="row default">' +
 					'<div class="col-md-4">' +
@@ -526,8 +596,8 @@ function r_f3FormUser(packet) {
 					  		'<input name="module[]" value="' + dataAccess[loop].module + '" type="hidden">' +
 						'</div>' +
 					'</div>';
-			for(loopY=0; loopY<dataAccess[loop].list.length; loopY++){		
-				body = body + 
+			for(loopY=0; loopY<dataAccess[loop].list.length; loopY++){
+				body = body +
 				'<div class="col-md-2 col-xs-3">' +
 					'<div class="check-box">' +
 					  '<input id="' + dataAccess[loop].list[loopY].id + '" name="' + dataAccess[loop].list[loopY].id + '" value="1" type="checkbox" ' + dataAccess[loop].list[loopY].state + '>' +
@@ -536,7 +606,7 @@ function r_f3FormUser(packet) {
 				'</div>';
 			}
 
-			body = body + 		
+			body = body +
 				'</div>' +
 			'</div>';
 		}
@@ -544,15 +614,15 @@ function r_f3FormUser(packet) {
 		body	= body + '</form></div></div></div>';
 		content = '<section id="">' + head + body + '</section>';
 		//--close
-		
+
 		//--gen
 		headPage.html(r_headPageHtml(3, 'Form user'));
 		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
 		$("#preload").remove();
-		
+
 		//--command reactor
 		$(".back-button").unbind().on('click', function(){ r_navigateTo(3); });
-		$(".click-option").unbind().on("click", function(){ 
+		$(".click-option").unbind().on("click", function(){
 			//packet session
 			clearPacket();
 			pGroup 			= $(this).attr('p-group');
@@ -563,23 +633,23 @@ function r_f3FormUser(packet) {
 			pReferences		= $(this).attr('p-references');
 			pReferencesKey	= $(this).attr('p-referencesKey');
 			pDecription		= $(this).attr('p-description');
-			showOptionList(); 
-			
+			showOptionList();
+
 			//-- option activator
-			$("#edit-card").unbind().on("click", function(){ 
-				hideOptionList(); 
-				r_f4userSectionEditor(pTarget, pId, pLabel, pReferences, pDecription); 
+			$("#edit-card").unbind().on("click", function(){
+				hideOptionList();
+				r_f4userSectionEditor(pTarget, pId, pLabel, pReferences, pDecription);
 			});
-			
-			$("#delete-card").unbind().on("click", function(){ 
-				hideOptionList(); 
+
+			$("#delete-card").unbind().on("click", function(){
+				hideOptionList();
 				showOptionConfirm('delete');
-				$(".option-yes").unbind().on("click", function(){ 
-					hideOptionList(); 
-					if(p_removeData(pGroup, pTarget, pId) == 'success'){ 
-						$('#' + pContainer).remove(); 
+				$(".option-yes").unbind().on("click", function(){
+					hideOptionList();
+					if(p_removeData(pGroup, pTarget, pId) == 'success'){
+						$('#' + pContainer).remove();
 						clearPacket();
-					}; 
+					};
 				});
 			});
 		});
@@ -605,12 +675,12 @@ function r_f3FormUser(packet) {
 		sData 	    = dataTemp.feedData;
 		sDetailData = dataTemp.feedDataDetail;
 
-		$("#f-user-create [name=lingkupArea]").on('change', function(){  
+		$("#f-user-create [name=lingkupArea]").on('change', function(){
 			$("#batasArea, #batasArea_id").val("");
 			if($(this).val() != ''){
 				var temp  = sData;
 				var tempD = sDetailData;
-				
+
 				if 	   ($(this).val() == '3') { temp = sData.provinsi; 	tempD = sDetailData.provinsi; }
 				else if($(this).val() == '2') { temp = sData.wilayah; 	tempD = sDetailData.wilayah; }
 				else if($(this).val() == '1') { temp = sData.kecamatan; tempD = sDetailData.kecamatan; }
@@ -627,24 +697,24 @@ function r_f3FormUser(packet) {
 		//autocomplete
 		autoCompleteActivator("f111_lingkupArea", sourcesData, sourcesDetailData, "lingkupArea");
 		// autoCompleteActivator("batasWilayah", sourcesWilayah, sourcesWilayahDetail, "batasWilayah");
-		
+
 		//form reactor
 		p_formHandler("f-user-create" , "addData");
 
 		//generate data for editing
-		if(packet != "start" && packet != "" && packet != null){ r_f3FormUserDataGenerator(packet); }	
+		if(packet != "start" && packet != "" && packet != null){ r_f3FormUserDataGenerator(packet); }
 	});
 }
 
 function r_f3userSectionEditor(username){
 	r_navigateTo(31, username);
-} 
+}
 
 
 function r_f3FormUserDataGenerator(packet){
 	data = p_getData('f3', 'f311', '', packet);
 	data = data.feedData;
-	
+
 	$("#f-user-create [name=noreg]").val(data.user.noRegistrasi);
 	$("#f-user-create [name=nama]").val(data.user.nama);
 	$("#f-user-create [name=jabatan]").val(data.user.jabatan);
@@ -670,9 +740,9 @@ function r_f3FormUserDataGenerator(packet){
 	$("#f-user-create [name=imageName]").html((data.user.urlGambar != "" && data.user.urlGambar != null) ? data.user.urlGambar : "berkas belum diunggah...");
 
 	$("#f-user-create [name=username]").attr('readonly', 'readonly');
-	if(data.user.urlGambar != "" && data.user.urlGambar != null){ 
-		$("[viewer-id=v-user]").removeClass('changed').addClass('changed'); 
-		$("[browser-id=v-user]").css('display', 'block'); 
+	if(data.user.urlGambar != "" && data.user.urlGambar != null){
+		$("[viewer-id=v-user]").removeClass('changed').addClass('changed');
+		$("[browser-id=v-user]").css('display', 'block');
 	}
 
 	if(data.user.noRegistrasi != "" && data.user.noRegistrasi != null){

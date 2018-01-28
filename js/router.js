@@ -16,7 +16,7 @@ var optionD	 			= [];
 var optionBatch 		= [];
 var autoData			= [];
 var sourcesData			= [];
-var sourcesDetailData	= []; 
+var sourcesDetailData	= [];
 var maxForm 			= 4; //set max form
 var lembagaCounter		= 0;
 var moduleCounter		= 0;
@@ -38,7 +38,7 @@ var pReferencesKey	= "";
 var pDecription		= "";
 
 $(function(){
-	//r_clearCookies(); 
+	//r_clearCookies();
 	r_navigateTo(r_pageReader(), 'start');
 	//r_navigateTo(0, 'start');
 	// r_pageSet(0);
@@ -56,14 +56,14 @@ $(function(){
 
 /* navigation */
 function r_navigateTo(index, packet, access) {
-	syncnavClose(); /*-- syncnav js*/ 
-	
+	syncnavClose(); /*-- syncnav js*/
+
 	if(r_auth(index) == true){
 		r_pageClear(); /*-- clear frame on page */
 		switch(index){
 			case 0  : r_f0Dashboard(); 					break;
 			case 0.1: r_f0Bantuan(); 					break;
-			
+
 			case 1  : r_f1Kelembagaan(); 				break;
 			case 11 : r_f1DaftarLembaga(packet); 		break;
 			case 12 : r_f1DetailLembaga(packet); 		break;
@@ -71,30 +71,30 @@ function r_navigateTo(index, packet, access) {
 			case 14 : r_f1KoleksiLembaga(); 			break;
 			case 16 : r_f1PrestasiLembaga(); 			break;
 			case 15 : r_f1FormKelembagaan(packet);		break;
-			
+
 			case 3  : r_f3Autentikasi(); 				break;
 			case 31 : r_f3FormUser(packet);				break;
-			
+
 			case 4  : r_f4Pengaturan();					break;
 			case 41 : r_f4LingkupArea();				break;
 			case 400: r_f4TimWilayah();					break;
 			case 410: r_f4AnggotaTimWilayah(packet);	break;
 			case 411: r_f4TransferLembaga();			break;
-			
+
 			case 42 : r_f4DaftarVerifikasi();			break;
 			case 421: r_f4GrupVerifikasi();				break;
-			
+
 			case 43 : r_f4BentukLembaga();				break;
 			case 431: r_f4LegalitasLembaga();			break;
 			case 432: r_f4BidangGerakLembaga();			break;
-			
+
 			case 44 : r_f4DaftarBerita();				break;
 			case 441: r_f4DetailBerita(packet);			break;
-			
+
 			case 45 : r_f4ImportData();					break;
 			case 451: r_f4BackupRestore();				break;
 			case 452: r_f4Setelan();					break;
-			
+
 			case 46 : r_f4InfoPersonal();				break;
 			case 461: r_f4GantiPassword();				break;
 			case 462: r_f4FormInfoPersonal();			break;
@@ -105,7 +105,7 @@ function r_navigateTo(index, packet, access) {
 			case 91 : r_fDaftarLembagaPublic(packet); 	break;
 			default : r_fHome(); 						break;
 		}
-		
+
 		if(packet != 'start' && index != r_pageReader()) /*--set page to static*/ r_pageSet(index);
 	}else{
 		if(packet != 'start') showNotification('danger', 'failure', 'Akses tidak diberikan, hubungi administrator untuk lebih lanjut!');
@@ -121,71 +121,71 @@ function r_auth(index){
 	var res = false;
 
 	switch(index){
-		case 0  : 
-		case 0.1: 
+		case 0  :
+		case 0.1:
 			res = (r_getCookie('login') == 'yes') ? true : false;
 		break;
 
-		case 1   : 
-		case 11  : 
-		case 12  : 
-		case 13  : 
-		case 15  : 
+		case 1   :
+		case 11  :
+		case 12  :
+		case 13  :
+		case 15  :
 			res = (r_getCookie('kelembagaanLihat') == '1' || r_getCookie('userLevel') == '1') ? true : false;
 		break;
 
-		case 14  : 
-		case 16 : 
+		case 14  :
+		case 16 :
 			res = true;
 		break;
 
-		case 3  : 
+		case 3  :
 			res = (r_getCookie('userLevel') != '1') ? true : false;
 		break;
-		
-		case 4  : 			
+
+		case 4  :
 			res = (r_getCookie('userLevel') != '1') ? true : false;
 		break;
 
 		case 41 :
-		case 400: 			
-		case 410: 			
-		case 411: 			
+		case 400:
+		case 410:
+		case 411:
 			res = (r_getCookie('lingkupAreaLihat') == '1') ? true : false;
 		break;
 
 		case 42 :
-		case 421: 
+		case 421:
 			res = (r_getCookie('pengaturanVerifikasiLihat') == '1') ? true : false;
 		break;
-		
-		case 43 : 
+
+		case 43 :
 		case 431:
-		case 432: 
+		case 432:
 			res = (r_getCookie('pengaturanKelembagaanLihat') == '1') ? true : false;
 		break;
-		
-		case 44 : 
+
+		case 44 :
 			res = (r_getCookie('beritaLihat') == '1') ? true : false;
 		break;
-		case 441: 
+		case 441:
 			res = true;
 		break;
-		
-		case 45 : 
+
+		case 45 :
 		case 451:
 		case 452:
 			res = (r_getCookie('konfigurasiLihat') == '1') ? true : false;
 		break;
-		
-		case 46 : 
-		case 461: 
-		case 462: 
+
+		case 46 :
+		case 461:
+		case 462:
 			res = (r_getCookie('login') == 'yes') ? true : false;
 		break;
 
-		case 91 : 
-		case 99 : 
+		case 91 :
+		case 99 :
 			res = true;
 		break;
 
@@ -193,7 +193,7 @@ function r_auth(index){
 			res = (r_getCookie('userLevel') != '1') ? true : false;
 		break;
 
-		default : 
+		default :
 			res = true;
 		break;
 	}
@@ -248,24 +248,24 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 					$("#" + formId + " [name=imageName]").html(recentId);
 				break;
 				case 'f118' :
-					dataFec = [{ 
-							'idData' 		: recentId, 
-							'noreg'	 		: $('#' + formId + ' input[name="noreg"]').val(), 
-							'judulKoleksi'	: $('#' + formId + ' input[name="judulKoleksi"]').val(), 
+					dataFec = [{
+							'idData' 		: recentId,
+							'noreg'	 		: $('#' + formId + ' input[name="noreg"]').val(),
+							'judulKoleksi'	: $('#' + formId + ' input[name="judulKoleksi"]').val(),
 							'jenisKoleksi'	: $('#' + formId + ' select[name="jenisKoleksi"]').val(),
 							'deskripsi'		: $('#' + formId + ' input[name="deskripsi"]').val(),
 					}];
-					
+
 					r_f1KoleksiDataGenerator(dataFec);
 					clearTargetFormNoreg(formId, $('#' + formId + ' input[name="noreg"]').val());
 				break;
 				case 'f119' :
-					dataFec = [{ 
-							'idData' 		: recentId, 
-							'noreg'	 		: $('#' + formId + ' input[name="noreg"]').val(), 
+					dataFec = [{
+							'idData' 		: recentId,
+							'noreg'	 		: $('#' + formId + ' input[name="noreg"]').val(),
 							'deskripsi'		: $('#' + formId + ' input[name="deskripsi"]').val(),
 					}];
-					
+
 					r_f1PrestasiDataGenerator(dataFec);
 					clearTargetFormNoreg(formId, $('#' + formId + ' input[name="noreg"]').val());
 				break;
@@ -273,32 +273,32 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 					$("#" + formId + " [name=imageName]").html(recentId);
 				break;
 				case 'f121' :
-					dataFec = [{ 
-							'idData' 		: recentId, 
-							'noreg'	 		: $('#' + formId + ' input[name="noreg"]').val(), 
-							'bantuanDari'	: $('#' + formId + ' input[name="bantuanDari"]').val(), 
-							'deskripsi'		: $('#' + formId + ' textarea[name="deskripsi"]').val(), 
+					dataFec = [{
+							'idData' 		: recentId,
+							'noreg'	 		: $('#' + formId + ' input[name="noreg"]').val(),
+							'bantuanDari'	: $('#' + formId + ' input[name="bantuanDari"]').val(),
+							'deskripsi'		: $('#' + formId + ' textarea[name="deskripsi"]').val(),
 							'tahun'			: $('#' + formId + ' input[name="tahun"]').val(),
 					}];
-					
+
 					r_f1SejarahBantuanDataGenerator(dataFec);
 					clearTargetFormNoreg(formId, $('#' + formId + ' input[name="noreg"]').val());
 				break;
 				case 'f122' :
-					dataFec = [{ 
-							'idData' 		: recentId, 
-							'noreg'	 		: $('#' + formId + ' input[name="noreg"]').val(), 
-							'namaLembaga'	: $('#' + formId + ' input[name="namaLembaga"]').val(), 
-							'noregTarget'	: $('#' + formId + ' input[name="noregTarget"]').val(), 
+					dataFec = [{
+							'idData' 		: recentId,
+							'noreg'	 		: $('#' + formId + ' input[name="noreg"]').val(),
+							'namaLembaga'	: $('#' + formId + ' input[name="namaLembaga"]').val(),
+							'noregTarget'	: $('#' + formId + ' input[name="noregTarget"]').val(),
 							'hirarki'		: $('#' + formId + ' select[name="hirarki"]').val(),
 					}];
-					
+
 					r_f1HirarkiDataGenerator(dataFec);
 					clearTargetFormNoreg(formId, $('#' + formId + ' input[name="noreg"]').val());
 				break;
 				case 'f123' :
 					var temp = recentId.split(',');
-					var textemp = 
+					var textemp =
 						$('#f-transfer-create [name=kodeKelurahan] option:selected').text() + ' / ' +
 						$('#f-transfer-create [name=kodeKecamatan] option:selected').text() + ' / ' +
 						$('#f-transfer-create [name=kodeWilayah] option:selected').text() + ' / ' +
@@ -316,8 +316,8 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 					$("#" + formId + ' [type=submit] span').removeClass('fa-active-success').addClass('fa-active-success');
 					$("#" + formId + ' [type=submit]').attr('type', 'reset');
 					$("#" + formId + ' [type=reset]').unbind().on('click', function(){
-						$("#" + formId + ' [type=reset]').children('span').removeClass('fa-active-success'); 
-						$("#" + formId + ' [type=reset]').attr('type', 'submit').unbind(); 
+						$("#" + formId + ' [type=reset]').children('span').removeClass('fa-active-success');
+						$("#" + formId + ' [type=reset]').attr('type', 'submit').unbind();
 						$("#" + formId + " .catatan").val('');
 						$("#" + formId + " input").unbind();
 						$("#" + formId + " input").on("keypress", function(event) { return event.keyCode; });
@@ -346,22 +346,22 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 			switch(target){
 				case 'f400':
 
-					dataFec = [{ 
-							'idData' 		: recentId, 
+					dataFec = [{
+							'idData' 		: recentId,
 							'namaTim'		: $('#f-timWilayah-create input[name="nama"]').val(),
 					}];
-				
+
 					r_f4TimWilayahDataGenerator(formType, dataFec);
 					clearTargetForm('f-timWilayah-create');
 					p_formHandler("f-timWilayah-create" , "addData");
 				break;
 				case 'f410':
 
-					dataFec = [{ 
-							'idData' 		: recentId, 
+					dataFec = [{
+							'idData' 		: recentId,
 							'namaWilayah'	: $('#f-anggotaTimWilayah-create select[name="idWilayah"] option:selected').text(),
 					}];
-					
+
 					r_f4RemoveLingkupAreaArray(optionSpecial, recentId);
 					r_f4AnggotaTimWilayahOptionGenerator();
 					r_f4AnggotaTimWilayahDataGenerator(formType, dataFec);
@@ -369,22 +369,22 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 					p_formHandler("f-anggotaTimWilayah-create" , "addData");
 				break;
 				case 'f411':
-					dataFec = [{ 
-							'idData' 		: recentId, 
-							'noreg'	 		: $('#f-provinsi-create input[name="kode"]').val(), 
+					dataFec = [{
+							'idData' 		: recentId,
+							'noreg'	 		: $('#f-provinsi-create input[name="kode"]').val(),
 							'caption'		: $('#f-provinsi-create input[name="nama"]').val(),
 							'references' 	: '',
 							'referencesKey' : ''
 					}];
-					
+
 					r_f4LingkupAreaDataGenerator(formType, 'provinsi', dataFec, 'section-Provinsi');
 					clearTargetForm('f-provinsi-create');
 					p_formHandler("f-provinsi-create" , "addData");
 				break;
 				case 'f412':
-					dataFec = [{ 
-							'idData' 		: recentId, 
-							'noreg'	 		: $('#f-wilayah-create input[name="kode"]').val(), 
+					dataFec = [{
+							'idData' 		: recentId,
+							'noreg'	 		: $('#f-wilayah-create input[name="kode"]').val(),
 							'caption'		: $('#f-wilayah-create input[name="nama"]').val(),
 							'references'	: $('#f-wilayah-create select[name="referensi"] option:selected').text(),
 							'referencesKey'	: $('#f-wilayah-create select[name="referensi"]').val(),
@@ -394,9 +394,9 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 					p_formHandler("f-wilayah-create" , "addData");
 				break;
 				case 'f413':
-					dataFec = [{ 
-							'idData' 		: recentId, 
-							'noreg'	 		: $('#f-kecamatan-create input[name="kode"]').val(), 
+					dataFec = [{
+							'idData' 		: recentId,
+							'noreg'	 		: $('#f-kecamatan-create input[name="kode"]').val(),
 							'caption'		: $('#f-kecamatan-create input[name="nama"]').val(),
 							'references'	: $('#f-kecamatan-create select[name="referensi"] option:selected').text(),
 							'referencesKey'	: $('#f-kecamatan-create select[name="referensi"]').val(),
@@ -406,9 +406,9 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 					p_formHandler("f-kecamatan-create" , "addData");
 				break;
 				case 'f414':
-					dataFec = [{ 
-							'idData' 		: recentId, 
-							'noreg'	 		: $('#f-kelurahan-create input[name="kode"]').val(), 
+					dataFec = [{
+							'idData' 		: recentId,
+							'noreg'	 		: $('#f-kelurahan-create input[name="kode"]').val(),
 							'caption'		: $('#f-kelurahan-create input[name="nama"]').val(),
 							'references'	: $('#f-kelurahan-create select[name="referensi"] option:selected').text(),
 							'referencesKey'	: $('#f-kelurahan-create select[name="referensi"]').val(),
@@ -418,8 +418,8 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 					p_formHandler("f-kelurahan-create" , "addData");
 				break;
 				case 'f421':
-					dataFec = [{ 
-							'noreg'	 		: recentId, 
+					dataFec = [{
+							'noreg'	 		: recentId,
 							'caption'		: $('#f-grupVerifikasi-create input[name="nama"]').val(),
 					}];
 					r_f4VerifikasiDataGenerator(formType, 'grupVerifikasi', dataFec, 'section-grupVerifikasi');
@@ -427,8 +427,8 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 					p_formHandler("f-grupVerifikasi-create" , "addData");
 				break;
 				case 'f422':
-					dataFec = [{ 
-							'noreg'	 		: recentId, 
+					dataFec = [{
+							'noreg'	 		: recentId,
 							'caption'		: $('#f-verifikasi-create input[name="nama"]').val(),
 							'references'	: $('#f-verifikasi-create select[name="referensi"] option:selected').text(),
 							'referencesKey'	: $('#f-verifikasi-create select[name="referensi"]').val(),
@@ -438,8 +438,8 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 					p_formHandler("f-verifikasi-create" , "addData");
 				break;
 				case 'f431':
-					dataFec = [{ 
-							'noreg'	 		: recentId, 
+					dataFec = [{
+							'noreg'	 		: recentId,
 							'caption'		: $('#f-bentukLembaga-create input[name="nama"]').val(),
 							'description'	: $('#f-bentukLembaga-create textarea[name="deskripsi"]').val(),
 					}];
@@ -448,8 +448,8 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 					p_formHandler("f-bentukLembaga-create" , "addData");
 				break;
 				case 'f432':
-					dataFec = [{ 
-							'noreg'	 		: recentId, 
+					dataFec = [{
+							'noreg'	 		: recentId,
 							'caption'		: $('#f-legalitas-create input[name="nama"]').val(),
 							'references'	: $('#f-legalitas-create select[name="referensi"] option:selected').text(),
 							'referencesKey'	: $('#f-legalitas-create select[name="referensi"]').val(),
@@ -459,8 +459,8 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 					p_formHandler("f-legalitas-create" , "addData");
 				break;
 				case 'f433':
-					dataFec = [{ 
-							'noreg'	 		: recentId, 
+					dataFec = [{
+							'noreg'	 		: recentId,
 							'caption'		: $('#f-bidangGerak-create input[name="nama"]').val(),
 					}];
 					r_f4KelembagaanSectionGenerator(formType, 'bidangGerak', dataFec, 'section-bidangGerak');
@@ -475,7 +475,7 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 					}];
 					r_f4BeritaGenerator(dataFec);
 					$("#f-berita-create [name=imgName]").html("berkas belum diunggah...");
-					$("#f-berita-create [browser-id=gambar-berita] ").css('display', 'none'); 
+					$("#f-berita-create [browser-id=gambar-berita] ").css('display', 'none');
 					clearTargetForm('f-berita-create');
 				break;
 			}
@@ -501,7 +501,7 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 
 
 					if(accessList[look].module == 'kelembagaan' && accessList[look].lihat == '0') { $('#navigation .kelembagaan').remove(); }
-				} 
+				}
 
 				moduleActive  = accessList;
 				moduleCounter = accessList.length;
@@ -513,8 +513,8 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 				r_navigateTo(12, recentId.noRegistrasi);
 			}else if(recentId.userLevel != ""){
 				r_navigateTo(0);
-				if(recentId.avatar == "" || recentId.avatar == null) { 
-					recentId.avatar = "avatar-default.jpg"; 
+				if(recentId.avatar == "" || recentId.avatar == null) {
+					recentId.avatar = "avatar-default.jpg";
 				}
 				$("#navigation .user-frame img").attr('src', 'img/avatar/' + recentId.avatar);
 				$("#navigation .user-frame p.caption span").html(recentId.username);
@@ -522,29 +522,29 @@ function r_customCallBack(formType, group, target, recentId, formId, pId){
 			}
 		break;
 	}
-	
+
 }
 
 function r_autoCompleteCallback(targetIndex, sources, sourcesDetail, ui, targetId){
 	switch (targetIndex){
-		case "hirarkiLembaga": 
+		case "hirarkiLembaga":
 			var source_1 = sourcesDetail[1];
-			var source_2 = sourcesDetail[2]; 
+			var source_2 = sourcesDetail[2];
 
 			$("#" + targetId).val(source_2[sources.indexOf(ui.item.value)]);
 			$("#" + targetId + "_kode").val(source_1[sources.indexOf(ui.item.value)]);
-			$("#" + targetId).on("keyup", function(){ 
+			$("#" + targetId).on("keyup", function(){
 				if($(this).val() == ""){
-					$("#" + targetId + "_kode").val(""); 
+					$("#" + targetId + "_kode").val("");
 				}
 			});
 		break;
-		case "lingkupArea": 
+		case "lingkupArea":
 			$("#" + targetId).val(sourcesDetail.list[sources.indexOf(ui.item.value)].namaKelurahan);
 			$("#" + targetId + "_2").val(sourcesDetail.list[sources.indexOf(ui.item.value)].namaKecamatan);
 			$("#" + targetId + "_3").val(sourcesDetail.list[sources.indexOf(ui.item.value)].namaWilayah);
 			$("#" + targetId + "_4").val(sourcesDetail.list[sources.indexOf(ui.item.value)].namaProvinsi);
-			
+
 			$("#" + targetId + "_kode").val(sourcesDetail.list[sources.indexOf(ui.item.value)].idKelurahan);
 			$("#" + targetId + "_kode2").val(sourcesDetail.list[sources.indexOf(ui.item.value)].idKecamatan);
 			$("#" + targetId + "_kode3").val(sourcesDetail.list[sources.indexOf(ui.item.value)].idWilayah);
@@ -554,29 +554,29 @@ function r_autoCompleteCallback(targetIndex, sources, sourcesDetail, ui, targetI
 			$("#" + targetId + "_kodeArea2").val(sourcesDetail.list[sources.indexOf(ui.item.value)].kodeKecamatan);
 			$("#" + targetId + "_kodeArea3").val(sourcesDetail.list[sources.indexOf(ui.item.value)].kodeWilayah);
 			$("#" + targetId + "_kodeArea4").val(sourcesDetail.list[sources.indexOf(ui.item.value)].kodeProvinsi);
-			
-			$("#" + targetId).on("keyup", function(){ 
+
+			$("#" + targetId).on("keyup", function(){
 				if($(this).val() == ""){
-					$("#" + targetId + "_2").val(""); 
-					$("#" + targetId + "_3").val(""); 
-					$("#" + targetId + "_4").val(""); 
-					$("#" + targetId + "_kode").val(""); 
-					$("#" + targetId + "_kode2").val(""); 
-					$("#" + targetId + "_kode3").val(""); 
-					$("#" + targetId + "_kode4").val(""); 
-					$("#" + targetId + "_kodeArea").val(""); 
-					$("#" + targetId + "_kodeArea2").val(""); 
-					$("#" + targetId + "_kodeArea3").val(""); 
-					$("#" + targetId + "_kodeArea4").val(""); 
+					$("#" + targetId + "_2").val("");
+					$("#" + targetId + "_3").val("");
+					$("#" + targetId + "_4").val("");
+					$("#" + targetId + "_kode").val("");
+					$("#" + targetId + "_kode2").val("");
+					$("#" + targetId + "_kode3").val("");
+					$("#" + targetId + "_kode4").val("");
+					$("#" + targetId + "_kodeArea").val("");
+					$("#" + targetId + "_kodeArea2").val("");
+					$("#" + targetId + "_kodeArea3").val("");
+					$("#" + targetId + "_kodeArea4").val("");
 				}
 			});
 		break;
-		case "batasArea": 
+		case "batasArea":
 			$("#" + targetId).val(sourcesDetail[sources.indexOf(ui.item.value)].nama);
 			$("#" + targetId + "_id").val(sourcesDetail[sources.indexOf(ui.item.value)].idData);
-			$("#" + targetId).on("keyup", function(){ 
+			$("#" + targetId).on("keyup", function(){
 				if($(this).val() == ""){
-					$("#" + targetId + "_id").val(""); 
+					$("#" + targetId + "_id").val("");
 				}
 			});
 		break;
@@ -591,23 +591,23 @@ function r_pageClear(){
 
 function r_optionDHtml(group){
 	var optionHtml ="";
-	
+
 	switch(group){
-		case "provinsi": 
+		case "provinsi":
 			if(optionD != null && optionD[0].provinsi != undefined){
 				for(var loop=0; loop<optionD[0].provinsi.length; loop++){
 					optionHtml = optionHtml + '<option value="' + optionD[0].provinsi[loop].idData + '">' + optionD[0].provinsi[loop].caption + '</option>';
 				}
 			}
 		break;
-		case "wilayah": 
+		case "wilayah":
 			if(optionD != null && optionD[0].wilayah != undefined){
 				for(var loop=0; loop<optionD[0].wilayah.length; loop++){
 					optionHtml = optionHtml + '<option value="' + optionD[0].wilayah[loop].idData + '">' + optionD[0].wilayah[loop].caption + '</option>';
 				}
 			}
 		break;
-		case "wilayahSpecial": 
+		case "wilayahSpecial":
 			if(optionSpecial.length == 0){
 				optionSpecial = p_getData('f4', 'f4010');
 				optionSpecial = optionSpecial.feedData;
@@ -619,38 +619,38 @@ function r_optionDHtml(group){
 				}
 			}
 		break;
-		case "kecamatan": 
+		case "kecamatan":
 			if(optionD != null && optionD[0].kecamatan != undefined){
 				for(var loop=0; loop<optionD[0].kecamatan.length; loop++){
 					optionHtml = optionHtml + '<option value="' + optionD[0].kecamatan[loop].idData + '">' + optionD[0].kecamatan[loop].caption + '</option>';
 				}
 			}
 		break;
-		case "kelurahan": 
+		case "kelurahan":
 			if(optionD != null && optionD[0].kelurahan != undefined){
 				for(var loop=0; loop<optionD[0].kelurahan.length; loop++){
 					optionHtml = optionHtml + '<option value="' + optionD[0].kelurahan[loop].idData + '">' + optionD[0].kelurahan[loop].caption + '</option>';
 				}
 			}
 		break;
-		case "level": 
+		case "level":
 			if(r_getCookie('userLevel') == '7' || r_getCookie('userLevel') == '3')
 				optionHtml = optionHtml + '<option value="2">Level 2</option>';
 			if(r_getCookie('userLevel') == '7')
 				optionHtml = optionHtml + '<option value="3">Level 3</option>';
 		break;
-		case "kelembagaan": 
-			var data 	= p_getData('f4', 'f431'); 
+		case "kelembagaan":
+			var data 	= p_getData('f4', 'f431');
 			if(data != null && data.feedData != null) {
-				data = data.feedData; 
-				
+				data = data.feedData;
+
 				for(var loop=0; loop<data.length; loop++){
 					optionHtml = optionHtml + '<option value="' + data[loop].noreg + '">' + data[loop].caption + '</option>';
 				}
 			}
 		break;
 	}
-	
+
 	return optionHtml;
 }
 
@@ -660,78 +660,78 @@ function r_headPageHtml(type, title){
 	if(type != "home"){
 		headHtml = '<div class="container"><div class="col-xs-12 frame">';
 		var headPart = ['','',''];
-		
+
 		/*--left */  headPart[0] = '<div class="fly left">';
 		/*--mid */   headPart[1] = '';
 		/*--right */ headPart[2] = '<div class="fly right">';
-		
+
 		switch(type) {
-			case 0: 
+			case 0:
 				headPart[0] = headPart[0] + '<div class="title"><span>' + title + '</span></div>';
 			break;
-			case 1: 
+			case 1:
 				headPart[0] = headPart[0] + '<div class="title"><span>' + title + '</span></div>';
 				headPart[2] = headPart[2] + '<div class="click" id="notif-ring"><span class="fa fa-bell bell"></span></div>';
 				headPart[2] = headPart[2] + '<div class="click" syncnav-target="#option"><span class="fa fa-bars"></span></div>';
 			break;
-			case 2: 
+			case 2:
 				headPart[0] = headPart[0] + '<div class="click back-button"><img class="icon-type" src="img/sources/arrow-left.png" /></div>';
 				headPart[0] = headPart[0] + '<div class="title"><span>' + title + '</span></div>';
-				
+
 			break;
-			case 3: 
+			case 3:
 				headPart[0] = headPart[0] + '<div class="click back-button"><img class="icon-type" src="img/sources/arrow-left.png" /></div>';
 				headPart[0] = headPart[0] + '<div class="title"><span>' + title + '</span></div>';
-				
+
 				headPart[2] = headPart[2] + '<div class="click" id="notif-ring"><span class="fa fa-bell bell"></span></div>';
 				headPart[2] = headPart[2] + '<div class="click" syncnav-target="#option"><span class="fa fa-bars"></span></div>';
 			break;
-			case 4: 
+			case 4:
 				headPart[0] = headPart[0] + '<div class="click back-button"><img class="icon-type" src="img/sources/arrow-left.png" /></div>';
 				headPart[0] = headPart[0] + '<div class="title"><span>' + title + '</span></div>';
-				
+
 				headPart[1] = headPart[1] + '<div class="search-box"><div class="icon-box right"><input class="search-input" placeholder="Cari lembaga" type="text" value="" /></div></div>';
-				
+
 				headPart[2] = headPart[2] + '<div class="click search-button"><span class="fa fa-search"></span></div>';
 				headPart[2] = headPart[2] + '<div class="click" id="notif-ring"><span class="fa fa-bell bell"></span></div>';
 				headPart[2] = headPart[2] + '<div class="click" syncnav-target="#option"><span class="fa fa-bars"></span></div>';
 			break;
-			case 5: 
+			case 5:
 				headPart[0] = headPart[0] + '<div class="click back-button"><img class="icon-type" src="img/sources/arrow-left.png" /></div>';
 				headPart[0] = headPart[0] + '<div class="title"><span>' + title + '</span></div>';
-				
+
 				headPart[1] = headPart[1] + '<div class="search-box clear-right"><div class="icon-box right"><input class="search-input" placeholder="Cari lembaga" type="text" value="" /></div></div>';
-				
+
 				headPart[2] = headPart[2] + '<div class="click search-button"><span class="fa fa-search"></span></div>';
 			break;
 		}
-		
+
 		/*--left */  headPart[0] = headPart[0] +	'</div>';
 		/*--right */ headPart[2] = headPart[2] +	'</div>';
-		
+
 		headHtml = headHtml + headPart[0] + headPart[1] + headPart[2] + '</div></div>';
 		headHome.addClass('parent theme');
 	}else {
-		headHtml = 
+		headHtml =
 		'<div class="col-md-3 hidden-sm hidden-xs inbound">' +
 			'<h4>DPLEGA 2.0</h4>' +
 		'</div>' +
 		'<div class="col-md-9 inbound text-right">' +
 				'<button type="button" class="clear go-login">LOGIN</button>' +
 		'</div>';
-		
+
 		headHome.addClass('blank theme clear');
 	}
-	
+
 	return headHtml;
 }
 
 function r_footPageHtml(type){
 	/*--clear class*/ footPage.removeClass('static');
 	var footHtml = "";
-	switch(type) { 
+	switch(type) {
 		case "credit":
-			footHtml = 
+			footHtml =
 			'<div class="container">' +
 				'<div class="col-md-4 col-md-offset-8 author-box">' +
 					'<div class="frame">' +
@@ -742,12 +742,12 @@ function r_footPageHtml(type){
 					'</div>' +
 				'</div>' +
 			'</div>';
-			
+
 			footPage.addClass('static');
 		break;
-		
+
 		case "add":
-			footHtml = 
+			footHtml =
 			'<div class="container">' +
 				'<div class="col-md-1 col-md-offset-11 command-box">' +
 					'<button id="add-button" type="button" class="btn btn-circle cyan">+</button>' +
@@ -755,7 +755,7 @@ function r_footPageHtml(type){
 			'</div>';
 		break;
 	}
-	
+
 	return footHtml;
 }
 
@@ -789,9 +789,9 @@ function r_fHome() {
 
 		dataNews = p_getData('f4','f441','');
 		dataNews = dataNews.feedData;
-		
+
 		//--open
-		head	= 
+		head	=
 		'<div class="row no-head jumbotron-ground">' +
 			'<div id="slider-background">' +
 				'<div class="col-md-3 bg-black-mirror banner-black">' +
@@ -872,7 +872,7 @@ function r_fHome() {
 
 		body	= '<div id="website-section" class="row"><div class="col-md-12">';
 		//--license detail
-		body	= body + 
+		body	= body +
 		'<div class="cards no-bg">' +
 			'<div class="banner-box">' +
 				'<div class="text text-center">' +
@@ -887,7 +887,7 @@ function r_fHome() {
 				'</div>' +
 			'</div>' +
 		'</div>';
-		
+
 		body 	= body + '</div></div>';
 		body	= body + '<div class="row"><div class="col-md-12"><div class="row default">';
 		body = body +
@@ -897,7 +897,7 @@ function r_fHome() {
 						'<div class="cards-header">' +
 							'<h4>BERITA TERKINI</h4>' +
 						'</div>';
-				
+
 		//--render data
 		for(var loop = 0; loop < dataNews.length; loop++){
 			//--content
@@ -922,17 +922,17 @@ function r_fHome() {
 				'</div>' +
 			'</div>';
 		}
-		
+
 		body = body +
 					'</div>' +
 				'</div>' +
 				'<div class="clearfix"></div>' +
 			'</div>';
-		
+
 		body	= body + '</div></div></div>';
-		
+
 		//--more news detail
-		body	= body + 
+		body	= body +
 		'<!--div class="cards clear">' +
 			'<div class="article-box">' +
 				'<div class="single">' +
@@ -941,10 +941,10 @@ function r_fHome() {
 			'</div>' +
 		'</div-->';
 
-		
+
 		body	= body + '<div id="kelembagaan-section" class="row"><div class="col-md-12"><div class="row default">';
 		//--quick nav
-		body	= body + 
+		body	= body +
 		'<div class="col-md-8 col-md-offset-2">' +
 			'<div class="empty-box"></div>' +
 			'<h4>KELEMBAGAAN</h4>' +
@@ -959,15 +959,15 @@ function r_fHome() {
 				'</div>' +
 			'</div>' +
 		'</div><div class="clearfix"></div>';
-		
+
 		/*--left*/  part[0] = '<div class="col-md-6"><div class="row default">';
 		/*--right*/ part[1] = '<div class="col-md-6"><div class="row default">';
-		
+
 		//--render quick nav
 		var indexes = 0;
-		var dataT 	= p_getData('f4', 'f431', '', ''); 
-		dataT 		= dataT.feedData; 
-		
+		var dataT 	= p_getData('f4', 'f431', '', '');
+		dataT 		= dataT.feedData;
+
 		if(dataT != null){
 			for(var loop = 0; loop < dataT.length; loop++){
 				//--content
@@ -983,11 +983,11 @@ function r_fHome() {
 				if(indexes > 1){ indexes = 0; }
 			}
 		}
-		
+
 		part[0]	= part[0] + '</div></div>';
 		part[1]	= part[1] + '</div></div>';
 		/*-- fetch*/ body = body + '<div class="col-md-8 col-md-offset-2"><div class="row default">' + part[0] + part[1] + '</div></div><div class="clearfix"></div>';
-		
+
 		/*-- static quicnav*/
 		body	= body +
 		'<div class="col-md-8 col-md-offset-2">' +
@@ -1022,12 +1022,12 @@ function r_fHome() {
 			'</div>' +
 			'<div class="empty-box"></div>' +
 		'</div>';
-		
+
 		/*--main close*/
 		body	= body + '</div></div></div>';
-		
+
 		/*--static footer*/
-		body	= body + 
+		body	= body +
 		'<div id="kontak-section" class="row foot">' +
 			'<div class="row">' +
 				'<div class="space-box"></div>' +
@@ -1051,16 +1051,16 @@ function r_fHome() {
 				'</div>' +
 			'</div>' +
 		'</div>';
-		
+
 		content = '<section id="home">' + head + body + '</section>';
 		//--close
-		
+
 		//--gen
 		$('body').addClass('clear');
 		headPage.html(r_headPageHtml('home', ''));
 		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
 		//$("#preload").remove();
-		
+
 		//--command reactor
 		$(".go-login").unbind().on('click', function(){ r_navigateTo(99); });
 		$(".more-click").unbind().on('click', function(){ r_navigateTo(44); });
@@ -1068,22 +1068,22 @@ function r_fHome() {
 		$(".group-click").unbind().on('click', function(){ r_navigateTo(91, [$(this).attr('p-id'), $(this).attr('p-caption')]); });
 		$(".koleksi-click").unbind().on('click', function(){ r_navigateTo(14); });
 		$(".prestasi-click").unbind().on('click', function(){ r_navigateTo(16); });
-		
+
 		//scrolling
 		var sec1 = $(window).innerHeight();
 		var sec2 = $('#website-section').innerHeight();
 		var sec3 = $('#berita-section').innerHeight();
 		var sec4 = $('#kelembagaan-section').innerHeight();
 		var sec5 = $('#kontak-section').innerHeight();
-		
+
 		$(".go-scroll").unbind().on('click', function(){ scrollPage(sec1); });
 		$("#go-websiteResmi").unbind().on('click', function(){ scrollPage(sec1); });
 		$("#go-beritaTerkini").unbind().on('click', function(){ scrollPage(sec1 + sec2); });
 		$("#go-kelembagaan").unbind().on('click', function(){ scrollPage(sec1 + sec2 + sec3); });
 		$("#go-kontak").unbind().on('click', function(){ scrollPage(sec1 + sec2 + sec3 + sec4); });
 		$(".scroll-up").unbind().on('click', function(){ backToTop(); });
-	
-		
+
+
 		//--css mod
 		if(sec1 >= 600) $(".jumbotron-ground").css('height', ($(window).innerHeight()*1));
 		else $(".jumbotron-ground").css('height', 694);
@@ -1091,7 +1091,7 @@ function r_fHome() {
 		$('#myCarousel').carousel({
 		  interval: 3000,
 		  cycle: true
-		}); 
+		});
 	});
 }
 
@@ -1107,10 +1107,10 @@ function r_fLogin() {
 			{'bentukLembaga':'Yayasan', 'jumlahData': '4', 'picture': 'icon-1.png', 'deskripsi': 'Lorem ipsum dolor sit amet'},
 			{'bentukLembaga':'Perkumpulan', 'jumlahData': '2', 'picture': 'icon-2.png', 'deskripsi': 'Lorem ipsum dolor sit amet'},
 		];
-		
+
 		//--open
 		head	= '';
-		body	= 
+		body	=
 		'<form id="f-login" f-group="fLogin" f-target="fLogin">' +
 			'<div class="row no-head">' +
 				'<div class="container">' +
@@ -1156,15 +1156,15 @@ function r_fLogin() {
 				'</div>' +
 			'</div>' +
 		'</form>';
-		
+
 		content = '<section id="login">' + head + body + '</section>';
 		//--close
-		
+
 		//--gen
 		headPage.html(r_headPageHtml(2, 'Login'));
 		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
 		$("#preload").remove();
-		
+
 		//--command reactor
 		$(".back-button").unbind().on('click', function(){ r_navigateTo(); });
 		//$(".go-login").unbind().on('click', function(){ r_navigateTo(0); });
@@ -1182,11 +1182,11 @@ function r_fNotification() {
 		part	= ['','','',''];
 		content = '';
 		data	= p_getData('fNotification', 'f110', '');
-		
+
 		//--open
 		head = '';
 		body = '<div class="row no-head"><div class="container"><div class="col-md-10 col-md-offset-1">';
-		
+
 		if(data.feedData != null){
 			for(var loop = 0; loop < data.feedData.length; loop++){
 				//--group
@@ -1194,7 +1194,7 @@ function r_fNotification() {
 				if(data.feedData[loop].list != null){
 					counta = data.feedData[loop].list.length;
 
-					body = body + 
+					body = body +
 					'<div class="cards-label ' + ((loop > 0) ? "plus" : '') + '">' +
 						'<p>' +
 							'<strong>' + data.feedData[loop].group + ' (' + counta + ')</strong>' +
@@ -1202,7 +1202,7 @@ function r_fNotification() {
 					'</div>';
 
 					for(var look = 0; look < data.feedData[loop].list.length; look++){
-						body = body + 
+						body = body +
 						'<div class="cards bakcup-list">' +
 							'<div class="row default">' +
 								'<div class="col-xs-9">' +
@@ -1230,7 +1230,7 @@ function r_fNotification() {
 						'</div>';
 					}
 				}
-			}	
+			}
 		}else{
 			body = body +
 			'<div class="cards">' +
@@ -1239,16 +1239,16 @@ function r_fNotification() {
 				'</div>' +
 			'</div>';
 		}
-		
+
 		body	= body + '</div></div></div>';
 		content = '<section id="">' + head + body + '</section>';
 		//--close
-		
+
 		//--gen
 		headPage.html(r_headPageHtml(3, 'Pemberitahuan'));
 		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
 		$("#preload").remove();
-		
+
 		//--command reactor
 		$(".back-button").unbind().on('click', function(){ r_navigateTo(r_pagePreviousReader()); });
 		r_navbarReactor();
@@ -1270,17 +1270,17 @@ function r_f0Dashboard() {
 				{'caption':'Total data sudah verfikasi', 'counter': '0', 'id': 'verifikasi'},
 				{'caption':'Total data akun (lembaga)', 'counter': '0', 'id': 'akun'},
 			]
-			
+
 		}];
 
-		dataT 	= p_getData('f4', 'f431', '', ''); 
-		dataT 	= dataT.feedData; 
-		
+		dataT 	= p_getData('f4', 'f431', '', '');
+		dataT 	= dataT.feedData;
+
 		var counta = 0;
 		var countv = 0;
 
 		//--open
-		head	= 
+		head	=
 		'<div class="row no-head">'+
 			'<div class="container">' +
 				'<div class="col-md-12">' +
@@ -1297,11 +1297,11 @@ function r_f0Dashboard() {
 				'</div>' +
 			'</div>' +
 		'</div>';
-		
+
 		body	= '<div class="row no-head"><div class="container">';
 		part[0] = '<div class="col-md-4">';
 		part[1] = '<div class="col-md-8">';
-		
+
 		//--render data left
 		for(var loop = 0; loop < data[0].summary.length; loop++){
 			part[0] = part[0] +
@@ -1324,7 +1324,7 @@ function r_f0Dashboard() {
 				'<div class="space-box"></div>' +
 			'</div>';
 		}
-		
+
 		part[1] = part[1] +
 		'<div class="cards title">' +
 			'<div class="cards-header">' +
@@ -1334,7 +1334,7 @@ function r_f0Dashboard() {
 				'</div>' +
 			'</div>' +
 		'</div>';
-		
+
 		if(dataT != null){
 			for(var loop = 0; loop < dataT.length; loop++){
 				counta = counta + parseInt(dataT[loop].ajuan);
@@ -1377,11 +1377,11 @@ function r_f0Dashboard() {
 				'</div>';
 			}
 		}
-		
+
 		part[0] = part[0] + '</div>';
 		part[1] = part[1];
 
-		body	= body + part[0] + part[1] + 
+		body	= body + part[0] + part[1] +
 		'<div class="cards-label plus">' +
 			'<p>' +
 				'<strong>Navigasi</strong>' +
@@ -1447,17 +1447,17 @@ function r_f0Dashboard() {
 				'</div>' +
 			'</div>' +
 		'</div>';
-							
+
 		body	= body + '</div></div></div>';
 		content = '<section id="dashboard">' + head + body + '</section>';
 		//--close
-		
+
 		//--gen
 		headPage.html(r_headPageHtml(1, 'Dashboard'));
 		footPage.html(r_footPageHtml('credit'));
 		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
 		$("#preload").remove();
-		
+
 		//--command reactor
 		$(".go-kelembagaan").unbind().on('click', function(){ r_navigateTo(1); });
 		$(".go-koleksi").unbind().on('click', function(){ r_navigateTo(14); });
@@ -1465,7 +1465,7 @@ function r_f0Dashboard() {
 		$(".go-prestasi").unbind().on('click', function(){ r_navigateTo(16); });
 		$(".go-pengaturan").unbind().on('click', function(){ r_navigateTo(4); });
 		$(".go-keluar").unbind().on('click', function(){ r_navigateTo(); });
-		
+
 		r_navbarReactor();
 
 		//sementara
@@ -1483,23 +1483,23 @@ function r_f0Bantuan(){
 		body  	= '';
 		part	= ['',''];
 		content = '';
-		
+
 		//--open
 		body	= '<div class="row no-head"><div class="container">';
-		
-		body	= body + 
+
+		body	= body +
 		'<h1>COMING SOON!</h1>' +
 		'<p>almost there, wait for new update version.</p>';
-		
+
 		body	= body + '</div></div>';
 		content = '<section id="dashboard">' + head + body + '</section>';
 		//--close
-		
+
 		headPage.html(r_headPageHtml(3, 'Bantuan'));
 		footPage.html(r_footPageHtml('credit'));
 		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
 		$("#preload").remove();
-		
+
 		//--command reactor
 		$(".back-button").unbind().on('click', function(){ r_navigateTo(0); });
 		r_navbarReactor();
@@ -1509,25 +1509,25 @@ function r_f0Bantuan(){
 //F DAFTAR LEMBAGA PUBLIC
 //=====================================
 function r_fDaftarLembagaPublic(packet) {
-	
+
 	//-- get direct load
 	var kodeBentukLembagaState = null;
 	var namaBentukLembagaState = null;
 	var dumbBentukLembagaState = null;
-	
+
 	if(Array.isArray(packet) == true){
 		kodeBentukLembagaState = packet[0];
 		namaBentukLembagaState = packet[1];
 	}
-	
+
 	if(kodeBentukLembagaState == "" || kodeBentukLembagaState == null || kodeBentukLembagaState == "start"){
 		dumbBentukLembagaState = r_bentukLembagaReader();
 		kodeBentukLembagaState = dumbBentukLembagaState[0];
 		namaBentukLembagaState = dumbBentukLembagaState[1];
 	}
-	
+
 	r_bentukLembagaSet([kodeBentukLembagaState,namaBentukLembagaState]);
-	
+
 	$("body").prepend(preload);
 	$('main.parent').animate({'opacity': '0.6'},'fast','linear', function(){
 		mainPage.html('');
@@ -1536,14 +1536,14 @@ function r_fDaftarLembagaPublic(packet) {
 		part	= ['',''];
 		content = '';
 		data = p_getData('support', 'f91', "", 'single,'+ kodeBentukLembagaState);
-		data = data.feedData; 
-		
+		data = data.feedData;
+
 		//--open
 		head	= '';
 		body	= '<div class="row no-head"><div class="container">';
 		part[0] = '<div class="col-md-3">';
 		part[1] = '<div class="col-md-8" id="lembaga-list">';
-		
+
 		//--left
 		part[0] = part[0] +
 		'<form id="f-filter-select">' +
@@ -1584,41 +1584,41 @@ function r_fDaftarLembagaPublic(packet) {
 				'<div class="space-box"></div>' +
 			'</div>' +
 		'</form>';
-			
+
 		//--render data
 		var tempP = "";
-		var tempB = ""; 
+		var tempB = "";
 
 		part[1] = part[1] + r_fLembagaGenerator(data);
-		
+
 		part[0] = part[0] + '</div>';
 		part[1] = part[1] + '</div>';
 		body	= body 	  + part[0] + part[1] + '</div></div>';
 		content = '<section id="kelembagaan">' + head + body + '</section>';
 		//--close
-		
+
 		//--gen
 		headPage.html(r_headPageHtml(5, namaBentukLembagaState));
 		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
-		
+
 		$("#preload").remove();
-		
+
 		//--command reactor
 		$(".back-button").unbind().on('click', function(){ r_navigateTo(); });
-		
+
 		//navbar
 		r_navbarReactor();
 
 		//search-box
 		searchBoxActivator();
-		$(".search-input").on('keyup', function(){ 
+		$(".search-input").on('keyup', function(){
 			var dumbBentukLembagaState = r_bentukLembagaReader();
 			var kodeBentukLembagaState = dumbBentukLembagaState[0];
-			var dataKey = p_getData('support', 'f91', $(this).val(), 
+			var dataKey = p_getData('support', 'f91', $(this).val(),
 						'multipart,' + kodeBentukLembagaState + ',' +
-						$('#f-filter-select #filter-provinsi').val()  + ',' + 
-						$('#f-filter-select #filter-wilayah').val()   + ',' + 
-						$('#f-filter-select #filter-kecamatan').val() + ',' + 
+						$('#f-filter-select #filter-provinsi').val()  + ',' +
+						$('#f-filter-select #filter-wilayah').val()   + ',' +
+						$('#f-filter-select #filter-kecamatan').val() + ',' +
 						$('#f-filter-select #filter-kelurahan').val());
 				dataKey = dataKey.feedData;
 			$("#lembaga-list").html(r_fLembagaGenerator(dataKey));
@@ -1630,11 +1630,11 @@ function r_fDaftarLembagaPublic(packet) {
 			e.preventDefault();
 			var dumbBentukLembagaState = r_bentukLembagaReader();
 			var kodeBentukLembagaState = dumbBentukLembagaState[0];
-			var dataKey = p_getData('support', 'f91', $(".search-input").val(), 
+			var dataKey = p_getData('support', 'f91', $(".search-input").val(),
 						'multipart,' + kodeBentukLembagaState + ',' +
-						$('#f-filter-select #filter-provinsi').val()  + ',' + 
-						$('#f-filter-select #filter-wilayah').val()   + ',' + 
-						$('#f-filter-select #filter-kecamatan').val() + ',' + 
+						$('#f-filter-select #filter-provinsi').val()  + ',' +
+						$('#f-filter-select #filter-wilayah').val()   + ',' +
+						$('#f-filter-select #filter-kecamatan').val() + ',' +
 						$('#f-filter-select #filter-kelurahan').val());
 				dataKey = dataKey.feedData;
 			$("#lembaga-list").html(r_fLembagaGenerator(dataKey));
@@ -1649,7 +1649,7 @@ function r_fDaftarLembagaPublic(packet) {
 function r_fLembagaEventctivator(){
 	//$(".detail-click").unbind().on('click', function(){ r_navigateTo(12, $(this).attr('p-id')); });
 	detailBoxActivator();
-	$(".go-maps").unbind().on("click", function(){ 
+	$(".go-maps").unbind().on("click", function(){
 		openMaps($(this).attr('m-lng'),$(this).attr('m-lat'));
 	});
 }
@@ -1660,7 +1660,7 @@ function r_fLembagaGenerator(data){
 	var tempP	= "";
 	if(data.lembaga != null){
 		lembagaCounter = data.lembaga.length;
-		for(var loop = 0; loop < data.lembaga.length; loop++){	
+		for(var loop = 0; loop < data.lembaga.length; loop++){
 			var placeImg = data.lembaga[loop].noreg;
 			placeImg = placeImg.substr((placeImg.length-1), 1);
 			temPic   = (data.lembaga[loop].picture != "") ? 'img/logo/' + data.lembaga[loop].picture : 'img/logo/avatar-' + placeImg + '.jpg';
@@ -1688,7 +1688,22 @@ function r_fLembagaGenerator(data){
 					'<div class="list-box">' +
 						'<div class="list-icon"><span class="fa fa-map-marker"></span></div>' +
 						'<p class="list-text">' + data.lembaga[loop].alamat + '</p>' +
-					'</div>' +
+					'</div>';
+
+					statusColor = "red";
+					status = "Tidak terverifikasi";
+					console.log(data.lembaga[loop].group);
+					if(data.lembaga[loop].group == "Valid"){
+						status = "Sudah diverifikasi";
+						statusColor = "green";
+					}
+
+					genHtml  = genHtml +
+					'<div class="list-box">' +
+						'<p class="list-text text-' + statusColor + '">' + status + '</p>' +
+					'</div>';
+
+					genHtml  = genHtml +
 					'<div class="list-box">' +
 						'<p class="list-text go-maps text-cyan click" m-lng="' + data.lembaga[loop].langitude + '" m-lat="' + data.lembaga[loop].latitude + '">Lihat maps</p>' +
 					'</div>' +
@@ -1726,26 +1741,26 @@ function clearPacket(){
 function showOptionList(){
 	var optionHtml = '';
 	optionHtml = '<div class="option-pop">';
-	
+
 	optionHtml = optionHtml +
 	'<div id="option-main" class="option-list">' +
 		'<div class="option-frame col-md-4 col-sm-8">' +
 			'<ul>' +
 				'<li class="head">' + pLabel + '</li>';
-				
+
 				for(var loop=0; loop < optionBatch.length; loop++){
 					optionHtml = optionHtml +
 					'<li id="' + optionBatch[loop].selector + '" p-id=""><button type="button" class="clear btn-icon"><span class="fa fa-' + optionBatch[loop].icon + '"></span>' + optionBatch[loop].label + '</button></li>';
 				}
-	
+
 	optionHtml = optionHtml +
 			'</ul>' +
 		'</div>' +
 	'</div>' +
 	'<div class="option-layer"></div>';
-	
+
 	optionHtml = optionHtml + '</div>';
-	
+
 	$("body").append(optionHtml);
 	$(".option-layer").unbind().on("click", function(){ hideOptionList() });
 	$("html, body").css("overflow","hidden");
@@ -1754,7 +1769,7 @@ function showOptionList(){
 /* global reactor */
 function r_navbarReactor(){
 	/*--syncnav menubar*/ syncnavReactor();
-	
+
 	$("#option.syncnav .dashboard")  .unbind().on("click", function(){ r_navigateTo(0); });
 	$("#option.syncnav .kelembagaan").unbind().on("click", function(){ r_navigateTo(1); });
 	$("#option.syncnav .koleksi")	 .unbind().on("click", function(){ r_navigateTo(14); });
@@ -1763,43 +1778,43 @@ function r_navbarReactor(){
 	$("#option.syncnav .pengaturan") .unbind().on("click", function(){ r_navigateTo(4); });
 	$("#option.syncnav .bantuan") 	 .unbind().on("click", function(){ r_navigateTo(0.1); });
 	$("#option.syncnav .log-off")	 .unbind().on("click", function(){ p_logout(); r_navigateTo(); });
-	
+
 	$("#notif-ring").unbind().on("click", function(){ r_navigateTo(999); });
 }
 
 /* cookies management */
 /* =============================================================================================== */
 function r_pageSet(page){ r_setCookie('pagePrevious', r_pageReader(), 1); r_setCookie('page', page, 1); }
-function r_pageReader(){	
-	var page = null;	
+function r_pageReader(){
+	var page = null;
 	if(r_getCookie('page') != '' && r_getCookie('page') != undefined) { page = parseInt(r_getCookie('page')); }
 	return page;
 }
 
-function r_pagePreviousReader(){	
+function r_pagePreviousReader(){
 	var page = null;
 	if(r_getCookie('pagePrevious') != '' && r_getCookie('pagePrevious') != undefined && isNaN(r_getCookie('pagePrevious')) == false) { page = parseInt(r_getCookie('pagePrevious')); }
 	return page;
 }
 
 function r_tabSet(tab){ r_setCookie('tab', tab, 1); }
-function r_tabReader(){	
-	var tab = null;	
+function r_tabReader(){
+	var tab = null;
 	if(r_getCookie('tab') != '' && r_getCookie('tab') != undefined) { tab = r_getCookie('tab'); }
 	return tab;
 }
 
-function r_bentukLembagaSet(data){ 
-	r_setCookie('kodeBentukLembaga', data[0], 1); 
-	r_setCookie('namaBentukLembaga', data[1], 1); 
+function r_bentukLembagaSet(data){
+	r_setCookie('kodeBentukLembaga', data[0], 1);
+	r_setCookie('namaBentukLembaga', data[1], 1);
 }
-function r_bentukLembagaReader(){	
-	var code = null;	
+function r_bentukLembagaReader(){
+	var code = null;
 	var caption = null;
 	var data = null;
 	if(r_getCookie('kodeBentukLembaga') != '' && r_getCookie('kodeBentukLembaga') != undefined) { code = r_getCookie('kodeBentukLembaga'); }
 	if(r_getCookie('namaBentukLembaga') != '' && r_getCookie('namaBentukLembaga') != undefined) { caption = r_getCookie('namaBentukLembaga'); }
-	
+
 	data = [code, caption];
 	return data;
 }
@@ -1840,13 +1855,13 @@ function r_getCookie(cname) {
 }
 
 // function header_set(data){ r_setCookie('header_log', JSON.stringify(data), 1); }
-// function header_read(){ 
-	// var result = []; 
+// function header_read(){
+	// var result = [];
 	// if(r_getCookie('header_log') != ""){
 		// result = JSON.parse(r_getCookie('header_log'));
 	// }
-	
-	// return result; 
+
+	// return result;
 // }
 
 function r_clearCookies(){

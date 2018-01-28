@@ -1,6 +1,6 @@
 /* PROCESSOR DPLEGA JS */
 $(function(){
-	
+
 });
 
 /* authentication */
@@ -29,9 +29,19 @@ function p_logout(){
 	return reStatus;
 }
 
+/* get param from url */
+function getParam(name, url) {
+    if (!url) url = location.href;
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( url );
+    return results == null ? null : results[1];
+}
+
 /* request management */
 /* =============================================================================================== */
-function p_getData(group, target, keyword, refferences){
+function p_getData(group, target, keyword, refferences, page = 1){
 	var data = null;
 
 	$.ajax({
@@ -39,14 +49,14 @@ function p_getData(group, target, keyword, refferences){
 		type: 'post',
 		dataType: 'json',
 		async: false,
-		data: { keyword : keyword, refferences: refferences },
+		data: { keyword : keyword, refferences: refferences, page: page },
 		success: function(result){
 			data = result;
 		},
 		complete: function(xhr,status) { hideNotification('waiting'); },
 		error: function(xhr,status,error) { console.log(xhr); showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); }
 	});
-	
+
 	return data;
 }
 
@@ -68,7 +78,7 @@ function p_removeData(group, target, pId, refferenceId){
 		complete: function(xhr,status) { hideNotification('waiting'); },
 		error: function(xhr,status,error) { showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); }
 	});
-	
+
 	return reStatus;
 }
 
@@ -90,7 +100,7 @@ function p_changeData(group, target, pId, refferenceId, dataFetch){
 		complete: function(xhr,status) { hideNotification('waiting'); },
 		error: function(xhr,status,error) { showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); }
 	});
-	
+
 	return reStatus;
 }
 
@@ -112,7 +122,7 @@ function p_restore(group, target, pId, refferenceId){
 		complete: function(xhr,status) { hideNotification('waiting'); },
 		error: function(xhr,status,error) { showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); }
 	});
-	
+
 	return reStatus;
 }
 
@@ -128,7 +138,7 @@ function p_formHandler(formId, type){
 			cache: false,             // To unable request pages to be cached
 			processData:false,        // To send DOMDocument or non processed data file it is set to false
 			success: function(data)   // A function to be called if request succeeds
-			{ 
+			{
 				showNotification(data.feedType, '0', data.feedMessage);
 				if(data.feedStatus == "success" || data.feedStatus == "warning"){
 					if(data.feedPId == undefined){ data.feedPId = null }
@@ -138,5 +148,5 @@ function p_formHandler(formId, type){
 			complete: function(xhr,status) { hideNotification('waiting'); },
 			error: function(xhr,status,error) { showNotification('danger', 'failure', 'Terjadi kesalahan, tidak ada respon dari server!'); }
 		});
-	});		
+	});
 }
