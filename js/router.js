@@ -103,6 +103,7 @@ function r_navigateTo(index, packet, access) {
 			case 999: r_fNotification();				break;
 
 			case 91 : r_fDaftarLembagaPublic(packet); 	break;
+			case 92 : r_fDaftarKontak(packet); 	break;
 			default : r_fHome(); 						break;
 		}
 
@@ -1023,12 +1024,79 @@ function r_fHome() {
 			'<div class="empty-box"></div>' +
 		'</div>';
 
+
+
+
 		/*--main close*/
 		body	= body + '</div></div></div>';
 
+		var wilayah_ = [
+			"Kab.Bandung",
+			"Kab.Bandung Barat",
+			"Kab.Bekasi",
+			"Kab.Bogor",
+			"Kab.Ciamis",
+			"Kab.Cimahi",
+			"Kab.Cianjur",
+			"Kab.Cirebon",
+			"Kab.Garut",
+			"Kab.Indramayu",
+			"Kab.Karawang",
+			"Kab.Kuningan",
+			"Kab.Majalengka",
+			"Kab.Pangandaran",
+			"Kab.Purwakarta",
+			"Kab.Subang",
+			"Kab.Sukabumi",
+			"Kab.Sumedang",
+			"Kab.Tasikmalaya",
+			"Kota Bandung",
+			"Kota Banjar",
+			"Kota Bekasi",
+			"Kota Bogor",
+			"Kota Cimahi",
+			"Kota Cirebon",
+			"Kota Depok",
+			"Kota Sukabumi",
+			"Kota Tasikmalaya"
+		];
+
+		/*-- static quicnav info*/
+		body	= body +
+		'<div id="kontak-section">' +
+			'<div class="row">' +
+				'<div class="space-box"></div>' +
+					'<div class="col-md-8 col-md-offset-2">' +
+						'<div class="row default">' +
+							'<div class="cards-label plus">' +
+								'<h4>' +
+									'<strong>Informasi Kontak PAH 2018</strong>' +
+								'</h4>' +
+							'</div>';
+
+			for(loop=0;loop<wilayah_.length;loop++){
+				body	= body +
+				'<div class="col-md-6">' +
+					'<div class="row default">' +
+						'<div class="cards">' +
+							'<div class="navigation-box kontak-click" p-id="' + loop + '" p-reff="' + wilayah_[loop] + '">' +
+								'<div class="caption">' +
+									'<span>' + wilayah_[loop] + '</span>' +
+								'</div>' +
+							'</div>' +
+						'</div>' +
+					'</div>' +
+				'</div>';
+			}
+
+		body	= body +
+			'</div>' +
+			'<div class="empty-box"></div>' +
+		'</div></div></div>';
+
 		/*--static footer*/
 		body	= body +
-		'<div id="kontak-section" class="row foot">' +
+		'<div id="kontak-section_" class="row foot">' +
 			'<div class="row">' +
 				'<div class="space-box"></div>' +
 				'<div class="col-md-8 col-md-offset-2 relative bg-gsate">' +
@@ -1052,13 +1120,43 @@ function r_fHome() {
 			'</div>' +
 		'</div>';
 
+
+
 		content = '<section id="home">' + head + body + '</section>';
+
+		modal =
+		'<div id="info" class="modal fade" role="dialog">' +
+		  '<div class="modal-dialog">' +
+		    '<!-- Modal content-->' +
+		    '<div class="modal-content">' +
+		      '<div class="modal-header">' +
+		        '<button type="button" class="close" data-dismiss="modal">&times;</button>' +
+		        '<h4 class="modal-title">Pemberitahuan.</h4>' +
+		      '</div>' +
+		      '<div class="modal-body">' +
+		        '<p>Kami beritahukan kepeda seluruh Lembaga Keagamaan Jawa Barat khususnya kepada Lembaga yang belum terdaftar.</p>' +
+						'<p>Kami akan informasikan bahwa Anda dapat menghubungi PAH perwakilan Wilayah untuk dapat mendaftarkan data Kelembagaan,</p>' +
+						'<p>Daftar Kontak yang dapat dihubungi terletak dibawah laman ini di bagian,</p>' +
+						'<h4><b>Informasi Kontak PAH 2018</b></h4>' +
+						'<p>atau <a href="#" class="kontak-go">Klik disini</a></p>' +
+						'<br/>' +
+						'<p>Terima Kasih</p>' +
+						'<br/>' +
+						'<p>Tim DPLEGA 2018</p>' +
+					'</div>' +
+		      '<div class="modal-footer">' +
+		        '<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>' +
+		      '</div>' +
+		    '</div>' +
+		  '</div>' +
+		'</div> <style>.modal-backdrop.in{ opacity: 0.7; }.modal-backdrop{ background-color: #111; }</style>';
 		//--close
 
 		//--gen
 		$('body').addClass('clear');
 		headPage.html(r_headPageHtml('home', ''));
 		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
+		$('body').append(modal);
 		//$("#preload").remove();
 
 		//--command reactor
@@ -1068,6 +1166,7 @@ function r_fHome() {
 		$(".group-click").unbind().on('click', function(){ r_navigateTo(91, [$(this).attr('p-id'), $(this).attr('p-caption')]); });
 		$(".koleksi-click").unbind().on('click', function(){ r_navigateTo(14); });
 		$(".prestasi-click").unbind().on('click', function(){ r_navigateTo(16); });
+		$(".kontak-click").unbind().on('click', function(){ r_navigateTo(92, [$(this).attr('p-id'), $(this).attr('p-reff')]); });
 
 		//scrolling
 		var sec1 = $(window).innerHeight();
@@ -1080,7 +1179,7 @@ function r_fHome() {
 		$("#go-websiteResmi").unbind().on('click', function(){ scrollPage(sec1); });
 		$("#go-beritaTerkini").unbind().on('click', function(){ scrollPage(sec1 + sec2); });
 		$("#go-kelembagaan").unbind().on('click', function(){ scrollPage(sec1 + sec2 + sec3); });
-		$("#go-kontak").unbind().on('click', function(){ scrollPage(sec1 + sec2 + sec3 + sec4); });
+		$("#go-kontak, .kontak-go").unbind().on('click', function(){ scrollPage(sec1 + sec2 + sec3 + sec4); $("#info").modal('hide'); });
 		$(".scroll-up").unbind().on('click', function(){ backToTop(); });
 
 
@@ -1092,6 +1191,8 @@ function r_fHome() {
 		  interval: 3000,
 		  cycle: true
 		});
+
+		$("#info").modal('show');
 	});
 }
 
@@ -1725,6 +1826,191 @@ function r_fLembagaGenerator(data){
 	return genHtml;
 }
 
+//F DAFTAR KONTAK PUBLIC
+//=====================================
+function r_fDaftarKontak(packet) {
+
+	if(Array.isArray(packet) == true){
+		packetCaption = packet[1];
+		packet = packet[0];
+	}
+
+	if(packet == "" || packet == null || packet == "start"){
+		packet = r_kontakReader();
+		packetCaption = packet[1];
+		packet = packet[0];
+	}
+
+	r_kontakSet(packet, packetCaption);
+
+	$("body").prepend(preload);
+	$('main.parent').animate({'opacity': '0.6'},'fast','linear', function(){
+		mainPage.html('');
+		head  	= '';
+		body  	= '';
+		content = '';
+
+		packet = parseInt(packet);
+
+		data 		= [
+			[
+				{ name: "Usman Rahmat", phone: "085317017001" },
+				{ name: "Sayiid Nurlie", phone: "085317697240" }
+			],
+			[
+				{ name: "Usman Rahmat", phone: "085223388235" },
+				{ name: "Dadang Hermawan", phone: "082128143097" }
+			],
+			[
+				{ name: "Sian Susanto", phone: "085885241283" },
+				{ name: "Judi Muhyidin", phone: "081315609988" }
+			],
+			[
+				{ name: "Amid Hamdani", phone: "085715726993" },
+				{ name: "Royani", phone: "087770414919" }
+			],
+			[
+				{ name: "Acep Muhsin", phone: "082126645958" },
+				{ name: "Nana Sutisna", phone: "085223332274" }
+			],
+			[
+				{ name: "Asep Suherman", phone: "087708470606" },
+				{ name: "Siti Fatimah", phone: "0852220465505" }
+			],
+			[
+				{ name: "Fahmi Ilmansyah", phone: "089660763281" },
+				{ name: "M Rizki", phone: "085323317386" }
+			],
+			[
+				{ name: "Iim Komarudin", phone: "085314263352" },
+				{ name: "Aneng Fatimah", phone: "082217743453" }
+			],
+			[
+				{ name: "Ahmad Syifa", phone: "082216441613" },
+				{ name: "Haris", phone: "085280295950" }
+			],
+			[
+				{ name: "Ahmad Romdhoni", phone: "085715728474" },
+				{ name: "M.Zainal Alien", phone: "085711020981" }
+			],
+			[
+				{ name: "H.Muhammad Ishak", phone: "081395691675" },
+				{ name: "Aminudin", phone: "081312064194" }
+			],
+			[
+				{ name: "Afif Amrulloh", phone: "082315784115" },
+				{ name: "Andri Mulyana", phone: "082316569805" }
+			],
+			[
+				{ name: "Asep Sopwan", phone: "085220043532" },
+				{ name: "Anwar Hidayat", phone: "081320692997" }
+			],
+			[
+				{ name: "Dede Lukman", phone: "081931491938" },
+				{ name: "Ikbal M Maptuh", phone: "089653370959" }
+			],
+			[
+				{ name: "Ato Ismail", phone: "085220616222" },
+				{ name: "Ahmad Kolaid", phone: "082315736086" }
+			],
+			[
+				{ name: "Ade Irfan Nurjaman", phone: "081293165550" },
+				{ name: "Entin Kartini", phone: "085720954020" }
+			],
+			[
+				{ name: "Jojo Sutarjo", phone: "081214212424" },
+				{ name: "Sumiati", phone: "081394609919" }
+			],
+			[
+				{ name: "Agus Mulyana", phone: "085352809777" },
+				{ name: "Asep M H", phone: "081222900123" }
+			],
+			[
+				{ name: "A.shany, R", phone: "085222994322" },
+				{ name: "Oke Prasetyo", phone: "085974122028" }
+			],
+			[
+				{ name: "Siti Romlah", phone: "085223571845" },
+				{ name: "Eris M", phone: "089606106576" }
+			],
+			[
+				{ name: "Solihin", phone: "081280103601" },
+				{ name: "Faisal Hakim", phone: "085715301719" }
+			],
+			[
+				{ name: "M.Habibi", phone: "8176616665" },
+				{ name: "Ali Murtado", phone: "08176758005" }
+			],
+			[
+				{ name: "Deden Setia", phone: "081214297064" },
+				{ name: "Yayan Rohyana", phone: "081573057831" }
+			],
+			[
+				{ name: "Otong Tumari", phone: "089660311306" },
+				{ name: "Khusnul Khotimah", phone: "085294740126" }
+			],
+			[
+				{ name: "Aditya Nupratma", phone: "085711735857" },
+				{ name: "Nurfi Laila", phone: "087781857284" }
+			],
+			[
+				{ name: "Ohan Jauharudin", phone: "085288888027" },
+				{ name: "Didin Supriadin", phone: "085720141375" }
+			],
+			[
+				{ name: "Jejen J A", phone: "085323412669" },
+				{ name: "Moch Yasir", phone: "082319204567" }
+			],
+		];
+
+		//--open
+		head	= '';
+		body	= '<div class="row no-head"><div class="container">' + '<div class="col-md-8 col-offset-2" id="kontak-list">';
+
+		//--render data
+		var tempP = "";
+		var tempB = "";
+
+		for(loop=0; loop<data[packet].length; loop++){
+			body	= body +
+			'<div class="col-md-12">' +
+				'<div class="row default">' +
+					'<div class="cards">' +
+						'<div class="navigation-box">' +
+							'<div class="col-xs-6">' +
+								'<div class="caption">' +
+									'<span>' + data[packet][loop].name + '</span>' +
+								'</div>' +
+							'</div>' +
+							'<div class="col-xs-6">' +
+								'<div class="caption">' +
+									'<span>' + data[packet][loop].phone + '</span>' +
+								'</div>' +
+							'</div>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+			'</div>';
+		}
+
+		body	= body + '</div></div></div>';
+		content = '<section id="kontak">' + head + body + '</section>';
+		//--close
+
+		//--gen
+		headPage.html(r_headPageHtml(2, "Kontak PAH 2018 | " + packetCaption));
+		mainPage.html(content).animate({'opacity': '1'},'fast','linear');
+
+		$("#preload").remove();
+
+		//--command reactor
+		$(".back-button").unbind().on('click', function(){ r_navigateTo(); });
+
+		//navbar
+		r_navbarReactor();
+	});
+}
+
 /* maintance */
 function clearPacket(){
 	pGroup  		= "";
@@ -1817,6 +2103,19 @@ function r_bentukLembagaReader(){
 
 	data = [code, caption];
 	return data;
+}
+
+function r_kontakSet(data, caption){
+	r_setCookie('kontakPAH', data, 1);
+	r_setCookie('kontakPAHCaption', caption, 1);
+}
+function r_kontakReader(){
+	var data = null;
+	var caption = null;
+	if(r_getCookie('kontakPAH') != '' && r_getCookie('kontakPAH') != undefined) { data = r_getCookie('kontakPAH'); }
+	if(r_getCookie('kontakPAHCaption') != '' && r_getCookie('kontakPAHCaption') != undefined) { caption = r_getCookie('kontakPAHCaption'); }
+
+	return [data,caption];
 }
 
 function profile_look_set(id){ r_setCookie('profile_look', id, 1); }
