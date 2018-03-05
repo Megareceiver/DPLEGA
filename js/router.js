@@ -1036,7 +1036,6 @@ function r_fHome() {
 			"Kab.Bekasi",
 			"Kab.Bogor",
 			"Kab.Ciamis",
-			"Kab.Cimahi",
 			"Kab.Cianjur",
 			"Kab.Cirebon",
 			"Kab.Garut",
@@ -1858,7 +1857,7 @@ function r_fDaftarKontak(packet) {
 				{ name: "Sayiid Nurlie", phone: "085317697240" }
 			],
 			[
-				{ name: "Usman Rahmat", phone: "085223388235" },
+				{ name: "Miftah Fitriyana", phone: "085223388235" },
 				{ name: "Dadang Hermawan", phone: "082128143097" }
 			],
 			[
